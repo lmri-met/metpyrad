@@ -91,6 +91,15 @@ initial_time = result_df['EndTime_smpl'].min()
 # Compute the elapsed time for each row
 result_df['ETime'] = result_df['EndTime_smpl'] - initial_time
 
+# Compute the elapsed time for each row in a specific unit
+unit = 'minutes'
+label = f'ETime ({unit})'
+time_conversion = {'seconds':1, 'minutes':1/60, 'hours':1/3600,'days':1/ 86400,'weeks':1/ (86400 * 7),'months':1/ (86400 * 30.44),'years':1/ (86400 * 365.25)}
+if unit not in time_conversion:
+    raise ValueError("Invalid unit. Choose from 'seconds', 'minutes', 'hours', or 'days'.")
+elapsed_seconds = pd.Series([i.total_seconds() for i in result_df['ETime']])*time_conversion[unit]
+result_df[label] = elapsed_seconds
+
 # STEP: Save the results
 
 # Save the DataFrame to a CSV file

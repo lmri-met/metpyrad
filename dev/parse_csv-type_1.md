@@ -367,3 +367,59 @@ This ensures that the `DateTime` column is correctly parsed according to the spe
 ```
 
 This will correctly convert the strings in the `DateTime` column to datetime objects. If you have any questions or need further assistance, feel free to ask!
+
+## Custom elapsed time column
+
+This code snippet calculates the elapsed time between measurements in a DataFrame and converts it into a specific unit (e.g., minutes, hours, days). Here's a step-by-step explanation:
+
+1. **Find the earliest datetime**:
+    ```python
+    initial_time = result_df['EndTime_smpl'].min()
+    ```
+    This line finds the earliest datetime in the `EndTime_smpl` column of the `result_df` DataFrame.
+
+2. **Compute the elapsed time for each row**:
+    ```python
+    result_df['ETime'] = result_df['EndTime_smpl'] - initial_time
+    ```
+    This line calculates the elapsed time for each row by subtracting the earliest datetime (`initial_time`) from each datetime value in the `EndTime_smpl` column. The result is stored in a new column called `ETime`.
+
+3. **Specify the unit for elapsed time**:
+    ```python
+    unit = 'minutes'
+    label = f'ETime ({unit})'
+    ```
+    These lines set the desired unit for the elapsed time calculation (in this case, 'minutes') and create a label for the new column that will store the converted elapsed time.
+
+4. **Define time conversion factors**:
+    ```python
+    time_conversion = {'seconds':1, 'minutes':1/60, 'hours':1/3600,'days':1/ 86400,'weeks':1/ (86400 * 7),'months':1/ (86400 * 30.44),'years':1/ (86400 * 365.25)}
+    ```
+    This dictionary contains conversion factors to convert elapsed time from seconds to the desired unit.
+
+5. **Validate the unit**:
+    ```python
+    if unit not in time_conversion:
+        raise ValueError("Invalid unit. Choose from 'seconds', 'minutes', 'hours', or 'days'.")
+    ```
+    This block checks if the specified unit is valid. If not, it raises a `ValueError`.
+
+6. **Convert elapsed time to the specified unit**:
+    ```python
+    elapsed_seconds = pd.Series([i.total_seconds() for i in result_df['ETime']])*time_conversion[unit]
+    result_df[label] = elapsed_seconds
+    ```
+    - This line converts the `ETime` values to total seconds using the `total_seconds()` method.
+    - It then multiplies the total seconds by the appropriate conversion factor from the `time_conversion` dictionary to get the elapsed time in the specified unit.
+    - The result is stored in a new column with the label `ETime (minutes)`.
+
+In summary, this code calculates the elapsed time between measurements in a DataFrame, converts it to a specified unit, and adds the result as a new column in the DataFrame.
+
+Example output Dataframe:
+```
+  Event          EndTime_smpl            ETime  ETime (minutes)
+0     A 2023-12-01 12:46:16 0 days 00:00:00     0.000000
+1     B 2023-12-01 14:30:45 0 days 01:44:29   104.483333
+2     C 2023-12-01 16:45:30 0 days 03:59:14   239.233333
+3     D 2023-12-02 09:15:10 0 days 20:28:54  1228.900000
+```
