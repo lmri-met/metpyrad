@@ -66,6 +66,15 @@ result_df = result_df.drop(['Samp._bkgd', 'Samp._smpl', 'Repe._smpl'], axis=1)
 # Rename repetition column
 result_df = result_df.rename(columns={'Repe._bkgd': 'Repe.'})
 
+# Compute net count rate: sample count rate - background count rate
+result_df["CPM_net"]=result_df["CPM_smpl"]-result_df["CPM_bkgd"]
+# Compute net counts: sample counts - background counts
+result_df["Counts_net"]=result_df["Counts__smpl"]-result_df["Counts__bkgd"]
+# Compute uncertainty of net counts
+result_df["UCounts_net"]=(result_df["UCounts_smpl"].pow(2)+result_df["UCounts_bkgd"].pow(2)).pow(1/2)
+# Compute relative uncertainty of net counts
+result_df["UrCounts_net"]=result_df["UCounts_net"]/result_df["Counts_net"]*100
+
 # Save the DataFrame to a CSV file
 df.to_csv('output1.csv', index=False)
 result_df.to_csv('output2.csv', index=False)
