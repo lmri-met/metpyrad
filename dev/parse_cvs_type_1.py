@@ -34,7 +34,13 @@ for input_file in input_files:
 # Create a DataFrame from the extracted data
 df = pd.DataFrame(extracted_data, columns=rows_to_extract)
 
+# Convert columns to numeric, except the last one which should be a date object
+for col in df.columns[:-1]:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+
+df[df.columns[-1]] = pd.to_datetime(df[df.columns[-1]], errors='coerce')
+
 # Save the DataFrame to a CSV file
 df.to_csv('output.csv', index=False)
 
-print("Data extracted and saved to output.csv")
+print("Data extracted, types converted, and saved to output.csv")
