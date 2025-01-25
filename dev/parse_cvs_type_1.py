@@ -1,5 +1,7 @@
 import pandas as pd
 
+# STEP 1: Parse type1 CSV files to a dataframe
+
 # Define the rows to extract
 rows_to_extract = ["Samp.", "Repe.", "CPM", "Counts", "DTime", "Time", "EndTime"]
 
@@ -40,6 +42,8 @@ for col in df.columns[:-1]:
 
 df[df.columns[-1]] = pd.to_datetime(df[df.columns[-1]], errors='coerce')
 
+# STEP 2: Compute quantities for each measurement
+
 # Compute live time
 df["LTime"]=df["Time"]-df["DTime"]
 # Compute total counts: rate count (1/min) * real time (s) / 60 (s/min)
@@ -48,6 +52,8 @@ df["Counts_"]=df["CPM"]*df["Time"]/60
 df["UCounts"]=df["Counts_"].pow(1/2)
 # Compute relative uncertainty of total counts
 df["UrCounts"]=df["UCounts"]/df["Counts_"]*100
+
+# STEP 3: Transform the DataFrame based of background or sample measurements
 
 # Split the DataFrame into two DataFrames based on Samp.
 df_b = df[df["Samp."] == df["Samp."].unique()[0]].reset_index(drop=True)
@@ -66,6 +72,8 @@ result_df = result_df.drop(['Samp._bkgd', 'Samp._smpl', 'Repe._smpl'], axis=1)
 # Rename repetition column
 result_df = result_df.rename(columns={'Repe._bkgd': 'Repe.'})
 
+# STEP 4: Compute net quantities
+
 # Compute net count rate: sample count rate - background count rate
 result_df["CPM_net"]=result_df["CPM_smpl"]-result_df["CPM_bkgd"]
 # Compute net counts: sample counts - background counts
@@ -74,6 +82,8 @@ result_df["Counts_net"]=result_df["Counts__smpl"]-result_df["Counts__bkgd"]
 result_df["UCounts_net"]=(result_df["UCounts_smpl"].pow(2)+result_df["UCounts_bkgd"].pow(2)).pow(1/2)
 # Compute relative uncertainty of net counts
 result_df["UrCounts_net"]=result_df["UCounts_net"]/result_df["Counts_net"]*100
+
+# STEP: Save the results
 
 # Save the DataFrame to a CSV file
 df.to_csv('output1.csv', index=False)
