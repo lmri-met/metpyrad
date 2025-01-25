@@ -1,0 +1,35 @@
+import pandas as pd
+# STEP 1: extract data from csv file
+# Define the rows to extract
+rows_to_extract = ["Samp.", "Repe.", "CPM", "Counts", "DTime", "Time", "EndTime"]
+
+# Initialize an empty list to store the extracted data
+extracted_data = []
+
+# Read the CSV file
+with open('csv_type1_old.csv', 'r') as file:
+    lines = file.readlines()
+
+# Process the file to extract the required rows from each block
+current_block = {}
+for line in lines[4:]:  # Skip the first 4 rows
+    if line.strip() == "Sample start":
+        if current_block:
+            extracted_data.append(current_block)
+        current_block = {}
+    else:
+        for row in rows_to_extract:
+            if line.startswith(row):
+                current_block[row] = line.split(";")[1].strip()
+
+# Append the last block if it exists
+if current_block:
+    extracted_data.append(current_block)
+
+# Create a DataFrame from the extracted data
+df = pd.DataFrame(extracted_data, columns=rows_to_extract)
+
+# Save the DataFrame to a CSV file
+df.to_csv('output.csv', index=False)
+
+print("Data extracted and saved to output.csv")
