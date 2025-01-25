@@ -254,3 +254,116 @@ Explanation:
 4. **Concatenate DataFrames**: The two DataFrames are concatenated side by side to form the final DataFrame. 
  
 This will give you the desired output DataFrame. If you have any questions or need further assistance, feel free to ask!
+
+# Computing the elapsed time
+
+I have a dataframe in which a column are datetime object. I need to compute in a new column the elapsed time for each row, being the initial time the row with the earliest datetime
+
+You can compute the elapsed time for each row in a DataFrame with a datetime column by following these steps:
+
+1. Convert the datetime column to datetime objects (if not already done).
+2. Find the earliest datetime in the column.
+3. Compute the elapsed time for each row by subtracting the earliest datetime from each datetime value in the column.
+4. Store the result in a new column.
+
+Here's an example of how to do this:
+```python
+import pandas as pd
+
+# Sample DataFrame with a datetime column
+data = {
+    'Event': ['A', 'B', 'C', 'D'],
+    'DateTime': ['2023-01-01 12:00:00', '2023-01-01 14:30:00', '2023-01-01 16:45:00', '2023-01-02 09:15:00']
+}
+df = pd.DataFrame(data)
+
+# Convert the DateTime column to datetime objects
+df['DateTime'] = pd.to_datetime(df['DateTime'])
+
+# Find the earliest datetime
+initial_time = df['DateTime'].min()
+
+# Compute the elapsed time for each row
+df['ElapsedTime'] = df['DateTime'] - initial_time
+
+print(df)
+```
+Explanation:
+1. Convert the DateTime column to datetime objects:
+   ```python
+   df['DateTime'] = pd.to_datetime(df['DateTime'])
+   ```
+   This ensures that the DateTime column is in the correct datetime format.
+
+2. Find the earliest datetime:
+   ```python
+   initial_time = df['DateTime'].min()
+   ```
+   This finds the earliest datetime in the DateTime column.
+
+3. Compute the elapsed time for each row:
+   ```python
+   df['ElapsedTime'] = df['DateTime'] - initial_time
+   ```
+   This calculates the elapsed time for each row by subtracting the earliest datetime from each datetime value in the column.
+
+Example Output:
+```
+  Event            DateTime        ElapsedTime
+0     A 2023-01-01 12:00:00  0 days 00:00:00
+1     B 2023-01-01 14:30:00  0 days 02:30:00
+2     C 2023-01-01 16:45:00  0 days 04:45:00
+3     D 2023-01-02 09:15:00  0 days 21:15:00
+```
+In this example, the ElapsedTime column shows the time difference between each row's datetime and the earliest datetime in the DataFrame.
+
+If you have any questions or need further assistance, feel free to ask!
+
+## Specific datetime format
+
+When converting types of a dataframe column using:
+df[df.columns[-1]] = pd.to_datetime(df[df.columns[-1]])
+The strings in this column have the format:
+ day/month/year hour:min
+How to transform this correctly to a datetime object?
+
+To correctly transform strings in the format `day/month/year hour:min` to datetime objects, you can use the `pd.to_datetime` function with the `format` parameter. This parameter allows you to specify the exact format of the datetime strings.
+
+Here's how you can do it:
+
+```python
+import pandas as pd
+
+# Sample DataFrame with a datetime column in the format day/month/year hour:min
+data = {
+    'Event': ['A', 'B', 'C', 'D'],
+    'DateTime': ['01/12/2023 12:46', '01/12/2023 14:30', '01/12/2023 16:45', '02/12/2023 09:15']
+}
+df = pd.DataFrame(data)
+
+# Convert the DateTime column to datetime objects with the specified format
+df['DateTime'] = pd.to_datetime(df['DateTime'], format='%d/%m/%Y %H:%M')
+
+print(df)
+```
+
+### Explanation:
+- **`format='%d/%m/%Y %H:%M'`**:
+  - `%d`: Day of the month as a zero-padded decimal number (01-31).
+  - `%m`: Month as a zero-padded decimal number (01-12).
+  - `%Y`: Year with century as a decimal number.
+  - `%H`: Hour (24-hour clock) as a zero-padded decimal number (00-23).
+  - `%M`: Minute as a zero-padded decimal number (00-59).
+
+This ensures that the `DateTime` column is correctly parsed according to the specified format.
+
+### Example Output:
+```
+  Event            DateTime
+0     A 2023-12-01 12:46:00
+1     B 2023-12-01 14:30:00
+2     C 2023-12-01 16:45:00
+3     D 2023-12-02 09:15:00
+```
+
+This will correctly convert the strings in the `DateTime` column to datetime objects. If you have any questions or need further assistance, feel free to ask!

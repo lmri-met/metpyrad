@@ -38,9 +38,9 @@ df = pd.DataFrame(extracted_data, columns=rows_to_extract)
 
 # Convert columns to numeric, except the last one which should be a date object
 for col in df.columns[:-1]:
-    df[col] = pd.to_numeric(df[col], errors='coerce')
+    df[col] = pd.to_numeric(df[col])
 
-df[df.columns[-1]] = pd.to_datetime(df[df.columns[-1]], errors='coerce')
+df[df.columns[-1]] = pd.to_datetime(df[df.columns[-1]], format='%d/%m/%Y %H:%M:%S')
 
 # STEP 2: Compute quantities for each measurement
 
@@ -82,6 +82,14 @@ result_df["Counts_net"]=result_df["Counts__smpl"]-result_df["Counts__bkgd"]
 result_df["UCounts_net"]=(result_df["UCounts_smpl"].pow(2)+result_df["UCounts_bkgd"].pow(2)).pow(1/2)
 # Compute relative uncertainty of net counts
 result_df["UrCounts_net"]=result_df["UCounts_net"]/result_df["Counts_net"]*100
+
+# STEP 5: Find the elapsed time between measurements
+
+# Find the earliest datetime
+initial_time = result_df['EndTime_smpl'].min()
+
+# Compute the elapsed time for each row
+result_df['ETime'] = result_df['EndTime_smpl'] - initial_time
 
 # STEP: Save the results
 
