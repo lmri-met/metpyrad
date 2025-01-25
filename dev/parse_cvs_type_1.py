@@ -1,3 +1,33 @@
+# The goal of this script is to process multiple CSV files, extract specific data, compute various quantities, transform the data based on measurement types, calculate net quantities, determine elapsed time in user-specified units, and save the results to new CSV files.
+# This script performs several tasks to process and analyze data from multiple CSV files. Here's a detailed description of what it does:
+# 1. Parse Type1 CSV Files:
+# - Reads multiple CSV files (csv_type1_1.csv, csv_type1_2.csv).
+# - Extracts specific rows (e.g., Samp., Repe., CPM, Counts, DTime, Time, EndTime) from each block of data within the files.
+# - Stores the extracted data in a DataFrame.
+# - Converts the extracted columns to numeric types, except for the last column, which is converted to datetime objects.
+# 2.Compute Quantities for Each Measurement:
+# - Computes the live time (LTime) as the difference between Time and DTime.
+# - Calculates total counts (Counts_) as the product of CPM and Time, divided by 60.
+# - Computes the uncertainty of total counts (UCounts) as the square root of Counts_.
+# - Calculates the relative uncertainty of total counts (UrCounts) as the ratio of UCounts to Counts_, multiplied by 100.
+# 3. Transform the DataFrame Based on Background or Sample Measurements:
+# - Splits the DataFrame into two separate DataFrames based on the Samp. column (background and sample measurements).
+# - Renames the columns of each DataFrame to distinguish between background (_bkgd) and sample (_smpl) measurements.
+# - Concatenates the two DataFrames side by side.
+# - Drops unnecessary columns (Samp._bkgd, Samp._smpl, Repe._smpl) and renames the repetition column (Repe._bkgd to Repe.).
+# 4. Compute Net Quantities:
+# - Calculates the net count rate (CPM_net) as the difference between sample and background count rates.
+# - Computes net counts (Counts_net) as the difference between sample and background counts.
+# - Calculates the uncertainty of net counts (UCounts_net) as the square root of the sum of the squares of sample and background uncertainties.
+# - Computes the relative uncertainty of net counts (UrCounts_net) as the ratio of UCounts_net to Counts_net, multiplied by 100.
+# 5. Find the Elapsed Time Between Measurements:
+# - Finds the earliest datetime in the EndTime_smpl column.
+# - Computes the elapsed time for each row as the difference between each datetime and the earliest datetime.
+# - Converts the elapsed time to a user-specified unit (e.g., minutes) and adds it as a new column.
+# 6. Save the Results:
+# - Saves the initial DataFrame to output1.csv.
+# - Saves the transformed and computed results to output2.csv.
+# In summary, this script processes CSV files to extract and compute various data points, transforms the data for analysis, calculates net quantities, determines elapsed time, and saves the results to new CSV files.
 import pandas as pd
 
 # STEP 1: Parse type1 CSV files to a dataframe
