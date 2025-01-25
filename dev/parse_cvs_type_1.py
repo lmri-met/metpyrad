@@ -46,6 +46,8 @@ df["LTime"]=df["Time"]-df["DTime"]
 df["Counts_"]=df["CPM"]*df["Time"]/60
 # Compute uncertainty of total counts
 df["UCounts"]=df["Counts_"].pow(1/2)
+# Compute relative uncertainty of total counts
+df["UrCounts"]=df["UCounts"]/df["Counts_"]*100
 
 # Split the DataFrame into two DataFrames based on Samp.
 df_b = df[df["Samp."] == df["Samp."].unique()[0]].reset_index(drop=True)
