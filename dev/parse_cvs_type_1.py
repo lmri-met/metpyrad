@@ -47,7 +47,25 @@ df["Counts_"]=df["CPM"]*df["Time"]/60
 # Compute uncertainty of total counts
 df["UCounts"]=df["Counts_"].pow(1/2)
 
+# Split the DataFrame into two DataFrames based on Samp.
+df_b = df[df["Samp."] == df["Samp."].unique()[0]].reset_index(drop=True)
+df_s = df[df["Samp."] == df["Samp."].unique()[1]].reset_index(drop=True)
+
+# Rename columns for each DataFrame
+df_b.columns = [col + "_bkgd" for col in df_b.columns]
+df_s.columns = [col + "_smpl" for col in df_s.columns]
+
+# Concatenate the two DataFrames side by side
+result_df = pd.concat([df_b, df_s], axis=1)
+
+# Drop sample coumns for background and sample and repetition column for sample
+result_df = result_df.drop(['Samp._bkgd', 'Samp._smpl', 'Repe._smpl'], axis=1)
+
+# Rename repetition column
+result_df = result_df.rename(columns={'Repe._bkgd': 'Repe.'})
+
 # Save the DataFrame to a CSV file
-df.to_csv('output.csv', index=False)
+df.to_csv('output1.csv', index=False)
+result_df.to_csv('output2.csv', index=False)
 
 print("Data extracted, types converted, and saved to output.csv")
