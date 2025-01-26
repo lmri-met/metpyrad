@@ -134,10 +134,15 @@ import pandas as pd
 
 class DataProcessor:
     def __init__(self, input_files, rows_to_extract):
-        self.input_files = input_files
-        self.rows_to_extract = rows_to_extract
+        self.input_files = input_files # This should not be a class attribute
+        self.rows_to_extract = rows_to_extract # This should be a class constant
+        # This a dataframe with the parsed lines and computed values of live time and total counts value and uncertainties for the backgorund and the sample
         self.df = None
+        # This is dataframe with the quantities for background, sample and net
         self.result_df = None
+        # A dataframe with the raw parsed values should be stored
+        # Attributes dataframes may be one for the background, one for the sample, and one for the net quantities
+        # There may be attributes for the radionuclide of the sample and the month and year of the measurement, for ID purposes
 
     def parse_csv_files(self):
         extracted_data = []
