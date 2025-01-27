@@ -20,7 +20,7 @@ def get_csv_files(folder_path):
 
 
 class DataProcessor:  # TODO: find a better name, use instrument model or something
-    ROWS_TO_EXTRACT = ["Samp.", "Repe.", "CPM", "Counts", "DTime", "Time", "EndTime"]
+    ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
     DATE_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
     BLOCK_STARTER = 'Sample start'
     ID_LINES = 4
@@ -69,7 +69,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
                 lines = file.readlines()
             current_block = {}
             for line in lines[self.ID_LINES:]:
-                if line.strip() == "Sample start":
+                if line.strip() == 'Sample start':
                     if current_block:
                         extracted_data.append(current_block)
                     current_block = {'file': file_number}
@@ -89,6 +89,10 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         cols = df.columns.tolist()
         cols = [cols[-1]] + cols[:-1]
         df = df[cols]
+        # Rename columns
+        old_names = ['file','Samp.','Repe.','CPM','Counts','DTime','Time','EndTime']
+        new_names = ['Cicle','Sample','Repetitions','Count rate (cpm)','Counts (reading)','Dead time (s)','Real time (s)','End time']
+        df = df.rename(columns=dict(zip(old_names, new_names)))
         self.readings_df = df
 
     def get_statistics(self):
@@ -98,72 +102,72 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         # Initialize a variable to store the total number of measurements
         total_measurements = 0
         # Iterate over each unique file
-        for file_number in self.readings_df['file'].unique():
+        for file_number in self.readings_df['Cicle'].unique():
             # Filter the DataFrame for the current file
-            file_df = self.readings_df[self.readings_df['file'] == file_number]
+            file_df = self.readings_df[self.readings_df['Cicle'] == file_number]
             # Get the maximum number of repetitions for the current file
-            max_repetitions = file_df['Repe.'].max()
+            max_repetitions = file_df['Repetitions'].max()
             # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
-            time_repetitions = file_df['Time'].iloc[0]
+            time_repetitions = file_df['Real time (s)'].iloc[0]
             # Check if all times are the same for the current file
-            if not (file_df['Time'] == time_repetitions).all():
-                raise ValueError(f"Time values are not consistent for file {file_number}")
+            if not (file_df['Real time (s)'] == time_repetitions).all():
+                raise ValueError(f'Time values are not consistent for file {file_number}')
             # Calculate the total number of measurements for the current file
             total_measurements += max_repetitions
             # Get the earliest end time for the current file
-            earliest_end_time = file_df['EndTime'].min()
+            earliest_end_time = file_df['End time'].min()
             # Append the results to the list
             results.append({
-                'File': file_number,
+                'Cicle': file_number,
                 'Repetitions': max_repetitions,
-                'Time': time_repetitions,
+                'Real time (s)': time_repetitions,
                 'Date': earliest_end_time
             })
         # Convert the results to a DataFrame
-        self.summary_df = pd.DataFrame(results, columns=['File', 'Repetitions', 'Time', 'Date'])
+        self.summary_df = pd.DataFrame(results, columns=['Cicle', 'Repetitions', 'Real time (s)', 'Date'])
         # Get the number of unique files
-        self.number_of_cicles = df['file'].nunique()
+        self.number_of_cicles = df['Cicle'].nunique()
         # Assing the total number of measurements
         self.number_of_measurements = self.summary_df['Repetitions'].sum()
         # Get the total measurement time
-        self.measurement_time = (self.summary_df['Repetitions'] * self.summary_df['Time']).sum()
+        self.measurement_time = (self.summary_df['Repetitions'] * self.summary_df['Real time (s)']).sum()
         # Get the time per repetition TODO: are these always the same?
-        time_repetitions = self.summary_df['Time'].iloc[0]
-        if not (self.summary_df['Time'] == time_repetitions).all():
-            raise ValueError(f"Time values are not consistent for all files")
+        time_repetitions = self.summary_df['Real time (s)'].iloc[0]
+        if not (self.summary_df['Real time (s)'] == time_repetitions).all():
+            raise ValueError(f'Time values are not consistent for all files')
         self.time_per_repetition = time_repetitions
         # Get the repetitions per cicle TODO: are these always the same?
         repetitions_per_cicle = self.summary_df['Repetitions'].iloc[0]
         if not (self.summary_df['Repetitions'] == repetitions_per_cicle).all():
-            raise ValueError(f"Repetitions per cicle are not consistent for all files")
+            raise ValueError(f'Repetitions per cicle are not consistent for all files')
         self.repetitions_per_cicle = repetitions_per_cicle
 
     def get_background_sample_df(self):
         df = self.readings_df.copy()
-        df["LTime"] = df["Time"] - df["DTime"]
-        df["Counts_"] = df["CPM"] * df["Time"] / 60
-        df["UCounts"] = df["Counts_"].pow(1 / 2)
-        df["UrCounts"] = df["UCounts"] / df["Counts_"] * 100
-        df_b = df[df["Samp."] == df["Samp."].unique()[0]].reset_index(drop=True)
-        df_s = df[df["Samp."] == df["Samp."].unique()[1]].reset_index(drop=True)
+        df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)']
+        df['Counts'] = df['Count rate (cpm)'] * df['Real time (s)'] / 60
+        df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
+        df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
+        df_b = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
+        df_s = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
         # TODO: drop unncessesary columns
         self.background_df = df_b
         self.sample_df = df_s
 
     def get_net_quantities_df(self, time_unit):  # TODO: check time conversion factors
-        net_cpm = self.sample_df["CPM"] - self.background_df["CPM"]
-        net_counts = self.sample_df["Counts_"] - self.background_df["Counts_"]
-        u_net_counts = (self.sample_df["UCounts"].pow(2) + self.background_df["UCounts"].pow(2)).pow(1 / 2)
+        net_cpm = self.sample_df['Count rate (cpm)'] - self.background_df['Count rate (cpm)']
+        net_counts = self.sample_df['Counts'] - self.background_df['Counts']
+        u_net_counts = (self.sample_df['Counts uncertainty'].pow(2) + self.background_df['Counts uncertainty'].pow(2)).pow(1 / 2)
         ur_net_counts = u_net_counts / net_counts * 100
-        initial_time = self.sample_df['EndTime'].min()
-        elapsed_time = self.sample_df['EndTime'] - initial_time
+        initial_time = self.sample_df['End time'].min()
+        elapsed_time = self.sample_df['End time'] - initial_time
         time_conversion = {'seconds': 1, 'minutes': 1 / 60, 'hours': 1 / 3600, 'days': 1 / 86400,
                            'weeks': 1 / (86400 * 7), 'months': 1 / (86400 * 30.44), 'years': 1 / (86400 * 365.25)}
         if time_unit not in time_conversion:
             raise ValueError(
-                "Invalid unit. Choose from 'seconds', 'minutes', 'hours', 'days', 'weeks', 'months', or 'years'.")
+                'Invalid unit. Choose from "seconds", "minutes", "hours", "days", "weeks", "months", or "years".')
         elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
-        labels = ['ETime', f'ETime ({time_unit})', 'CPM', 'Counts', 'UCounts', 'UrCounts']
+        labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty', 'Counts uncertainty (%)']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
         self.net_df = pd.DataFrame(dict(zip(labels, data)))
 
@@ -189,26 +193,26 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         elif sample == 'sample':
             df = self.sample_df
         else:
-            raise ValueError("Invalid sample value. Choose from 'background' or 'sample'.")
-        x = df['EndTime']
+            raise ValueError('Invalid sample value. Choose from "background" or "sample".')
+        x = df['End time']
         xlabel = 'End time'
         markersize = 2
         fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
-        axs[0, 0].plot(x, df['CPM'], 'o-', markersize=markersize)
+        axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
         axs[0, 0].set_ylabel('Count rate (cpm)')
-        axs[0, 1].plot(x, df['DTime'], 'o-', markersize=markersize)
+        axs[0, 1].plot(x, df['Dead time (s)'], 'o-', markersize=markersize)
         axs[0, 1].set_ylabel('Dead time (s)')
-        axs[1, 0].plot(x, df['Time'], 'o-', markersize=markersize)
+        axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
         axs[1, 0].set_ylabel('Real time (s)')
-        axs[1, 1].plot(x, df['LTime'], 'o-', markersize=markersize)
+        axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
         axs[1, 1].set_ylabel('Live time (s)')
-        axs[2, 0].plot(x, df['Counts'], 'o-', label='Measured', markersize=markersize)
-        axs[2, 0].plot(x, df['Counts_'], 'o-', label='Calculated', markersize=markersize)
+        axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=markersize)
+        axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=markersize)
         axs[2, 0].set_ylabel('Counts')
         axs[2, 0].legend()
         axs[2, 0].set_xlabel(xlabel)
         axs[2, 0].tick_params(axis='x', rotation=45)
-        axs[2, 1].plot(x, df['UrCounts'], 'o-', markersize=markersize)
+        axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
         axs[2, 1].set_ylabel('Counts uncertainty (%)')
         axs[2, 1].set_xlabel(xlabel)
         axs[2, 1].tick_params(axis='x', rotation=45)
@@ -219,9 +223,9 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
     def plot_net_quantities(self):
         df = self.net_df
         # Extracting the unit from the column label
-        etime_column = [col for col in df.columns if col.startswith('ETime (')][0]
+        etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
         unit = etime_column.split('(')[-1].strip(')')
-        x = df[f'ETime ({unit})']
+        x = df[f'Elapsed time ({unit})']
         xlabel = f'Elapsed time ({unit})'
         markersize = 2
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
@@ -229,7 +233,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         ax1.set_ylabel('Counts')
         ax1.set_xlabel(xlabel)
         ax1.tick_params(axis='x', rotation=45)
-        ax2.plot(x, df['UrCounts'], 'o-', markersize=markersize)
+        ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
         ax2.set_ylabel('Counts uncertainty (%)')
         ax2.set_xlabel(xlabel)
         ax2.tick_params(axis='x', rotation=45)
