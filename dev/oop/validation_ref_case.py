@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+# processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
+# input_folder_path = '../ref_case/equipment_output_files'
+# processor.process_readings(input_folder_path, 's')
+
 df1 = pd.read_csv('oop/Lu-177_2023_11/results.csv', header=[0, 1])
 df2 = pd.read_excel('ref_case/results_file.xlsx', usecols='A,B,C,D,E,F,G,H,J,K,L,M,N', skiprows=2)
 
