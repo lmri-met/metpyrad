@@ -27,23 +27,18 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
     DELIMITER = ';'
 
     def __init__(self, radionuclide, year, month):
-        # There may be attributes for the radionuclide of the sample and the month and year of the measurement, for ID purposes
         self.radionuclide = radionuclide
         self.year = year
         self.month = month
-        # A dataframe with the raw parsed values should be stored
-        # This a dataframe with the parsed lines and computed values of live time and total counts value and uncertainties for the backgorund and the sample
-        self.readings_df = None
-        # Attributes dataframes may be one for the background, one for the sample, and one for the net quantities
-        self.background_df = None
-        self.sample_df = None
-        self.net_df = None
-        # Summary of the measurement
-        self.summary_df = None
-        self.number_of_cicles = None
-        self.repetitions_per_cicle = None
-        self.time_per_repetition = None
-        self.number_of_measurements = None
+        self.readings = None
+        self.background = None
+        self.sample = None
+        self.net = None
+        self.summary = None
+        self.cycles = None
+        self.cycle_repetitions = None
+        self.repetition_time = None
+        self.measurements = None
         self.measurement_time = None
 
     def __repr__(self):
@@ -51,13 +46,12 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 
     def __str__(self):
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
-        attributes = ['number_of_cicles', 'repetitions_per_cicle', 'time_per_repetition', 'number_of_measurements',
-                      'measurement_time']
+        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
         if all(getattr(self, attr) is not None for attr in attributes):
-            msg += (f'\nNumber of cicles: {self.number_of_cicles}\n'
-                    f'Repetitions per cicle:{self.repetitions_per_cicle}\n'
-                    f'Time per repetition: {self.time_per_repetition} s\n'
-                    f'Total number of measurements: {self.number_of_measurements}\n'
+            msg += (f'\nNumber of cicles: {self.cycles}\n'
+                    f'Repetitions per cicle:{self.cycle_repetitions}\n'
+                    f'Time per repetition: {self.repetition_time} s\n'
+                    f'Total number of measurements: {self.measurements}\n'
                     f'Total measurement time: {self.measurement_time} s')
         return msg
 
@@ -93,18 +87,18 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         old_names = ['file','Samp.','Repe.','CPM','Counts','DTime','Time','EndTime']
         new_names = ['Cicle','Sample','Repetitions','Count rate (cpm)','Counts (reading)','Dead time (s)','Real time (s)','End time']
         df = df.rename(columns=dict(zip(old_names, new_names)))
-        self.readings_df = df
+        self.readings = df
 
     def get_statistics(self):
-        df = self.readings_df.copy()
+        df = self.readings.copy()
         # Initialize a list to store the results
         results = []
         # Initialize a variable to store the total number of measurements
         total_measurements = 0
         # Iterate over each unique file
-        for file_number in self.readings_df['Cicle'].unique():
+        for file_number in self.readings['Cicle'].unique():
             # Filter the DataFrame for the current file
-            file_df = self.readings_df[self.readings_df['Cicle'] == file_number]
+            file_df = self.readings[self.readings['Cicle'] == file_number]
             # Get the maximum number of repetitions for the current file
             max_repetitions = file_df['Repetitions'].max()
             # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
@@ -124,26 +118,26 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
                 'Date': earliest_end_time
             })
         # Convert the results to a DataFrame
-        self.summary_df = pd.DataFrame(results, columns=['Cicle', 'Repetitions', 'Real time (s)', 'Date'])
+        self.summary = pd.DataFrame(results, columns=['Cicle', 'Repetitions', 'Real time (s)', 'Date'])
         # Get the number of unique files
-        self.number_of_cicles = df['Cicle'].nunique()
+        self.cycles = df['Cicle'].nunique()
         # Assing the total number of measurements
-        self.number_of_measurements = self.summary_df['Repetitions'].sum()
+        self.measurements = self.summary['Repetitions'].sum()
         # Get the total measurement time
-        self.measurement_time = (self.summary_df['Repetitions'] * self.summary_df['Real time (s)']).sum()
+        self.measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
         # Get the time per repetition TODO: are these always the same?
-        time_repetitions = self.summary_df['Real time (s)'].iloc[0]
-        if not (self.summary_df['Real time (s)'] == time_repetitions).all():
+        time_repetitions = self.summary['Real time (s)'].iloc[0]
+        if not (self.summary['Real time (s)'] == time_repetitions).all():
             raise ValueError(f'Time values are not consistent for all files')
-        self.time_per_repetition = time_repetitions
+        self.repetition_time = time_repetitions
         # Get the repetitions per cicle TODO: are these always the same?
-        repetitions_per_cicle = self.summary_df['Repetitions'].iloc[0]
-        if not (self.summary_df['Repetitions'] == repetitions_per_cicle).all():
+        repetitions_per_cicle = self.summary['Repetitions'].iloc[0]
+        if not (self.summary['Repetitions'] == repetitions_per_cicle).all():
             raise ValueError(f'Repetitions per cicle are not consistent for all files')
-        self.repetitions_per_cicle = repetitions_per_cicle
+        self.cycle_repetitions = repetitions_per_cicle
 
     def get_background_sample_df(self):
-        df = self.readings_df.copy()
+        df = self.readings.copy()
         df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)']
         df['Counts'] = df['Count rate (cpm)'] * df['Real time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
@@ -151,29 +145,29 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         df_b = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
         df_s = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
         # TODO: drop unncessesary columns
-        self.background_df = df_b
-        self.sample_df = df_s
+        self.background = df_b
+        self.sample = df_s
 
     def get_net_quantities_df(self, time_unit):  # TODO: check time conversion factors
-        net_cpm = self.sample_df['Count rate (cpm)'] - self.background_df['Count rate (cpm)']
-        net_counts = self.sample_df['Counts'] - self.background_df['Counts']
-        u_net_counts = (self.sample_df['Counts uncertainty'].pow(2) + self.background_df['Counts uncertainty'].pow(2)).pow(1 / 2)
+        net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
+        net_counts = self.sample['Counts'] - self.background['Counts']
+        u_net_counts = (self.sample['Counts uncertainty'].pow(2) + self.background['Counts uncertainty'].pow(2)).pow(1 / 2)
         ur_net_counts = u_net_counts / net_counts * 100
-        initial_time = self.sample_df['End time'].min()
-        elapsed_time = self.sample_df['End time'] - initial_time
+        initial_time = self.sample['End time'].min()
+        elapsed_time = self.sample['End time'] - initial_time
         time_conversion = {'s': 1, 'min': 1 / 60, 'h': 1 / 3600, 'd': 1 / 86400, 'wk': 1 / (86400 * 7), 'mo': 1 / (86400 * 30.44), 'yr': 1 / (86400 * 365.25)}
         if time_unit not in time_conversion:
             raise ValueError(f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), weeks ("wk"), months ("mo"), or years ("yr").')
         elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
         labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty', 'Counts uncertainty (%)']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
-        self.net_df = pd.DataFrame(dict(zip(labels, data)))
+        self.net = pd.DataFrame(dict(zip(labels, data)))
 
     def concatenate_results(self):
         # Sample DataFrames
-        df1 = self.background_df.copy()
-        df2 = self.sample_df.copy()
-        df3 = self.net_df.copy()
+        df1 = self.background.copy()
+        df2 = self.sample.copy()
+        df3 = self.net.copy()
         # Creating multi-level headers
         header1 = pd.MultiIndex.from_product([['Background'], df1.columns])
         header2 = pd.MultiIndex.from_product([['Sample'], df2.columns])
@@ -187,9 +181,9 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 
     def plot_readings(self, sample):
         if sample == 'background':
-            df = self.background_df
+            df = self.background
         elif sample == 'sample':
-            df = self.sample_df
+            df = self.sample
         else:
             raise ValueError('Invalid sample value. Choose from "background" or "sample".')
         x = df['End time']
@@ -219,7 +213,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         return fig
 
     def plot_net_quantities(self):
-        df = self.net_df
+        df = self.net
         # Extracting the unit from the column label
         etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
         unit = etime_column.split('(')[-1].strip(')')
@@ -252,9 +246,9 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         if os.path.exists(f'{output_folder}/readings'):
             shutil.rmtree(f'{output_folder}/readings')
         shutil.copytree(folder_path, f'{output_folder}/readings')
-        self.background_df.to_csv(f'{output_folder}/background.csv', index=False)
-        self.sample_df.to_csv(f'{output_folder}/sample.csv', index=False)
-        self.net_df.to_csv(f'{output_folder}/net.csv', index=False)
+        self.background.to_csv(f'{output_folder}/background.csv', index=False)
+        self.sample.to_csv(f'{output_folder}/sample.csv', index=False)
+        self.net.to_csv(f'{output_folder}/net.csv', index=False)
         df.to_csv(f'{output_folder}/results.csv', index=False)
         print(f'Saving figures to folder {output_folder}.')
         fig1 = self.plot_readings('sample')
