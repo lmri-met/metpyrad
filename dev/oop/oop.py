@@ -161,11 +161,9 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         ur_net_counts = u_net_counts / net_counts * 100
         initial_time = self.sample_df['End time'].min()
         elapsed_time = self.sample_df['End time'] - initial_time
-        time_conversion = {'seconds': 1, 'minutes': 1 / 60, 'hours': 1 / 3600, 'days': 1 / 86400,
-                           'weeks': 1 / (86400 * 7), 'months': 1 / (86400 * 30.44), 'years': 1 / (86400 * 365.25)}
+        time_conversion = {'s': 1, 'min': 1 / 60, 'h': 1 / 3600, 'd': 1 / 86400, 'wk': 1 / (86400 * 7), 'mo': 1 / (86400 * 30.44), 'yr': 1 / (86400 * 365.25)}
         if time_unit not in time_conversion:
-            raise ValueError(
-                'Invalid unit. Choose from "seconds", "minutes", "hours", "days", "weeks", "months", or "years".')
+            raise ValueError(f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), weeks ("wk"), months ("mo"), or years ("yr").')
         elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
         labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty', 'Counts uncertainty (%)']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
@@ -241,14 +239,14 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         plt.tight_layout()
         return fig
 
-    def process_readings(self, folder_path):
+    def process_readings(self, folder_path, time_unit):
         output_folder = f'{self.radionuclide}_{self.year}_{self.month}'
         os.makedirs(output_folder, exist_ok=True)
         print(f'Processing readings from {folder_path}.')
         self.parse_csv_files(folder_path)
         self.get_statistics()
         self.get_background_sample_df()
-        self.get_net_quantities_df('seconds')
+        self.get_net_quantities_df(time_unit)
         df = self.concatenate_results()
         print(f'Saving CSV files to folder {output_folder}.')
         if os.path.exists(f'{output_folder}/readings'):
@@ -272,4 +270,4 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 if __name__ == "__main__":
     processor = DataProcessor(radionuclide='Lu-177', year=2023, month=11)
     input_folder_path = '../ref_case/equipment_output_files'
-    processor.process_readings(input_folder_path)
+    processor.process_readings(input_folder_path, 's')
