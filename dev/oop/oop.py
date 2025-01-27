@@ -19,7 +19,7 @@ def get_csv_files(folder_path):
     return csv_files
 
 
-class DataProcessor:  # TODO: find a better name, use instrument model or something
+class HidexTDCRProcessor:
     ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
     DATE_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
     BLOCK_STARTER = 'Sample start'
@@ -125,12 +125,12 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         self.measurements = self.summary['Repetitions'].sum()
         # Get the total measurement time
         self.measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
-        # Get the time per repetition TODO: are these always the same?
+        # Get the time per repetition
         time_repetitions = self.summary['Real time (s)'].iloc[0]
         if not (self.summary['Real time (s)'] == time_repetitions).all():
             raise ValueError(f'Time values are not consistent for all files')
         self.repetition_time = time_repetitions
-        # Get the repetitions per cicle TODO: are these always the same?
+        # Get the repetitions per cicle
         repetitions_per_cicle = self.summary['Repetitions'].iloc[0]
         if not (self.summary['Repetitions'] == repetitions_per_cicle).all():
             raise ValueError(f'Repetitions per cicle are not consistent for all files')
@@ -138,13 +138,12 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 
     def get_background_sample_df(self):
         df = self.readings.copy()
-        df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)']
+        df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)'] # TODO: dead time is a factor o a number in seconds?
         df['Counts'] = df['Count rate (cpm)'] * df['Real time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
         df_b = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
         df_s = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
-        # TODO: drop unncessesary columns
         self.background = df_b
         self.sample = df_s
 
@@ -262,6 +261,8 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 
 
 if __name__ == "__main__":
-    processor = DataProcessor(radionuclide='Lu-177', year=2023, month=11)
+    processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
     input_folder_path = '../ref_case/equipment_output_files'
     processor.process_readings(input_folder_path, 's')
+
+    df = processor.concatenate_results()
