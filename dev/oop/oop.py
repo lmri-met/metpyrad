@@ -91,7 +91,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         df = df[cols]
         self.readings_df = df
 
-    def analyze_files(self):  # TODO: find a better name get_readings_statictics?
+    def get_statistics(self):
         df = self.readings_df.copy()
         # Initialize a list to store the results
         results = []
@@ -167,7 +167,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
         self.net_df = pd.DataFrame(dict(zip(labels, data)))
 
-    def get_result_df(self):  # TODO: find a better name
+    def concatenate_results(self):
         # Sample DataFrames
         df1 = self.background_df.copy()
         df2 = self.sample_df.copy()
@@ -183,7 +183,7 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
-    def plot_measurements(self, sample):  # TODO: Find a better name plot_readings?
+    def plot_readings(self, sample):
         if sample == 'background':
             df = self.background_df
         elif sample == 'sample':
@@ -239,10 +239,10 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         os.makedirs(output_folder, exist_ok=True)
         print(f'Processing readings from {folder_path}.')
         self.parse_csv_files(folder_path)
-        self.analyze_files()
+        self.get_statistics()
         self.get_background_sample_df()
         self.get_net_quantities_df('seconds')
-        df = self.get_result_df()
+        df = self.concatenate_results()
         print(f'Saving CSV files to folder {output_folder}.')
         if os.path.exists(f'{output_folder}/readings'):
             shutil.rmtree(f'{output_folder}/readings')
@@ -252,9 +252,9 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         self.net_df.to_csv(f'{output_folder}/net.csv', index=False)
         df.to_csv(f'{output_folder}/results.csv', index=False)
         print(f'Saving figures to folder {output_folder}.')
-        fig1 = self.plot_measurements('sample')
+        fig1 = self.plot_readings('sample')
         plt.savefig(f'{output_folder}/sample_measurements.png')
-        fig2 = self.plot_measurements('background')
+        fig2 = self.plot_readings('background')
         plt.savefig(f'{output_folder}/background_measurements.png')
         fig3 = self.plot_net_quantities()
         plt.savefig(f'{output_folder}/net_quantities.png')
