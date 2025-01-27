@@ -9,18 +9,13 @@ import pandas as pd
 def get_csv_files(folder_path):
     # List to store csv files with their full paths
     csv_files = []
-
     # Iterate over all the files in the given folder
     for file_name in os.listdir(folder_path):
         # Check if the file has a .csv extension
         if file_name.endswith('.csv'):
             # Append the absolute path of the file to the list
             csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
-
     print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
-    # for i in csv_files:
-    #     print(i)
-
     return csv_files
 
 
@@ -64,7 +59,6 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
                     f'Time per repetition: {self.time_per_repetition} s\n'
                     f'Total number of measurements: {self.number_of_measurements}\n'
                     f'Total measurement time: {self.measurement_time} s')
-
         return msg
 
     def parse_csv_files(self, folder_path):
@@ -91,44 +85,33 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         df[df.columns[-2]] = pd.to_datetime(df[df.columns[-2]], format=self.DATE_TIME_FORMAT)
         df = df.sort_values(by='EndTime')
         df = df.reset_index(drop=True)
-
         # Moving the last column to be the first
         cols = df.columns.tolist()
         cols = [cols[-1]] + cols[:-1]
         df = df[cols]
-
         self.readings_df = df
 
     def analyze_files(self):  # TODO: find a better name get_readings_statictics?
         df = self.readings_df.copy()
-
         # Initialize a list to store the results
         results = []
-
         # Initialize a variable to store the total number of measurements
         total_measurements = 0
-
         # Iterate over each unique file
         for file_number in self.readings_df['file'].unique():
             # Filter the DataFrame for the current file
             file_df = self.readings_df[self.readings_df['file'] == file_number]
-
             # Get the maximum number of repetitions for the current file
             max_repetitions = file_df['Repe.'].max()
-
             # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
             time_repetitions = file_df['Time'].iloc[0]
-
             # Check if all times are the same for the current file
             if not (file_df['Time'] == time_repetitions).all():
                 raise ValueError(f"Time values are not consistent for file {file_number}")
-
             # Calculate the total number of measurements for the current file
             total_measurements += max_repetitions
-
             # Get the earliest end time for the current file
             earliest_end_time = file_df['EndTime'].min()
-
             # Append the results to the list
             results.append({
                 'File': file_number,
@@ -136,7 +119,6 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
                 'Time': time_repetitions,
                 'Date': earliest_end_time
             })
-
         # Convert the results to a DataFrame
         self.summary_df = pd.DataFrame(results, columns=['File', 'Repetitions', 'Time', 'Date'])
         # Get the number of unique files
@@ -145,12 +127,12 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         self.number_of_measurements = self.summary_df['Repetitions'].sum()
         # Get the total measurement time
         self.measurement_time = (self.summary_df['Repetitions'] * self.summary_df['Time']).sum()
-
+        # Get the time per repetition TODO: are these always the same?
         time_repetitions = self.summary_df['Time'].iloc[0]
         if not (self.summary_df['Time'] == time_repetitions).all():
             raise ValueError(f"Time values are not consistent for all files")
         self.time_per_repetition = time_repetitions
-
+        # Get the repetitions per cicle TODO: are these always the same?
         repetitions_per_cicle = self.summary_df['Repetitions'].iloc[0]
         if not (self.summary_df['Repetitions'] == repetitions_per_cicle).all():
             raise ValueError(f"Repetitions per cicle are not consistent for all files")
@@ -162,7 +144,6 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         df["Counts_"] = df["CPM"] * df["Time"] / 60
         df["UCounts"] = df["Counts_"].pow(1 / 2)
         df["UrCounts"] = df["UCounts"] / df["Counts_"] * 100
-
         df_b = df[df["Samp."] == df["Samp."].unique()[0]].reset_index(drop=True)
         df_s = df[df["Samp."] == df["Samp."].unique()[1]].reset_index(drop=True)
         # TODO: drop unncessesary columns
@@ -174,19 +155,14 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         net_counts = self.sample_df["Counts_"] - self.background_df["Counts_"]
         u_net_counts = (self.sample_df["UCounts"].pow(2) + self.background_df["UCounts"].pow(2)).pow(1 / 2)
         ur_net_counts = u_net_counts / net_counts * 100
-
         initial_time = self.sample_df['EndTime'].min()
         elapsed_time = self.sample_df['EndTime'] - initial_time
-        # label = f'ETime ({time_unit})'
-        time_conversion = {
-            'seconds': 1, 'minutes': 1 / 60, 'hours': 1 / 3600, 'days': 1 / 86400,
-            'weeks': 1 / (86400 * 7), 'months': 1 / (86400 * 30.44), 'years': 1 / (86400 * 365.25)
-        }
+        time_conversion = {'seconds': 1, 'minutes': 1 / 60, 'hours': 1 / 3600, 'days': 1 / 86400,
+                           'weeks': 1 / (86400 * 7), 'months': 1 / (86400 * 30.44), 'years': 1 / (86400 * 365.25)}
         if time_unit not in time_conversion:
             raise ValueError(
                 "Invalid unit. Choose from 'seconds', 'minutes', 'hours', 'days', 'weeks', 'months', or 'years'.")
         elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
-
         labels = ['ETime', f'ETime ({time_unit})', 'CPM', 'Counts', 'UCounts', 'UrCounts']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
         self.net_df = pd.DataFrame(dict(zip(labels, data)))
@@ -196,17 +172,14 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         df1 = self.background_df.copy()
         df2 = self.sample_df.copy()
         df3 = self.net_df.copy()
-
         # Creating multi-level headers
         header1 = pd.MultiIndex.from_product([['Background'], df1.columns])
         header2 = pd.MultiIndex.from_product([['Sample'], df2.columns])
         header3 = pd.MultiIndex.from_product([['Net'], df3.columns])
-
         # Assigning the multi-level headers to the DataFrames
         df1.columns = header1
         df2.columns = header2
         df3.columns = header3
-
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
@@ -217,13 +190,10 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
             df = self.sample_df
         else:
             raise ValueError("Invalid sample value. Choose from 'background' or 'sample'.")
-
         x = df['EndTime']
         xlabel = 'End time'
         markersize = 2
-
         fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
-
         axs[0, 0].plot(x, df['CPM'], 'o-', markersize=markersize)
         axs[0, 0].set_ylabel('Count rate (cpm)')
         axs[0, 1].plot(x, df['DTime'], 'o-', markersize=markersize)
@@ -242,10 +212,8 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         axs[2, 1].set_ylabel('Counts uncertainty (%)')
         axs[2, 1].set_xlabel(xlabel)
         axs[2, 1].tick_params(axis='x', rotation=45)
-
         fig.suptitle(f'{sample.capitalize()} measurements')
         plt.tight_layout()
-
         return fig
 
     def plot_net_quantities(self):
@@ -253,22 +221,17 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
         x = df['ETime (seconds)']  # TODO unit may vary
         xlabel = 'Elapsed time (seconds)'
         markersize = 2
-
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
-
         ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
         ax1.set_ylabel('Counts')
         ax1.set_xlabel(xlabel)
         ax1.tick_params(axis='x', rotation=45)
-
         ax2.plot(x, df['UrCounts'], 'o-', markersize=markersize)
         ax2.set_ylabel('Counts uncertainty (%)')
         ax2.set_xlabel(xlabel)
         ax2.tick_params(axis='x', rotation=45)
-
         fig.suptitle(f'Net quantities measurements')
         plt.tight_layout()
-
         return fig
 
     def process_readings(self, folder_path):
