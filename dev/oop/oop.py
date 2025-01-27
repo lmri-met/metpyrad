@@ -218,8 +218,11 @@ class DataProcessor:  # TODO: find a better name, use instrument model or someth
 
     def plot_net_quantities(self):
         df = self.net_df
-        x = df['ETime (seconds)']  # TODO unit may vary
-        xlabel = 'Elapsed time (seconds)'
+        # Extracting the unit from the column label
+        etime_column = [col for col in df.columns if col.startswith('ETime (')][0]
+        unit = etime_column.split('(')[-1].strip(')')
+        x = df[f'ETime ({unit})']
+        xlabel = f'Elapsed time ({unit})'
         markersize = 2
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
         ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
