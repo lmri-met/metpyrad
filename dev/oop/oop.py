@@ -150,7 +150,7 @@ class HidexTDCRProcessor:
     def get_net_quantities_df(self, time_unit):  # TODO: check time conversion factors
         net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
         net_counts = self.sample['Counts'] - self.background['Counts']
-        u_net_counts = (self.sample['Counts uncertainty'].pow(2) + self.background['Counts uncertainty'].pow(2)).pow(1 / 2)
+        u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1/2)
         ur_net_counts = u_net_counts / net_counts * 100
         initial_time = self.sample['End time'].min()
         elapsed_time = self.sample['End time'] - initial_time
