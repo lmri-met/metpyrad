@@ -238,8 +238,6 @@ class HidexTDCRProcessor:
         return fig
 
     def process_readings(self, folder_path, time_unit, save=True):
-        output_folder = f'{self.radionuclide}_{self.year}_{self.month}'
-        os.makedirs(output_folder, exist_ok=True)
         print(f'Processing readings from {folder_path}.')
         self.parse_csv_files(folder_path)
         self.get_statistics()
@@ -249,6 +247,8 @@ class HidexTDCRProcessor:
         print('Measurements summary:')
         print(self)
         if save:
+            output_folder = f'{self.radionuclide}_{self.year}_{self.month}'
+            os.makedirs(output_folder, exist_ok=True)
             print(f'Saving CSV files to folder {output_folder}.')
             if os.path.exists(f'{output_folder}/readings'):
                 shutil.rmtree(f'{output_folder}/readings')
