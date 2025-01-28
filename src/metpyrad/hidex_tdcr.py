@@ -267,3 +267,4 @@ class HidexTDCRProcessor:
             plt.savefig(f'{output_folder}/net_quantities.png')
 
 
+# TODO: Testing: test __repr__, __str__, raise exceptions in get_statistics, raise exceptions in get_net_quantities_df, plot methods, process_readings if save=True
