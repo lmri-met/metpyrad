@@ -85,7 +85,7 @@ class HidexTDCRProcessor:
         df = df[cols]
         # Rename columns
         old_names = ['file', 'Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
-        new_names = ['Cicle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time (s)',
+        new_names = ['Cycle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
                      'Real time (s)', 'End time']
         df = df.rename(columns=dict(zip(old_names, new_names)))
         self.readings = df
@@ -97,9 +97,9 @@ class HidexTDCRProcessor:
         # Initialize a variable to store the total number of measurements
         total_measurements = 0
         # Iterate over each unique file
-        for file_number in self.readings['Cicle'].unique():
+        for file_number in self.readings['Cycle'].unique():
             # Filter the DataFrame for the current file
-            file_df = self.readings[self.readings['Cicle'] == file_number]
+            file_df = self.readings[self.readings['Cycle'] == file_number]
             # Get the maximum number of repetitions for the current file
             max_repetitions = file_df['Repetitions'].max()
             # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
@@ -113,15 +113,15 @@ class HidexTDCRProcessor:
             earliest_end_time = file_df['End time'].min()
             # Append the results to the list
             results.append({
-                'Cicle': file_number,
+                'Cycle': file_number,
                 'Repetitions': max_repetitions,
                 'Real time (s)': time_repetitions,
                 'Date': earliest_end_time
             })
         # Convert the results to a DataFrame
-        self.summary = pd.DataFrame(results, columns=['Cicle', 'Repetitions', 'Real time (s)', 'Date'])
+        self.summary = pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
         # Get the number of unique files
-        self.cycles = df['Cicle'].nunique()
+        self.cycles = df['Cycle'].nunique()
         # Assing the total number of measurements
         self.measurements = self.summary['Repetitions'].sum()
         # Get the total measurement time
@@ -131,17 +131,16 @@ class HidexTDCRProcessor:
         if not (self.summary['Real time (s)'] == time_repetitions).all():
             raise ValueError(f'Time values are not consistent for all files')
         self.repetition_time = time_repetitions
-        # Get the repetitions per cicle
-        repetitions_per_cicle = self.summary['Repetitions'].iloc[0]
-        if not (self.summary['Repetitions'] == repetitions_per_cicle).all():
-            raise ValueError(f'Repetitions per cicle are not consistent for all files')
-        self.cycle_repetitions = repetitions_per_cicle
+        # Get the repetitions per Cycle
+        repetitions_per_cycle = self.summary['Repetitions'].iloc[0]
+        if not (self.summary['Repetitions'] == repetitions_per_cycle).all():
+            raise ValueError(f'Repetitions per Cycle are not consistent for all files')
+        self.cycle_repetitions = repetitions_per_cycle
 
     def get_background_sample_df(self):
         df = self.readings.copy()
-        df['Live time (s)'] = df['Real time (s)'] - df[
-            'Dead time (s)']  # TODO: dead time is a factor o a number in seconds?
-        df['Counts'] = df['Count rate (cpm)'] * df['Real time (s)'] / 60
+        df['Live time (s)'] = df['Real time (s)'] / df['Dead time']  # TODO: dead time is a factor o a number in seconds?
+        df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
         df_b = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
@@ -196,8 +195,8 @@ class HidexTDCRProcessor:
         fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
         axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
         axs[0, 0].set_ylabel('Count rate (cpm)')
-        axs[0, 1].plot(x, df['Dead time (s)'], 'o-', markersize=markersize)
-        axs[0, 1].set_ylabel('Dead time (s)')
+        axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=markersize)
+        axs[0, 1].set_ylabel('Dead time')
         axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
         axs[1, 0].set_ylabel('Real time (s)')
         axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
