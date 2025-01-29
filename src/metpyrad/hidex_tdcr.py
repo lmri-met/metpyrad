@@ -115,86 +115,101 @@ class HidexTDCRProcessor:
         return df
 
     def _get_readings_summary(self):
-        # Check if real times are the same for all files
-        if not self.readings['Real time (s)'].nunique() == 1:
-            raise ValueError('Real time values are not consistent for all measurements. Check readings table.')
-        # Initialize a list to store the results
-        results = []
-        # Iterate over each unique file
-        for cycle in self.readings['Cycle'].unique():
-            # Filter the DataFrame for the current file
-            df = self.readings[self.readings['Cycle'] == cycle]
-            # Get the maximum number of repetitions for the current file
-            repetitions = df['Repetitions'].max()
-            # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
-            real_time = df['Real time (s)'].iloc[0]
-            # Get the earliest end time for the current file
-            start_time = df['End time'].min()
-            # Append the results to the list
-            results.append({'Cycle': cycle, 'Repetitions': repetitions, 'Real time (s)': real_time, 'Date': start_time})
-        # Convert the results to a DataFrame
-        return pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
+        if self.readings is not None:
+            # Check if real times are the same for all files
+            if not self.readings['Real time (s)'].nunique() == 1:
+                raise ValueError('Real time values are not consistent for all measurements. Check readings table.')
+            # Initialize a list to store the results
+            results = []
+            # Iterate over each unique file
+            for cycle in self.readings['Cycle'].unique():
+                # Filter the DataFrame for the current file
+                df = self.readings[self.readings['Cycle'] == cycle]
+                # Get the maximum number of repetitions for the current file
+                repetitions = df['Repetitions'].max()
+                # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
+                real_time = df['Real time (s)'].iloc[0]
+                # Get the earliest end time for the current file
+                start_time = df['End time'].min()
+                # Append the results to the list
+                results.append({'Cycle': cycle, 'Repetitions': repetitions, 'Real time (s)': real_time, 'Date': start_time})
+            # Convert the results to a DataFrame
+            return pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
+        else:
+            raise ValueError('No readings data to compute readings summary. Please read the CSV files first.')
 
     def _get_readings_statistics(self):
-        # Check if repetitions per cycle are the same for all files
-        if not self.summary['Repetitions'].nunique() == 1:
-            raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
-        # Get the number of unique files
-        cycles = self.summary['Cycle'].count()
-        # Assign the total number of measurements
-        measurements = self.summary['Repetitions'].sum()
-        # Get the total measurement time
-        measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
-        # Get the time per repetition
-        repetition_time = self.summary['Real time (s)'].iloc[0]
-        # Get the repetitions per Cycle
-        cycle_repetitions = self.summary['Repetitions'].iloc[0]
-        # Create a dictionary to store results
-        labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
-        values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
-        statistics = dict(zip(labels, values))
-        return statistics
+        if self.summary is not None:
+            # Check if repetitions per cycle are the same for all files
+            if not self.summary['Repetitions'].nunique() == 1:
+                raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
+            # Get the number of unique files
+            cycles = self.summary['Cycle'].count()
+            # Assign the total number of measurements
+            measurements = self.summary['Repetitions'].sum()
+            # Get the total measurement time
+            measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
+            # Get the time per repetition
+            repetition_time = self.summary['Real time (s)'].iloc[0]
+            # Get the repetitions per Cycle
+            cycle_repetitions = self.summary['Repetitions'].iloc[0]
+            # Create a dictionary to store results
+            labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
+            values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
+            statistics = dict(zip(labels, values))
+            return statistics
+        else:
+            raise ValueError('No readings summary data to compute readings statistics. Please get the readings summary.')
 
     def _get_background_sample(self, kind, time_unit='s'):
         # TODO: dead time is a factor o a number in seconds?
-        ids = {'background': self.BACKGROUND_ID, 'sample': self.SAMPLE_ID}
-        df = self.readings.copy()
-        df = df[df['Sample'] == ids[kind]].reset_index(drop=True)
-        elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit)
-        df['Live time (s)'] = df['Real time (s)'] / df['Dead time']
-        df['Elapsed time'] = elapsed_time
-        df[f'Elapsed time ({time_unit})'] = elapsed_time_unit
-        df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
-        df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
-        df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
-        return df
+        if self.readings is not None:
+            ids = {'background': self.BACKGROUND_ID, 'sample': self.SAMPLE_ID}
+            df = self.readings.copy()
+            df = df[df['Sample'] == ids[kind]].reset_index(drop=True)
+            elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit)
+            df['Live time (s)'] = df['Real time (s)'] / df['Dead time']
+            df['Elapsed time'] = elapsed_time
+            df[f'Elapsed time ({time_unit})'] = elapsed_time_unit
+            df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
+            df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
+            df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
+            return df
+        else:
+            raise ValueError(f'No readings data to compute {kind} measurements. Please read the CSV files first.')
 
     def _get_net_measurements(self, time_unit='s'):
         # TODO: check time conversion factors
-        data = {'Cycle': self.sample['Cycle'], 'Repetitions': self.sample['Repetitions'],
-            'Elapsed time': self.sample['Elapsed time'],
-            f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
-            'Count rate (cpm)': self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)'],
-            'Counts': self.sample['Counts'] - self.background['Counts'],
-            'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2), }
-        data['Counts uncertainty (%)'] = data['Counts uncertainty'] / data['Counts'] * 100
-        return pd.DataFrame(data)
+        if self.background is not None and self.sample is not None:
+            data = {'Cycle': self.sample['Cycle'], 'Repetitions': self.sample['Repetitions'],
+                'Elapsed time': self.sample['Elapsed time'],
+                f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
+                'Count rate (cpm)': self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)'],
+                'Counts': self.sample['Counts'] - self.background['Counts'],
+                'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2), }
+            data['Counts uncertainty (%)'] = data['Counts uncertainty'] / data['Counts'] * 100
+            return pd.DataFrame(data)
+        else:
+            raise ValueError(f'No background and sample data to compute net measurements. Please process the readings first.')
 
     def _compile_measurements(self):
-        # Sample DataFrames
-        df1 = self.background.copy()
-        df2 = self.sample.copy()
-        df3 = self.net.copy()
-        # Creating multi-level headers
-        header1 = pd.MultiIndex.from_product([['Background'], df1.columns])
-        header2 = pd.MultiIndex.from_product([['Sample'], df2.columns])
-        header3 = pd.MultiIndex.from_product([['Net'], df3.columns])
-        # Assigning the multi-level headers to the DataFrames
-        df1.columns = header1
-        df2.columns = header2
-        df3.columns = header3
-        # Concatenating the DataFrames
-        return pd.concat([df1, df2, df3], axis=1)
+        if self.background is not None and self.sample is not None and self.net is not None:
+            # Sample DataFrames
+            df1 = self.background.copy()
+            df2 = self.sample.copy()
+            df3 = self.net.copy()
+            # Creating multi-level headers
+            header1 = pd.MultiIndex.from_product([['Background'], df1.columns])
+            header2 = pd.MultiIndex.from_product([['Sample'], df2.columns])
+            header3 = pd.MultiIndex.from_product([['Net'], df3.columns])
+            # Assigning the multi-level headers to the DataFrames
+            df1.columns = header1
+            df2.columns = header2
+            df3.columns = header3
+            # Concatenating the DataFrames
+            return pd.concat([df1, df2, df3], axis=1)
+        else:
+            raise ValueError(f'No background, sample and net data to compile measurements. Please process the readings first.')
 
     def plot_measurements(self, kind):
         if kind == 'background':
