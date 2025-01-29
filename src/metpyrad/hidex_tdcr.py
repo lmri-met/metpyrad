@@ -82,6 +82,7 @@ class HidexTDCRProcessor:
     def _parse_readings(self, folder_path):
         input_files = get_csv_files(folder_path)
         extracted_data = []
+
         for file_number, input_file in enumerate(input_files, start=1):
             with open(input_file, 'r') as file:
                 lines = file.readlines()
@@ -97,16 +98,28 @@ class HidexTDCRProcessor:
                             current_block[row] = line.split(self.DELIMITER)[1].strip()
             if current_block:
                 extracted_data.append(current_block)
+
         df = pd.DataFrame(extracted_data, columns=self.ROWS_TO_EXTRACT + ['file'])
+
         for col in df.columns[:-2]:
             df[col] = pd.to_numeric(df[col])
         df[df.columns[-2]] = pd.to_datetime(df[df.columns[-2]], format=self.DATE_TIME_FORMAT)
+
+        # Sort by date time
         df = df.sort_values(by='EndTime')
         df = df.reset_index(drop=True)
+
+        # Reassign values to files according to chronological order
+        value_counts = df['file'].value_counts()
+        if not value_counts.nunique() == 1:
+            raise ValueError('Repetitions per cycle are not consistent for all measurements.')
+        df['file'] = [i for i in range(1, df['file'].unique().size + 1) for _ in range(value_counts.unique()[0])]
+
         # Moving the last column to be the first
         cols = df.columns.tolist()
         cols = [cols[-1]] + cols[:-1]
         df = df[cols]
+
         # Rename columns
         old_names = ['file', 'Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
         new_names = ['Cycle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
