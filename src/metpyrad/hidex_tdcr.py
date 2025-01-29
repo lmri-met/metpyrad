@@ -80,7 +80,7 @@ class HidexTDCRProcessor:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", "net" or "all".')
 
     def _parse_readings(self, folder_path):
-        input_files = get_csv_files(folder_path)
+        input_files = _get_csv_files(folder_path)
         extracted_data = []
 
         for file_number, input_file in enumerate(input_files, start=1):
@@ -276,7 +276,20 @@ class HidexTDCRProcessor:
             self.export_measurements_plot(kind='net', folder_path=folder)
 
 
-def get_csv_files(folder_path):
+def _get_csv_files(folder_path):
+    """Retrieves a list of CSV files from the specified folder.
+
+    Args:
+        folder_path (str): The path to the folder containing the files.
+
+    Returns:
+        list: A list of full paths to the CSV files found in the folder.
+
+    Example:
+        >>> _get_csv_files('/path/to/folder')
+        Found 3 CSV files in folder /path/to/folder:
+        ['/path/to/folder/file1.csv', '/path/to/folder/file2.csv', '/path/to/folder/file3.csv']
+    """
     # List to store csv files with their full paths
     csv_files = []
     # Iterate over all the files in the given folder
@@ -289,62 +302,160 @@ def get_csv_files(folder_path):
     return csv_files
 
 
-def _get_elapsed_time(df, time_unit):
+def _get_elapsed_time(df, time_unit='s'):
+    """Calculate the elapsed time from the minimum 'End time' in a dataframe and convert it to the specified time unit.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing a column 'End time' with datetime values.
+        time_unit (str): The unit of time to convert the elapsed time to.
+                         Options are 's' (seconds), 'min' (minutes), 'h' (hours), 'd' (days),
+                         'wk' (weeks), 'mo' (months), 'yr' (years). Default is 's'.
+
+    Returns:
+        tuple: A tuple containing:
+            - pd.Series: Elapsed time in the original time delta format.
+            - pd.Series: Elapsed time converted to the specified time unit.
+
+    Raises:
+        ValueError: If an invalid time unit is provided.
+
+    Example:
+        >>> df = pd.DataFrame({'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16'])})
+        >>> elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit='h')
+        >>> print(elapsed_time)
+        0   0 days 00:00:00
+        1   1 days 04:01:56
+        Name: End time, dtype: timedelta64[ns]
+        >>> print(elapsed_time_unit)
+        0     0.000000
+        1    28.032222
+        dtype: float64
+    """
+    # Find the earliest 'End time' in the DataFrame
     initial_time = df['End time'].min()
+    # Calculate the elapsed time from the initial time for each entry
     elapsed_time = df['End time'] - initial_time
-    time_conversion = {'s': 1, 'min': 1 / 60, 'h': 1 / 3600, 'd': 1 / 86400, 'wk': 1 / (86400 * 7),
-                       'mo': 1 / (86400 * 30.44), 'yr': 1 / (86400 * 365.25)}
+    # Define conversion factors for different time units
+    time_conversion = {
+        's': 1,  # seconds
+        'min': 1 / 60,  # minutes
+        'h': 1 / 3600,  # hours
+        'd': 1 / 86400,  # days
+        'wk': 1 / (86400 * 7),  # weeks
+        'mo': 1 / (86400 * 30.44),  # months (approximate)
+        'yr': 1 / (86400 * 365.25)  # years (approximate)
+    }
+    # Check if the provided time unit is valid
     if time_unit not in time_conversion:
-        raise ValueError(
-            f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), weeks ("wk"), months ("mo"), or years ("yr").')
+        raise ValueError(f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), '
+                         f'weeks ("wk"), months ("mo"), or years ("yr").')
+    # Convert elapsed time to the specified unit
     elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
     return elapsed_time, elapsed_time_unit
 
 
 def _plot_background_sample_measurements(df, kind):
+    """Plots various quantities for background or sample measurements from the given DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the measurement data with columns 'End time', 'Count rate (cpm)',
+                           'Dead time', 'Real time (s)', 'Live time (s)', 'Counts (reading)', 'Counts', and 'Counts uncertainty (%)'.
+        kind (str): A string indicating the type of measurements (e.g., 'background' or 'sample').
+
+    Returns:
+        matplotlib.figure.Figure: The figure object containing the plots.
+
+    Example:
+        >>> df = pd.DataFrame({
+        ...     'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16']),
+        ...     'Count rate (cpm)': [100, 150],
+        ...     'Dead time': [0.1, 0.2],
+        ...     'Real time (s)': [60, 120],
+        ...     'Live time (s)': [50, 110],
+        ...     'Counts (reading)': [5000, 7500],
+        ...     'Counts': [4950, 7400],
+        ...     'Counts uncertainty (%)': [1.0, 1.2]
+        ... })
+        >>> fig = _plot_background_sample_measurements(df, 'background')
+        >>> plt.show()
+        """
+    # Extract the 'End time' column for the x-axis
     x = df['End time']
     xlabel = 'End time'
     markersize = 2
+    # Create a 3x2 grid of subplots
     fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
+    # Plot 'Count rate (cpm)' on the first subplot
     axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
     axs[0, 0].set_ylabel('Count rate (cpm)')
+    # Plot 'Dead time' on the second subplot
     axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=markersize)
     axs[0, 1].set_ylabel('Dead time')
+    # Plot 'Real time (s)' on the third subplot
     axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
     axs[1, 0].set_ylabel('Real time (s)')
+    # Plot 'Live time (s)' on the fourth subplot
     axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
     axs[1, 1].set_ylabel('Live time (s)')
+    # Plot 'Counts (reading)' and 'Counts' on the fifth subplot
     axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=markersize)
     axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=markersize)
     axs[2, 0].set_ylabel('Counts')
     axs[2, 0].legend()
     axs[2, 0].set_xlabel(xlabel)
     axs[2, 0].tick_params(axis='x', rotation=45)
+    # Plot 'Counts uncertainty (%)' on the sixth subplot
     axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
     axs[2, 1].set_ylabel('Counts uncertainty (%)')
     axs[2, 1].set_xlabel(xlabel)
     axs[2, 1].tick_params(axis='x', rotation=45)
+    # Set the overall title for the figure
     fig.suptitle(f'{kind.capitalize()} measurements')
+    # Adjust the layout to prevent overlap
     plt.tight_layout()
     return fig
 
 
 def _plot_net_measurements(df):
+    """Plots various quantities for net measurements from the given DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the measurement data with columns 'Elapsed time (unit)',
+                           'Counts', and 'Counts uncertainty (%)'.
+
+    Returns:
+        matplotlib.figure.Figure: The figure object containing the plots.
+
+    Example:
+        >>> df = pd.DataFrame({
+        ...     'Elapsed time (s)': [0, 10, 20, 30],
+        ...     'Counts': [100, 150, 200, 250],
+        ...     'Counts uncertainty (%)': [1.0, 1.2, 1.1, 1.3]
+        ... })
+        >>> fig = _plot_net_measurements(df)
+        >>> plt.show()
+    """
     # Extracting the unit from the column label
     etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
     unit = etime_column.split('(')[-1].strip(')')
+    # Extract the 'Elapsed time' column for the x-axis
     x = df[f'Elapsed time ({unit})']
     xlabel = f'Elapsed time ({unit})'
     markersize = 2
+    # Create a 2x1 grid of subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
+    # Plot 'Counts' on the first subplot
     ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
     ax1.set_ylabel('Counts')
     ax1.set_xlabel(xlabel)
     ax1.tick_params(axis='x', rotation=45)
+    # Plot 'Counts uncertainty (%)' on the second subplot
     ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
     ax2.set_ylabel('Counts uncertainty (%)')
     ax2.set_xlabel(xlabel)
     ax2.tick_params(axis='x', rotation=45)
-    fig.suptitle(f'Net quantities measurements')
+    # Set the overall title for the figure
+    fig.suptitle('Net quantities measurements')
+    # Adjust the layout to prevent overlap
     plt.tight_layout()
     return fig
