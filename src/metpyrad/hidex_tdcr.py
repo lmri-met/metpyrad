@@ -137,16 +137,23 @@ class HidexTDCRProcessor:
             raise ValueError(f'Repetitions per Cycle are not consistent for all files')
         self.cycle_repetitions = repetitions_per_cycle
 
-    def get_background_sample_df(self):
+    def process_background_sample(self):
         df = self.readings.copy()
         df['Live time (s)'] = df['Real time (s)'] / df['Dead time']  # TODO: dead time is a factor o a number in seconds?
         df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
-        df_b = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
-        df_s = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
-        self.background = df_b
-        self.sample = df_s
+        return df
+
+    def get_background_measurements(self):
+        df = self.process_background_sample()
+        background = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
+        self.background = background
+
+    def get_sample_measurements(self):
+        df = self.process_background_sample()
+        sample = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
+        self.sample = sample
 
     def get_net_measurements(self, time_unit):  # TODO: check time conversion factors
         net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
@@ -240,7 +247,8 @@ class HidexTDCRProcessor:
         print(f'Processing readings from {folder_path}.')
         self.parse_readings(folder_path)
         self.get_reading_statistics()
-        self.get_background_sample_df()
+        self.get_background_measurements()
+        self.get_sample_measurements()
         self.get_net_measurements(time_unit)
         df = self.compile_measurements()
         print('Measurements summary:')

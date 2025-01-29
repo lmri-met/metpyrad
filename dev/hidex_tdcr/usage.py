@@ -19,25 +19,24 @@ processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
 # 1. Simply extract some information of the readings.
 processor.parse_readings(folder_path='test_case/input_files')
 print(processor.readings)
-# TODO: Naming: parse_readings instead of parse_csv_files?
 
 # 2. Get a summary of the measurements.
 processor.get_reading_statistics()
 print(processor.summary)
-# TODO: Naming: get_measurements_statistics instead of get_statistics?
 # TODO: The user may not only want to see the table, but the complete summary that is printed when __str__ is called
 
-# 3. Compute some quantities for the background and sample measurements.
-processor.get_background_sample_df()
+# 3. Compute some quantities for the background measurements.
+processor.get_background_measurements()
 print(processor.background)
+
+# 3. Compute some quantities for the sample measurements.
+processor.get_sample_measurements()
 print(processor.sample)
-# TODO: Naming: get_background_measurements and get_sample_measurements instead of get_background_sample_df?
 # TODO: Maybe the elapsed time may be included in the background and measurements tables
 
 # 4. Compute some net quantities from the background and sample measurements.
 processor.get_net_measurements(time_unit='s')
 print(processor.net)
-# TODO: Naming: get_net_measurements instead of get_net_quantities_df?
 # TODO: Maybe the cycle, repetition and end time elapsed time should be included in the net quantities table
 
 # 5. Get a compilation of all of these results.
