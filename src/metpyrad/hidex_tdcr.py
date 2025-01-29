@@ -171,15 +171,17 @@ class HidexTDCRProcessor:
 
     def _get_net_measurements(self, time_unit='s'):
         # TODO: check time conversion factors
-        net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
-        net_counts = self.sample['Counts'] - self.background['Counts']
-        u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1 / 2)
-        ur_net_counts = u_net_counts / net_counts * 100
-        elapsed_time, elapsed_time_unit = _get_elapsed_time(self.sample, time_unit)
-        labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty',
-                  'Counts uncertainty (%)']
-        data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
-        return pd.DataFrame(dict(zip(labels, data)))
+        data = {
+            'Cycle': self.sample['Cycle'],
+            'Repetitions': self.sample['Repetitions'],
+            'Elapsed time': self.sample['Elapsed time'],
+            f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
+            'Count rate (cpm)': self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)'],
+            'Counts': self.sample['Counts'] - self.background['Counts'],
+            'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2),
+        }
+        data['Counts uncertainty (%)'] = data['Counts uncertainty'] / data['Counts'] * 100
+        return pd.DataFrame(data)
 
     def _compile_measurements(self):
         # Sample DataFrames

@@ -36,11 +36,11 @@ Cycle,Sample,Repetitions,Count rate (cpm),Counts (reading),Dead time,Real time (
 2,2,2,223689.4,335843,1.11,100,2023-12-01 12:56:24,90.09009009009009,1 days 04:08:40,101320.0,335869.96996996994,579.5428974372561,0.17254978094322423
 """
 net = """
-Elapsed time,Elapsed time (s),Count rate (cpm),Counts,Counts uncertainty,Counts uncertainty (%)
-0 days 00:00:00,0.0,252539.26,374116.68703703705,611.8795527201714,0.16355313032577887
-0 days 00:06:44,404.0,251865.52,373449.9723013048,611.3443156694146,0.16370179703110896
-1 days 04:01:56,100916.0,223646.33000000002,335789.15210210206,579.7543032199951,0.17265426818901866
-1 days 04:08:40,101320.0,223604.22999999998,335728.01996996993,579.6653517073191,0.17265921139354673
+Cycle,Repetitions,Elapsed time,Elapsed time (s),Count rate (cpm),Counts,Counts uncertainty,Counts uncertainty (%)
+1,1,0 days 00:00:00,0.0,252539.26,374116.68703703705,611.8795527201714,0.16355313032577887
+1,2,0 days 00:06:44,404.0,251865.52,373449.9723013048,611.3443156694146,0.16370179703110896
+2,1,1 days 04:01:56,100916.0,223646.33000000002,335789.15210210206,579.7543032199951,0.17265426818901866
+2,2,1 days 04:08:40,101320.0,223604.22999999998,335728.01996996993,579.6653517073191,0.17265921139354673
 """
 compilation = """
 Background,Background,Background,Background,Background,Background,Background,Background,Background,Background,Background,Background,Background,Background,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Sample,Net,Net,Net,Net,Net,Net
@@ -88,7 +88,7 @@ class TestHidexTDCRProcessor:
     @pytest.fixture
     def expected_net(self):
         df = pd.read_csv(StringIO(net))
-        df[df.columns[0]] = pd.to_timedelta(df[df.columns[0]])
+        df[df.columns[2]] = pd.to_timedelta(df[df.columns[2]])
         return df
 
     @pytest.fixture
