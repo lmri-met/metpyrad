@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-
-
-
 class HidexTDCRProcessor:
     ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
     DATE_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
@@ -131,8 +128,7 @@ class HidexTDCRProcessor:
         self.measurements = statistics['measurements']
         self.measurement_time = statistics['measurement_time']
 
-
-    def get_readings_summary_(self): # TODO: Check output
+    def get_readings_summary_(self):  # TODO: Check output
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
         attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
         if all(getattr(self, attr) is not None for attr in attributes):
@@ -196,14 +192,12 @@ class HidexTDCRProcessor:
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
-
-
     def plot_measurements(self, kind):
-        if kind== 'background':
+        if kind == 'background':
             _plot_background_sample_measurements(df=self.background, kind=kind)
-        elif kind== 'sample':
+        elif kind == 'sample':
             _plot_background_sample_measurements(df=self.sample, kind=kind)
-        elif kind== 'net':
+        elif kind == 'net':
             _plot_net_measurements(df=self.net)
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
@@ -239,8 +233,6 @@ class HidexTDCRProcessor:
             plt.savefig(f'{output_folder}/net.png')
 
 
-
-
 def get_csv_files(folder_path):
     # List to store csv files with their full paths
     csv_files = []
@@ -252,6 +244,7 @@ def get_csv_files(folder_path):
             csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
     print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
     return csv_files
+
 
 def _plot_background_sample_measurements(self, df, kind):
     x = df['End time']
@@ -280,6 +273,7 @@ def _plot_background_sample_measurements(self, df, kind):
     plt.tight_layout()
     return fig
 
+
 def _plot_net_measurements(self, df):
     # Extracting the unit from the column label
     etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
@@ -299,5 +293,3 @@ def _plot_net_measurements(self, df):
     fig.suptitle(f'Net quantities measurements')
     plt.tight_layout()
     return fig
-
-
