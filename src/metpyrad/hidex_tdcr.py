@@ -12,6 +12,8 @@ class HidexTDCRProcessor:
     BLOCK_STARTER = 'Sample start'
     ID_LINES = 4
     DELIMITER = ';'
+    BACKGROUND_ID = 1
+    SAMPLE_ID = 2
 
     def __init__(self, radionuclide, year, month):
         self.radionuclide = radionuclide
@@ -21,11 +23,12 @@ class HidexTDCRProcessor:
         self.background = None
         self.sample = None
         self.net = None
+        self.measurements = None
         self.summary = None
         self.cycles = None
         self.cycle_repetitions = None
         self.repetition_time = None
-        self.measurements = None
+        self.total_measurements = None
         self.measurement_time = None
 
     def __repr__(self):
@@ -39,11 +42,42 @@ class HidexTDCRProcessor:
                     f'Number of cycles: {self.cycles}\n'
                     f'Repetitions per cycle: {self.cycle_repetitions}\n'
                     f'Time per repetition: {self.repetition_time} s\n'
-                    f'Total number of measurements: {self.measurements}\n'
+                    f'Total number of measurements: {self.total_measurements}\n'
                     f'Total measurement time: {self.measurement_time} s\n'
                     f'Cycles summary\n'
                     f'{self.summary}')
         return msg
+
+    def parse_readings(self, folder_path):
+        self.readings = self._parse_readings(folder_path=folder_path)
+        self.summary = self._get_readings_summary()
+        statistics = self._get_readings_statistics()
+        self.cycles = statistics['cycles']
+        self.cycle_repetitions = statistics['cycle_repetitions']
+        self.repetition_time = statistics['repetition_time']
+        self.total_measurements = statistics['measurements']
+        self.measurement_time = statistics['measurement_time']
+
+    def summarize_readings(self, save=False, folder_path=None):
+        print(self.__str__())
+        if save:
+            with open(f'{folder_path}/summary.txt', 'w') as file:
+                file.write(self.__str__())
+
+    def process_readings(self, kind, time_unit='s'):
+        if kind == 'background':
+            self.background = self._get_background_sample(kind='background', time_unit=time_unit)
+        elif kind == 'sample':
+            self.sample = self._get_background_sample(kind='sample', time_unit=time_unit)
+        elif kind == 'net':
+            self.net = self._get_net_measurements(time_unit=time_unit)
+        elif kind == 'all':
+            self.background = self._get_background_sample(kind='background', time_unit=time_unit)
+            self.sample = self._get_background_sample(kind='sample', time_unit=time_unit)
+            self.net = self._get_net_measurements(time_unit=time_unit)
+            self.measurements = self._compile_measurements()
+        else:
+            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", "net" or "all".')
 
     def _parse_readings(self, folder_path):
         input_files = get_csv_files(folder_path)
@@ -121,42 +155,22 @@ class HidexTDCRProcessor:
         statistics = dict(zip(labels, values))
         return statistics
 
-    def get_readings(self, folder_path):
-        self.readings = self._parse_readings(folder_path=folder_path)
-        self.summary = self._get_readings_summary()
-        statistics = self._get_readings_statistics()
-        self.cycles = statistics['cycles']
-        self.cycle_repetitions = statistics['cycle_repetitions']
-        self.repetition_time = statistics['repetition_time']
-        self.measurements = statistics['measurements']
-        self.measurement_time = statistics['measurement_time']
-
-    def summarize_readings(self, save=False, folder_path=None):
-        print(self.__str__())
-        if save:
-            with open(f'{folder_path}/summary.txt', 'w') as file:
-                file.write(self.__str__())
-
-    def _process_background_sample(self):
+    def _get_background_sample(self, kind, time_unit='s'):
         # TODO: dead time is a factor o a number in seconds?
+        ids = {'background': self.BACKGROUND_ID, 'sample': self.SAMPLE_ID}
         df = self.readings.copy()
+        df = df[df['Sample'] == ids[kind]].reset_index(drop=True)
+        elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit)
         df['Live time (s)'] = df['Real time (s)'] / df['Dead time']
+        df['Elapsed time'] = elapsed_time
+        df[f'Elapsed time ({time_unit})'] = elapsed_time_unit
         df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
         return df
 
-    def get_background_measurements(self):
-        df = self._process_background_sample()
-        background = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
-        self.background = background
-
-    def get_sample_measurements(self):
-        df = self._process_background_sample()
-        sample = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
-        self.sample = sample
-
-    def get_net_measurements(self, time_unit):  # TODO: check time conversion factors
+    def _get_net_measurements(self, time_unit='s'):
+        # TODO: check time conversion factors
         net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
         net_counts = self.sample['Counts'] - self.background['Counts']
         u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1 / 2)
@@ -165,9 +179,9 @@ class HidexTDCRProcessor:
         labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty',
                   'Counts uncertainty (%)']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
-        self.net = pd.DataFrame(dict(zip(labels, data)))
+        return pd.DataFrame(dict(zip(labels, data)))
 
-    def compile_measurements(self):
+    def _compile_measurements(self):
         # Sample DataFrames
         df1 = self.background.copy()
         df2 = self.sample.copy()
@@ -195,7 +209,7 @@ class HidexTDCRProcessor:
 
     def export_measurements_table(self, kind, folder_path):
         dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net,
-               'all': self.compile_measurements()}
+               'all': self._compile_measurements()}
         if kind not in dfs.keys():
             raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
@@ -207,13 +221,10 @@ class HidexTDCRProcessor:
         self.plot_measurements(kind=kind)
         plt.savefig(f'{folder_path}/{kind}.png')
 
-    def process_readings(self, input_folder, time_unit, save=False, output_folder=None):
+    def analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
         print(f'Processing readings from {input_folder}.')
-        self.get_readings(input_folder)
-        self.get_background_measurements()
-        self.get_sample_measurements()
-        self.get_net_measurements(time_unit)
-        df = self.compile_measurements()
+        self.parse_readings(input_folder)
+        self.process_readings(kind='all', time_unit=time_unit)
         print('Measurements summary:')
         print(self)
         if save:
@@ -236,7 +247,6 @@ class HidexTDCRProcessor:
             self.export_measurements_plot(kind='background', folder_path=folder)
             self.export_measurements_plot(kind='sample', folder_path=folder)
             self.export_measurements_plot(kind='net', folder_path=folder)
-        return df
 
 
 def get_csv_files(folder_path):
