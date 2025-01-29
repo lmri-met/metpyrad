@@ -69,7 +69,7 @@ processor.export_measurements_table(kind='sample', folder_path='output')
 # Net quantities measurements table
 processor.export_measurements_table(kind='net', folder_path='output')
 # Table with background, sample and net measurements # TODO: What about this table? include in export method?
-results.to_csv('output/results.csv', index=False)
+processor.export_measurements_table(kind='all', folder_path='output')
 # Save plots to images
 # Plot of the background measurements
 processor.export_measurements_plot(kind='background', folder_path='output')
