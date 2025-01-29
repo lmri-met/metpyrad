@@ -189,13 +189,7 @@ class HidexTDCRProcessor:
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
-    def plot_background_sample_measurements(self, kind):
-        if kind == 'background':
-            df = self.background
-        elif kind == 'sample':
-            df = self.sample
-        else:
-            raise ValueError(f'Invalid measurement kind. Choose from "background" or "sample".')
+    def plot_background_sample_measurements(self, df, kind):
         x = df['End time']
         xlabel = 'End time'
         markersize = 2
@@ -222,8 +216,7 @@ class HidexTDCRProcessor:
         plt.tight_layout()
         return fig
 
-    def plot_net_measurements(self):
-        df = self.net
+    def plot_net_measurements(self, df):
         # Extracting the unit from the column label
         etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
         unit = etime_column.split('(')[-1].strip(')')
@@ -245,11 +238,11 @@ class HidexTDCRProcessor:
 
     def plot_measurements(self, kind):
         if kind== 'background':
-            self.plot_background_sample_measurements(kind=kind)
+            self.plot_background_sample_measurements(df=self.background, kind=kind)
         elif kind== 'sample':
-            self.plot_background_sample_measurements(kind=kind)
+            self.plot_background_sample_measurements(df=self.sample, kind=kind)
         elif kind== 'net':
-            self.plot_net_measurements()
+            self.plot_net_measurements(df=self.net)
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
@@ -277,12 +270,12 @@ class HidexTDCRProcessor:
             self.net.to_csv(f'{output_folder}/net.csv', index=False)
             df.to_csv(f'{output_folder}/results.csv', index=False)
             print(f'Saving figures to folder {output_folder}.')
-            fig1 = self.plot_background_sample_measurements('sample')
-            plt.savefig(f'{output_folder}/sample_measurements.png')
-            fig2 = self.plot_background_sample_measurements('background')
-            plt.savefig(f'{output_folder}/background_measurements.png')
-            fig3 = self.plot_net_measurements()
-            plt.savefig(f'{output_folder}/net_quantities.png')
+            fig1 = self.plot_measurements(kind='sample')
+            plt.savefig(f'{output_folder}/sample.png')
+            fig2 = self.plot_measurements(kind='background')
+            plt.savefig(f'{output_folder}/background.png')
+            fig3 = self.plot_measurements(kind='net')
+            plt.savefig(f'{output_folder}/net.png')
 
 
 # TODO: Testing: test __repr__, __str__, raise exceptions in get_statistics, raise exceptions in get_net_quantities_df, plot methods, process_readings if save=True
