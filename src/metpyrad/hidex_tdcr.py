@@ -171,15 +171,12 @@ class HidexTDCRProcessor:
 
     def _get_net_measurements(self, time_unit='s'):
         # TODO: check time conversion factors
-        data = {
-            'Cycle': self.sample['Cycle'],
-            'Repetitions': self.sample['Repetitions'],
+        data = {'Cycle': self.sample['Cycle'], 'Repetitions': self.sample['Repetitions'],
             'Elapsed time': self.sample['Elapsed time'],
             f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
             'Count rate (cpm)': self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)'],
             'Counts': self.sample['Counts'] - self.background['Counts'],
-            'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2),
-        }
+            'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2), }
         data['Counts uncertainty (%)'] = data['Counts uncertainty'] / data['Counts'] * 100
         return pd.DataFrame(data)
 
