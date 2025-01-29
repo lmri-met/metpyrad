@@ -141,8 +141,9 @@ class HidexTDCRProcessor:
         print(msg)
 
     def _process_background_sample(self):
+        # TODO: dead time is a factor o a number in seconds?
         df = self.readings.copy()
-        df['Live time (s)'] = df['Real time (s)'] / df['Dead time']  # TODO: dead time is a factor o a number in seconds?
+        df['Live time (s)'] = df['Real time (s)'] / df['Dead time']
         df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
@@ -202,6 +203,12 @@ class HidexTDCRProcessor:
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
+    def export_measurements(self, kind, folder_path):  # TODO: Check output
+        dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net}
+        if kind not in dfs.keys():
+            raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
+        dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
+
     def process_readings(self, folder_path, time_unit, save=True):
         print(f'Processing readings from {folder_path}.')
         self.get_readings(folder_path)
@@ -246,7 +253,7 @@ def get_csv_files(folder_path):
     return csv_files
 
 
-def _plot_background_sample_measurements(self, df, kind):
+def _plot_background_sample_measurements(df, kind):
     x = df['End time']
     xlabel = 'End time'
     markersize = 2
@@ -274,7 +281,7 @@ def _plot_background_sample_measurements(self, df, kind):
     return fig
 
 
-def _plot_net_measurements(self, df):
+def _plot_net_measurements(df):
     # Extracting the unit from the column label
     etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
     unit = etime_column.split('(')[-1].strip(')')
