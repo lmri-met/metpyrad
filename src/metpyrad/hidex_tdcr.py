@@ -161,14 +161,7 @@ class HidexTDCRProcessor:
         net_counts = self.sample['Counts'] - self.background['Counts']
         u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1 / 2)
         ur_net_counts = u_net_counts / net_counts * 100
-        initial_time = self.sample['End time'].min()
-        elapsed_time = self.sample['End time'] - initial_time
-        time_conversion = {'s': 1, 'min': 1 / 60, 'h': 1 / 3600, 'd': 1 / 86400, 'wk': 1 / (86400 * 7),
-                           'mo': 1 / (86400 * 30.44), 'yr': 1 / (86400 * 365.25)}
-        if time_unit not in time_conversion:
-            raise ValueError(
-                f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), weeks ("wk"), months ("mo"), or years ("yr").')
-        elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
+        elapsed_time, elapsed_time_unit = _get_elapsed_time(self.sample, time_unit)
         labels = ['Elapsed time', f'Elapsed time ({time_unit})', 'Count rate (cpm)', 'Counts', 'Counts uncertainty',
                   'Counts uncertainty (%)']
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
@@ -257,6 +250,18 @@ def get_csv_files(folder_path):
             csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
     print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
     return csv_files
+
+
+def _get_elapsed_time(df, time_unit):
+    initial_time = df['End time'].min()
+    elapsed_time = df['End time'] - initial_time
+    time_conversion = {'s': 1, 'min': 1 / 60, 'h': 1 / 3600, 'd': 1 / 86400, 'wk': 1 / (86400 * 7),
+                       'mo': 1 / (86400 * 30.44), 'yr': 1 / (86400 * 365.25)}
+    if time_unit not in time_conversion:
+        raise ValueError(
+            f'Invalid unit. Choose from seconds ("s"), minutes ("min"), hours ("h"), days ("d"), weeks ("wk"), months ("mo"), or years ("yr").')
+    elapsed_time_unit = pd.Series([i.total_seconds() for i in elapsed_time]) * time_conversion[time_unit]
+    return elapsed_time, elapsed_time_unit
 
 
 def _plot_background_sample_measurements(df, kind):
