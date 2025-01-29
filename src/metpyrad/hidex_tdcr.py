@@ -6,17 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def get_csv_files(folder_path):
-    # List to store csv files with their full paths
-    csv_files = []
-    # Iterate over all the files in the given folder
-    for file_name in os.listdir(folder_path):
-        # Check if the file has a .csv extension
-        if file_name.endswith('.csv'):
-            # Append the absolute path of the file to the list
-            csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
-    print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
-    return csv_files
+
 
 
 class HidexTDCRProcessor:
@@ -55,7 +45,7 @@ class HidexTDCRProcessor:
                     f'Total measurement time: {self.measurement_time} s')
         return msg
 
-    def parse_readings(self, folder_path):
+    def _parse_readings(self, folder_path):
         input_files = get_csv_files(folder_path)
         extracted_data = []
         for file_number, input_file in enumerate(input_files, start=1):
@@ -90,7 +80,7 @@ class HidexTDCRProcessor:
         df = df.rename(columns=dict(zip(old_names, new_names)))
         return df
 
-    def get_readings_summary(self):
+    def _get_readings_summary(self):
         # Check if real times are the same for all files
         if not self.readings['Real time (s)'].nunique() == 1:
             raise ValueError('Real time values are not consistent for all measurements. Check readings table.')
@@ -111,7 +101,7 @@ class HidexTDCRProcessor:
         # Convert the results to a DataFrame
         return pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
 
-    def get_readings_statistics(self):
+    def _get_readings_statistics(self):
         # Check if repetitions per cycle are the same for all files
         if not self.summary['Repetitions'].nunique() == 1:
             raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
@@ -132,9 +122,9 @@ class HidexTDCRProcessor:
         return statistics
 
     def get_readings(self, folder_path):
-        self.readings = self.parse_readings(folder_path=folder_path)
-        self.summary = self.get_readings_summary()
-        statistics = self.get_readings_statistics()
+        self.readings = self._parse_readings(folder_path=folder_path)
+        self.summary = self._get_readings_summary()
+        statistics = self._get_readings_statistics()
         self.cycles = statistics['cycles']
         self.cycle_repetitions = statistics['cycle_repetitions']
         self.repetition_time = statistics['repetition_time']
@@ -142,7 +132,7 @@ class HidexTDCRProcessor:
         self.measurement_time = statistics['measurement_time']
 
 
-    def get_readings_summary_(self):
+    def get_readings_summary_(self): # TODO: Check output
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
         attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
         if all(getattr(self, attr) is not None for attr in attributes):
@@ -154,7 +144,7 @@ class HidexTDCRProcessor:
                     f'{self.summary}')
         print(msg)
 
-    def process_background_sample(self):
+    def _process_background_sample(self):
         df = self.readings.copy()
         df['Live time (s)'] = df['Real time (s)'] / df['Dead time']  # TODO: dead time is a factor o a number in seconds?
         df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
@@ -163,12 +153,12 @@ class HidexTDCRProcessor:
         return df
 
     def get_background_measurements(self):
-        df = self.process_background_sample()
+        df = self._process_background_sample()
         background = df[df['Sample'] == df['Sample'].unique()[0]].reset_index(drop=True)
         self.background = background
 
     def get_sample_measurements(self):
-        df = self.process_background_sample()
+        df = self._process_background_sample()
         sample = df[df['Sample'] == df['Sample'].unique()[1]].reset_index(drop=True)
         self.sample = sample
 
@@ -206,60 +196,15 @@ class HidexTDCRProcessor:
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
-    def plot_background_sample_measurements(self, df, kind):
-        x = df['End time']
-        xlabel = 'End time'
-        markersize = 2
-        fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
-        axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
-        axs[0, 0].set_ylabel('Count rate (cpm)')
-        axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=markersize)
-        axs[0, 1].set_ylabel('Dead time')
-        axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
-        axs[1, 0].set_ylabel('Real time (s)')
-        axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
-        axs[1, 1].set_ylabel('Live time (s)')
-        axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=markersize)
-        axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=markersize)
-        axs[2, 0].set_ylabel('Counts')
-        axs[2, 0].legend()
-        axs[2, 0].set_xlabel(xlabel)
-        axs[2, 0].tick_params(axis='x', rotation=45)
-        axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
-        axs[2, 1].set_ylabel('Counts uncertainty (%)')
-        axs[2, 1].set_xlabel(xlabel)
-        axs[2, 1].tick_params(axis='x', rotation=45)
-        fig.suptitle(f'{kind.capitalize()} measurements')
-        plt.tight_layout()
-        return fig
 
-    def plot_net_measurements(self, df):
-        # Extracting the unit from the column label
-        etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
-        unit = etime_column.split('(')[-1].strip(')')
-        x = df[f'Elapsed time ({unit})']
-        xlabel = f'Elapsed time ({unit})'
-        markersize = 2
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
-        ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
-        ax1.set_ylabel('Counts')
-        ax1.set_xlabel(xlabel)
-        ax1.tick_params(axis='x', rotation=45)
-        ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
-        ax2.set_ylabel('Counts uncertainty (%)')
-        ax2.set_xlabel(xlabel)
-        ax2.tick_params(axis='x', rotation=45)
-        fig.suptitle(f'Net quantities measurements')
-        plt.tight_layout()
-        return fig
 
     def plot_measurements(self, kind):
         if kind== 'background':
-            self.plot_background_sample_measurements(df=self.background, kind=kind)
+            _plot_background_sample_measurements(df=self.background, kind=kind)
         elif kind== 'sample':
-            self.plot_background_sample_measurements(df=self.sample, kind=kind)
+            _plot_background_sample_measurements(df=self.sample, kind=kind)
         elif kind== 'net':
-            self.plot_net_measurements(df=self.net)
+            _plot_net_measurements(df=self.net)
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
@@ -294,4 +239,65 @@ class HidexTDCRProcessor:
             plt.savefig(f'{output_folder}/net.png')
 
 
-# TODO: Testing: test __repr__, __str__, raise exceptions in get_statistics, raise exceptions in get_net_quantities_df, plot methods, process_readings if save=True
+
+
+def get_csv_files(folder_path):
+    # List to store csv files with their full paths
+    csv_files = []
+    # Iterate over all the files in the given folder
+    for file_name in os.listdir(folder_path):
+        # Check if the file has a .csv extension
+        if file_name.endswith('.csv'):
+            # Append the absolute path of the file to the list
+            csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
+    print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
+    return csv_files
+
+def _plot_background_sample_measurements(self, df, kind):
+    x = df['End time']
+    xlabel = 'End time'
+    markersize = 2
+    fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
+    axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
+    axs[0, 0].set_ylabel('Count rate (cpm)')
+    axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=markersize)
+    axs[0, 1].set_ylabel('Dead time')
+    axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
+    axs[1, 0].set_ylabel('Real time (s)')
+    axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
+    axs[1, 1].set_ylabel('Live time (s)')
+    axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=markersize)
+    axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=markersize)
+    axs[2, 0].set_ylabel('Counts')
+    axs[2, 0].legend()
+    axs[2, 0].set_xlabel(xlabel)
+    axs[2, 0].tick_params(axis='x', rotation=45)
+    axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
+    axs[2, 1].set_ylabel('Counts uncertainty (%)')
+    axs[2, 1].set_xlabel(xlabel)
+    axs[2, 1].tick_params(axis='x', rotation=45)
+    fig.suptitle(f'{kind.capitalize()} measurements')
+    plt.tight_layout()
+    return fig
+
+def _plot_net_measurements(self, df):
+    # Extracting the unit from the column label
+    etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
+    unit = etime_column.split('(')[-1].strip(')')
+    x = df[f'Elapsed time ({unit})']
+    xlabel = f'Elapsed time ({unit})'
+    markersize = 2
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
+    ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
+    ax1.set_ylabel('Counts')
+    ax1.set_xlabel(xlabel)
+    ax1.tick_params(axis='x', rotation=45)
+    ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
+    ax2.set_ylabel('Counts uncertainty (%)')
+    ax2.set_xlabel(xlabel)
+    ax2.tick_params(axis='x', rotation=45)
+    fig.suptitle(f'Net quantities measurements')
+    plt.tight_layout()
+    return fig
+
+

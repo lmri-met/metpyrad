@@ -16,6 +16,7 @@ from metpyrad.hidex_tdcr import HidexTDCRProcessor
 processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
 # TODO: Maybe add methods to export tables as csv and plots as images.
 # TODO: Set private, public and static methods
+# TODO: Check code coverage
 
 # 1. Simply extract some information of the readings.
 processor.get_readings(folder_path='test_case/input_files')
@@ -41,8 +42,8 @@ print(results)
 # TODO: Minimize columns in output table
 
 # 2. Get a summary of the measurements.
-processor.get_readings_summary()
-processor.get_readings_summary()
+processor._get_readings_summary()
+processor._get_readings_summary()
 # print(processor.summary)
 # TODO: The user may not only want to see the table, but the complete summary that is printed when __str__ is called
 
