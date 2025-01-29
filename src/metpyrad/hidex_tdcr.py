@@ -189,13 +189,13 @@ class HidexTDCRProcessor:
         # Concatenating the DataFrames
         return pd.concat([df1, df2, df3], axis=1)
 
-    def plot_readings(self, sample):
-        if sample == 'background':
+    def plot_background_sample_measurements(self, kind):
+        if kind == 'background':
             df = self.background
-        elif sample == 'sample':
+        elif kind == 'sample':
             df = self.sample
         else:
-            raise ValueError('Invalid sample value. Choose from "background" or "sample".')
+            raise ValueError(f'Invalid measurement kind. Choose from "background" or "sample".')
         x = df['End time']
         xlabel = 'End time'
         markersize = 2
@@ -218,11 +218,11 @@ class HidexTDCRProcessor:
         axs[2, 1].set_ylabel('Counts uncertainty (%)')
         axs[2, 1].set_xlabel(xlabel)
         axs[2, 1].tick_params(axis='x', rotation=45)
-        fig.suptitle(f'{sample.capitalize()} measurements')
+        fig.suptitle(f'{kind.capitalize()} measurements')
         plt.tight_layout()
         return fig
 
-    def plot_net_quantities(self):
+    def plot_net_measurements(self):
         df = self.net
         # Extracting the unit from the column label
         etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
@@ -242,6 +242,16 @@ class HidexTDCRProcessor:
         fig.suptitle(f'Net quantities measurements')
         plt.tight_layout()
         return fig
+
+    def plot_measurements(self, kind):
+        if kind== 'background':
+            self.plot_background_sample_measurements(kind=kind)
+        elif kind== 'sample':
+            self.plot_background_sample_measurements(kind=kind)
+        elif kind== 'net':
+            self.plot_net_measurements()
+        else:
+            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
     def process_readings(self, folder_path, time_unit, save=True):
         print(f'Processing readings from {folder_path}.')
@@ -267,11 +277,11 @@ class HidexTDCRProcessor:
             self.net.to_csv(f'{output_folder}/net.csv', index=False)
             df.to_csv(f'{output_folder}/results.csv', index=False)
             print(f'Saving figures to folder {output_folder}.')
-            fig1 = self.plot_readings('sample')
+            fig1 = self.plot_background_sample_measurements('sample')
             plt.savefig(f'{output_folder}/sample_measurements.png')
-            fig2 = self.plot_readings('background')
+            fig2 = self.plot_background_sample_measurements('background')
             plt.savefig(f'{output_folder}/background_measurements.png')
-            fig3 = self.plot_net_quantities()
+            fig3 = self.plot_net_measurements()
             plt.savefig(f'{output_folder}/net_quantities.png')
 
 

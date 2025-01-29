@@ -46,13 +46,13 @@ print(results)
 
 # 6. Make some plots of some of these results.
 # Plot of the background measurements
-processor.plot_readings(sample='background')
+processor.plot_measurements(kind='background')
 plt.show()
 # Plot of the sample measurements
-processor.plot_readings(sample='sample')
+processor.plot_measurements(kind='sample')
 plt.show()
 # Plot of the net quantities
-processor.plot_net_quantities()
+processor.plot_measurements(kind='net')
 plt.show()
 # TODO: method like plot_measurements(type=[background, sample, net])
 
@@ -74,13 +74,13 @@ processor.net.to_csv('output/net.csv', index=False)
 results.to_csv('output/results.csv', index=False)
 # Save plots to images
 # Plot of the background measurements
-processor.plot_readings(sample='background')
+processor.plot_measurements(kind='background')
 plt.savefig('output/background.png')
 # Plot of the sample measurements
-processor.plot_readings(sample='sample')
+processor.plot_measurements(kind='sample')
 plt.savefig('output/sample.png')
 # Plot of the net quantities
-processor.plot_net_quantities()
+processor.plot_measurements(kind='net')
 plt.savefig('output/net.png')
 
 # 8. Make a complete analysis that includes all the previous steps.
