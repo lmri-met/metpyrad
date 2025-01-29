@@ -33,13 +33,16 @@ class HidexTDCRProcessor:
 
     def __str__(self):
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
-        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
+        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
         if all(getattr(self, attr) is not None for attr in attributes):
-            msg += (f'\nNumber of cicles: {self.cycles}\n'
-                    f'Repetitions per cicle:{self.cycle_repetitions}\n'
+            msg += (f'\nSummary\n'
+                    f'Number of cycles: {self.cycles}\n'
+                    f'Repetitions per cycle: {self.cycle_repetitions}\n'
                     f'Time per repetition: {self.repetition_time} s\n'
                     f'Total number of measurements: {self.measurements}\n'
-                    f'Total measurement time: {self.measurement_time} s')
+                    f'Total measurement time: {self.measurement_time} s\n'
+                    f'Cycles summary\n'
+                    f'{self.summary}')
         return msg
 
     def _parse_readings(self, folder_path):
@@ -128,22 +131,11 @@ class HidexTDCRProcessor:
         self.measurements = statistics['measurements']
         self.measurement_time = statistics['measurement_time']
 
-    def get_readings_summary_(self, save=False, folder_path=None):
-        msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
-        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
-        if all(getattr(self, attr) is not None for attr in attributes):
-            msg += (f'\nSummary\n'
-                    f'Number of cycles: {self.cycles}\n'
-                    f'Repetitions per cycle: {self.cycle_repetitions}\n'
-                    f'Time per repetition: {self.repetition_time} s\n'
-                    f'Total number of measurements: {self.measurements}\n'
-                    f'Total measurement time: {self.measurement_time} s\n'
-                    f'Cycles summary\n'
-                    f'{self.summary}')
-        print(msg)
+    def summarize_readings(self, save=False, folder_path=None):
+        print(self.__str__())
         if save:
             with open(f'{folder_path}/summary.txt', 'w') as file:
-                file.write(msg)
+                file.write(self.__str__())
 
     def _process_background_sample(self):
         # TODO: dead time is a factor o a number in seconds?
