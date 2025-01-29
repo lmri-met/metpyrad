@@ -128,17 +128,22 @@ class HidexTDCRProcessor:
         self.measurements = statistics['measurements']
         self.measurement_time = statistics['measurement_time']
 
-    def get_readings_summary_(self):  # TODO: Check output
+    def get_readings_summary_(self, save=False, folder_path=None):
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
         attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
         if all(getattr(self, attr) is not None for attr in attributes):
-            msg += (f'\nNumber of cicles: {self.cycles}\n'
-                    f'Repetitions per cicle:{self.cycle_repetitions}\n'
+            msg += (f'\nSummary\n'
+                    f'Number of cycles: {self.cycles}\n'
+                    f'Repetitions per cycle: {self.cycle_repetitions}\n'
                     f'Time per repetition: {self.repetition_time} s\n'
                     f'Total number of measurements: {self.measurements}\n'
                     f'Total measurement time: {self.measurement_time} s\n'
+                    f'Cycles summary\n'
                     f'{self.summary}')
         print(msg)
+        if save:
+            with open(f'{folder_path}/summary.txt', 'w') as file:
+                file.write(msg)
 
     def _process_background_sample(self):
         # TODO: dead time is a factor o a number in seconds?
@@ -204,7 +209,8 @@ class HidexTDCRProcessor:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
     def export_measurements_table(self, kind, folder_path):
-        dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net, 'all': self.compile_measurements()}
+        dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net,
+               'all': self.compile_measurements()}
         if kind not in dfs.keys():
             raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)

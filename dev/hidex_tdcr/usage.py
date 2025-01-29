@@ -39,11 +39,8 @@ results = processor.compile_measurements()
 print(results)
 # TODO: Minimize columns in output table
 
-# 2. Get a summary of the measurements.
-# processor._get_readings_summary()
-# processor._get_readings_summary()
-# print(processor.summary)
-# TODO: The user may not only want to see the table, but the complete summary that is printed when __str__ is called
+# 2. Get a summary of the measurements (export to txt file availabe).
+processor.get_readings_summary_()
 
 # 6. Make some plots of some of these results.
 # Plot of the background measurements
@@ -68,7 +65,7 @@ processor.export_measurements_table(kind='background', folder_path='output')
 processor.export_measurements_table(kind='sample', folder_path='output')
 # Net quantities measurements table
 processor.export_measurements_table(kind='net', folder_path='output')
-# Table with background, sample and net measurements # TODO: What about this table? include in export method?
+# Table with background, sample and net measurements
 processor.export_measurements_table(kind='all', folder_path='output')
 # Save plots to images
 # Plot of the background measurements
