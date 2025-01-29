@@ -56,7 +56,7 @@ class TestHidexTDCRProcessor:
     @pytest.fixture
     def processor(self):
         processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
-        processor.process_readings(folder_path='./data/hidex_tdcr', time_unit='s', save=False)
+        processor.process_readings(input_folder='./data/hidex_tdcr', time_unit='s', save=False)
         return processor
 
     @pytest.fixture

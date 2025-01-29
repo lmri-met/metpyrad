@@ -214,10 +214,9 @@ class HidexTDCRProcessor:
         self.plot_measurements(kind=kind)
         plt.savefig(f'{folder_path}/{kind}.png')
 
-    def process_readings(self, folder_path, time_unit, save=True):
-        # TODO: refactor with new methods
-        print(f'Processing readings from {folder_path}.')
-        self.get_readings(folder_path)
+    def process_readings(self, input_folder, time_unit, save=False, output_folder=None):
+        print(f'Processing readings from {input_folder}.')
+        self.get_readings(input_folder)
         self.get_background_measurements()
         self.get_sample_measurements()
         self.get_net_measurements(time_unit)
@@ -225,25 +224,26 @@ class HidexTDCRProcessor:
         print('Measurements summary:')
         print(self)
         if save:
-            output_folder = f'{self.radionuclide}_{self.year}_{self.month}'
-            os.makedirs(output_folder, exist_ok=True)
-            print(f'Saving CSV files to folder {output_folder}.')
-            if os.path.exists(f'{output_folder}/readings'):
-                shutil.rmtree(f'{output_folder}/readings')
-            shutil.copytree(folder_path, f'{output_folder}/readings')
-            self.readings.to_csv(f'{output_folder}/readings.csv', index=False)
-            self.summary.to_csv(f'{output_folder}/summary.csv', index=False)
-            self.background.to_csv(f'{output_folder}/background.csv', index=False)
-            self.sample.to_csv(f'{output_folder}/sample.csv', index=False)
-            self.net.to_csv(f'{output_folder}/net.csv', index=False)
-            df.to_csv(f'{output_folder}/results.csv', index=False)
-            print(f'Saving figures to folder {output_folder}.')
-            fig1 = self.plot_measurements(kind='sample')
-            plt.savefig(f'{output_folder}/sample.png')
-            fig2 = self.plot_measurements(kind='background')
-            plt.savefig(f'{output_folder}/background.png')
-            fig3 = self.plot_measurements(kind='net')
-            plt.savefig(f'{output_folder}/net.png')
+            if not os.path.exists(output_folder):
+                os.makedirs(output_folder)
+            folder = f'{output_folder}/{self.radionuclide}_{self.year}_{self.month}'
+            print(f'Saving measurement files to folder {folder}.')
+            if os.path.exists(folder):
+                shutil.rmtree(folder)
+            os.makedirs(folder)
+            print('Saving CSV files')
+            shutil.copytree(input_folder, f'{folder}/readings')
+            self.export_measurements_table(kind='readings', folder_path=folder)
+            self.export_measurements_table(kind='background', folder_path=folder)
+            self.export_measurements_table(kind='sample', folder_path=folder)
+            self.export_measurements_table(kind='net', folder_path=folder)
+            self.export_measurements_table(kind='all', folder_path=folder)
+            self.summarize_readings(save=True, folder_path=folder)
+            print(f'Saving figures')
+            self.export_measurements_plot(kind='background', folder_path=folder)
+            self.export_measurements_plot(kind='sample', folder_path=folder)
+            self.export_measurements_plot(kind='net', folder_path=folder)
+        return df
 
 
 def get_csv_files(folder_path):
