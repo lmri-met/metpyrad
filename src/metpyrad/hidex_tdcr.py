@@ -88,54 +88,81 @@ class HidexTDCRProcessor:
         new_names = ['Cycle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
                      'Real time (s)', 'End time']
         df = df.rename(columns=dict(zip(old_names, new_names)))
-        self.readings = df
+        return df
 
-    def get_reading_statistics(self):
-        df = self.readings.copy()
+    def get_readings_summary(self):
         # Initialize a list to store the results
         results = []
         # Initialize a variable to store the total number of measurements
         total_measurements = 0
         # Iterate over each unique file
-        for file_number in self.readings['Cycle'].unique():
+        for cycle in self.readings['Cycle'].unique():
             # Filter the DataFrame for the current file
-            file_df = self.readings[self.readings['Cycle'] == file_number]
+            file_df = self.readings[self.readings['Cycle'] == cycle]
             # Get the maximum number of repetitions for the current file
             max_repetitions = file_df['Repetitions'].max()
             # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
             time_repetitions = file_df['Real time (s)'].iloc[0]
             # Check if all times are the same for the current file
             if not (file_df['Real time (s)'] == time_repetitions).all():
-                raise ValueError(f'Time values are not consistent for file {file_number}')
+                raise ValueError(f'Time values are not consistent for file {cycle}')
             # Calculate the total number of measurements for the current file
             total_measurements += max_repetitions
             # Get the earliest end time for the current file
             earliest_end_time = file_df['End time'].min()
             # Append the results to the list
             results.append({
-                'Cycle': file_number,
+                'Cycle': cycle,
                 'Repetitions': max_repetitions,
                 'Real time (s)': time_repetitions,
                 'Date': earliest_end_time
             })
         # Convert the results to a DataFrame
-        self.summary = pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
+        return pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
+
+    def get_readings_statistics(self):
         # Get the number of unique files
-        self.cycles = df['Cycle'].nunique()
-        # Assing the total number of measurements
-        self.measurements = self.summary['Repetitions'].sum()
+        cycles = self.summary['Cycle'].count()
+        # Assign the total number of measurements
+        measurements = self.summary['Repetitions'].sum()
         # Get the total measurement time
-        self.measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
+        measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
         # Get the time per repetition
-        time_repetitions = self.summary['Real time (s)'].iloc[0]
-        if not (self.summary['Real time (s)'] == time_repetitions).all():
+        repetition_time = self.summary['Real time (s)'].iloc[0]
+        if not (self.summary['Real time (s)'] == repetition_time).all():
             raise ValueError(f'Time values are not consistent for all files')
-        self.repetition_time = time_repetitions
         # Get the repetitions per Cycle
-        repetitions_per_cycle = self.summary['Repetitions'].iloc[0]
-        if not (self.summary['Repetitions'] == repetitions_per_cycle).all():
+        cycle_repetitions = self.summary['Repetitions'].iloc[0]
+        if not (self.summary['Repetitions'] == cycle_repetitions).all():
             raise ValueError(f'Repetitions per Cycle are not consistent for all files')
-        self.cycle_repetitions = repetitions_per_cycle
+
+        labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
+        values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
+        statistics = dict(zip(labels, values))
+        return statistics
+
+    def get_readings(self, folder_path):
+        self.readings = self.parse_readings(folder_path=folder_path)
+        self.summary = self.get_readings_summary()
+        statistics = self.get_readings_statistics()
+        self.cycles = statistics['cycles']
+        self.cycle_repetitions = statistics['cycle_repetitions']
+        self.repetition_time = statistics['repetition_time']
+        self.measurements = statistics['measurements']
+        self.measurement_time = statistics['measurement_time']
+
+
+    def get_readings_summary_(self):
+        msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
+        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
+        if all(getattr(self, attr) is not None for attr in attributes):
+            msg += (f'\nNumber of cicles: {self.cycles}\n'
+                    f'Repetitions per cicle:{self.cycle_repetitions}\n'
+                    f'Time per repetition: {self.repetition_time} s\n'
+                    f'Total number of measurements: {self.measurements}\n'
+                    f'Total measurement time: {self.measurement_time} s\n'
+                    f'{self.summary}')
+        print(msg)
 
     def process_background_sample(self):
         df = self.readings.copy()
@@ -248,8 +275,7 @@ class HidexTDCRProcessor:
 
     def process_readings(self, folder_path, time_unit, save=True):
         print(f'Processing readings from {folder_path}.')
-        self.parse_readings(folder_path)
-        self.get_reading_statistics()
+        self.get_readings(folder_path)
         self.get_background_measurements()
         self.get_sample_measurements()
         self.get_net_measurements(time_unit)
