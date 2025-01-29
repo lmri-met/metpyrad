@@ -7,15 +7,47 @@ import pandas as pd
 
 
 class HidexTDCRProcessor:
-    ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
-    DATE_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
-    BLOCK_STARTER = 'Sample start'
-    ID_LINES = 4
-    DELIMITER = ';'
-    BACKGROUND_ID = 1
-    SAMPLE_ID = 2
+    """A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
+
+    Attributes:
+        radionuclide (str): Name of the radionuclide being measured.
+        year (int): Year of the measurements.
+        month (int): Month of the measurements.
+        readings (pd.DataFrame or None): DataFrame containing the readings.
+        background (pd.DataFrame or None): DataFrame containing the background measurements.
+        sample (pd.DataFrame or None): DataFrame containing the sample measurements.
+        net (pd.DataFrame or None): DataFrame containing the net measurements.
+        measurements (pd.DataFrame or None): DataFrame containing all measurements.
+        summary (str or None): A summary of the measurements.
+        cycles (int or None): Number of cycles in the measurements.
+        cycle_repetitions (int or None): Number of repetitions per cycle.
+        repetition_time (float or None): Time per repetition in seconds.
+        total_measurements (int or None): Total number of measurements.
+        measurement_time (float or None): Total measurement time in seconds.
+    """
+    # Rows to extract from the CSV files
+    _ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
+    # Format for parsing date and time strings from the CSV files
+    _DATE_TIME_FORMAT = '%d/%m/%Y %H:%M:%S'
+    # String that indicates the start of a data block in the CSV files
+    _BLOCK_STARTER = 'Sample start'
+    # Number of initial lines to skip from the CSV files
+    _ID_LINES = 4
+    # Delimiter used in the CSV files
+    _DELIMITER = ';'
+    # Identifier for background measurements in the CSV files
+    _BACKGROUND_ID = 1
+    # Identifier for sample measurements in the CSV files
+    _SAMPLE_ID = 2
 
     def __init__(self, radionuclide, year, month):
+        """Initializes the HidexTDCRProcessor with the given radionuclide, year, and month.
+
+        Args:
+            radionuclide (str): Name of the radionuclide being measured.
+            year (int): Year of the measurements.
+            month (int): Month of the measurements.
+        """
         self.radionuclide = radionuclide
         self.year = year
         self.month = month
@@ -35,8 +67,22 @@ class HidexTDCRProcessor:
         return f'DataProcessor(radionuclide={self.radionuclide}, year={self.year}, month={self.month})'
 
     def __str__(self):
+        """Returns a string representation of the HidexTDCRProcessor object, summarizing the measurements.
+
+        Returns:
+            str: A string summarizing the measurements of the radionuclide for the specified month and year.
+                 If all relevant attributes are not None, includes detailed summary information.
+
+        Example:
+            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+            >>> print(processor)
+            Measurements of Lu-177 on November 2023
+        """
+        # Create the initial message with the radionuclide and date information
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
+        # List of attributes to check for completeness of the summary
         attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
+        # If all relevant attributes are not None, add detailed summary information
         if all(getattr(self, attr) is not None for attr in attributes):
             msg += (f'\nSummary\n'
                     f'Number of cycles: {self.cycles}\n'
@@ -59,10 +105,36 @@ class HidexTDCRProcessor:
         self.measurement_time = statistics['measurement_time']
 
     def summarize_readings(self, save=False, folder_path=None):
+        """
+        Summarizes the readings by printing the string representation of the object.
+        Optionally saves the summary to a text file.
+
+        Args:
+            save (bool): If True, saves the summary to a text file. Default is False.
+            folder_path (str): Path to the folder where the summary file will be saved. Required if save is True.
+
+        Returns:
+            None
+
+        Example:
+            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+            >>> processor.summarize_readings()
+            Measurements of Lu-177 on November 2023
+            ...
+            >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
+            Measurements of Lu-177 on November 2023
+            Summary saved to /path/to/folder/summary.txt
+        """
+        # Print the string representation of the object
         print(self.__str__())
+
+        # If save is True, save the summary to a text file
         if save:
+            # Open the file in write mode
             with open(f'{folder_path}/summary.txt', 'w') as file:
+                # Write the string representation of the object to the file
                 file.write(self.__str__())
+            print(f'Summary saved to {folder_path}/summary.txt')
 
     def process_readings(self, kind, time_unit='s'):
         if kind == 'background':
@@ -87,23 +159,23 @@ class HidexTDCRProcessor:
             with open(input_file, 'r') as file:
                 lines = file.readlines()
             current_block = {}
-            for line in lines[self.ID_LINES:]:
+            for line in lines[self._ID_LINES:]:
                 if line.strip() == 'Sample start':
                     if current_block:
                         extracted_data.append(current_block)
                     current_block = {'file': file_number}
                 else:
-                    for row in self.ROWS_TO_EXTRACT:
+                    for row in self._ROWS_TO_EXTRACT:
                         if line.startswith(row):
-                            current_block[row] = line.split(self.DELIMITER)[1].strip()
+                            current_block[row] = line.split(self._DELIMITER)[1].strip()
             if current_block:
                 extracted_data.append(current_block)
 
-        df = pd.DataFrame(extracted_data, columns=self.ROWS_TO_EXTRACT + ['file'])
+        df = pd.DataFrame(extracted_data, columns=self._ROWS_TO_EXTRACT + ['file'])
 
         for col in df.columns[:-2]:
             df[col] = pd.to_numeric(df[col])
-        df[df.columns[-2]] = pd.to_datetime(df[df.columns[-2]], format=self.DATE_TIME_FORMAT)
+        df[df.columns[-2]] = pd.to_datetime(df[df.columns[-2]], format=self._DATE_TIME_FORMAT)
 
         # Sort by date time
         df = df.sort_values(by='EndTime')
@@ -177,7 +249,7 @@ class HidexTDCRProcessor:
     def _get_background_sample(self, kind, time_unit='s'):
         # TODO: dead time is a factor o a number in seconds?
         if self.readings is not None:
-            ids = {'background': self.BACKGROUND_ID, 'sample': self.SAMPLE_ID}
+            ids = {'background': self._BACKGROUND_ID, 'sample': self._SAMPLE_ID}
             df = self.readings.copy()
             df = df[df['Sample'] == ids[kind]].reset_index(drop=True)
             elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit)
