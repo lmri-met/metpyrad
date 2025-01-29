@@ -138,7 +138,7 @@ class HidexTDCRProcessor:
 
     def get_background_sample_df(self):
         df = self.readings.copy()
-        df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)'] # TODO: dead time is a factor o a number in seconds?
+        df['Live time (s)'] = df['Real time (s)'] - df['Dead time (s)']
         df['Counts'] = df['Count rate (cpm)'] * df['Real time (s)'] / 60
         df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
         df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
@@ -147,7 +147,7 @@ class HidexTDCRProcessor:
         self.background = df_b
         self.sample = df_s
 
-    def get_net_quantities_df(self, time_unit):  # TODO: check time conversion factors
+    def get_net_quantities_df(self, time_unit):
         net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
         net_counts = self.sample['Counts'] - self.background['Counts']
         u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1/2)

@@ -20,8 +20,6 @@ from matplotlib import pyplot as plt
 from metpyrad.hidex_tdcr import HidexTDCRProcessor
 
 processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
-# TODO: Check code coverage (maybe organise test in numeric results, IO and exceptions)
-# TODO: exceptions in methods if needed attributes are None
 
 # 1. Simply extract some information of the readings.
 processor.parse_readings(folder_path='test_case/input_files')
