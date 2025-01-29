@@ -297,27 +297,101 @@ class HidexTDCRProcessor:
             raise ValueError(f'No background, sample and net data to compile measurements. Please process the readings first.')
 
     def plot_measurements(self, kind):
+        """Plots the specified type of measurements.
+
+        Args:
+            kind (str): The type of measurements to plot. Options are 'background', 'sample', or 'net'.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If an invalid measurement kind is provided.
+
+        Example:
+            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+            >>> processor.parse_readings('/path/to/folder')
+            >>> processor.process_readings('all')
+            >>> processor.plot_measurements('net')
+        """
+        # Check the kind of measurements to plot
         if kind == 'background':
+            # Plot background measurements
             _plot_background_sample_measurements(df=self.background, kind=kind)
         elif kind == 'sample':
+            # Plot sample measurements
             _plot_background_sample_measurements(df=self.sample, kind=kind)
         elif kind == 'net':
+            # Plot net measurements
             _plot_net_measurements(df=self.net)
         else:
-            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
+            # Raise an error if the kind is invalid
+            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", or "net".')
 
     def export_measurements_table(self, kind, folder_path):
-        dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net,
-               'all': self._compile_measurements()}
+        """Exports the specified type of measurements to a CSV file.
+
+        Args:
+            kind (str): The type of measurements to export. Options are 'readings', 'background', 'sample', 'net', or 'all'.
+            folder_path (str): The path to the folder where the CSV file will be saved.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If an invalid measurement kind is provided.
+
+        Example:
+            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+            >>> processor.parse_readings('/path/to/folder')
+            >>> processor.process_readings('all')
+            >>> processor.export_measurements_table('net', '/path/to/folder')
+        """
+        # Dictionary mapping measurement kinds to their corresponding DataFrames
+        dfs = {
+            'readings': self.readings,
+            'background': self.background,
+            'sample': self.sample,
+            'net': self.net,
+            'all': self._compile_measurements()
+        }
+        # Check if the provided kind is valid
         if kind not in dfs.keys():
-            raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
+            raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample", "net", or "all".')
+        # Export the specified DataFrame to a CSV file
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
 
     def export_measurements_plot(self, kind, folder_path):
-        dfs = {'background': self.background, 'sample': self.sample, 'net': self.net}
+        """Exports the specified type of measurement plot to a PNG file.
+
+        Args:
+            kind (str): The type of measurements to plot. Options are 'background', 'sample', or 'net'.
+            folder_path (str): The path to the folder where the PNG file will be saved.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If an invalid measurement kind is provided.
+
+        Example:
+            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+            >>> processor.parse_readings('/path/to/folder')
+            >>> processor.process_readings('all')
+            >>> processor.export_measurements_plot('net', '/path/to/folder')
+        """
+        # Dictionary mapping measurement kinds to their corresponding DataFrames
+        dfs = {
+            'background': self.background,
+            'sample': self.sample,
+            'net': self.net
+        }
+        # Check if the provided kind is valid
         if kind not in dfs.keys():
-            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
+            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", or "net".')
+        # Plot the specified measurements
         self.plot_measurements(kind=kind)
+        # Save the plot to a PNG file
         plt.savefig(f'{folder_path}/{kind}.png')
 
     def analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
