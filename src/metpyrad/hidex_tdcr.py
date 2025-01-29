@@ -203,13 +203,21 @@ class HidexTDCRProcessor:
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
-    def export_measurements(self, kind, folder_path):  # TODO: Check output
+    def export_measurements_table(self, kind, folder_path):  # TODO: Check output
         dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net}
         if kind not in dfs.keys():
             raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
 
+    def export_measurements_plot(self, kind, folder_path):  # TODO: Check output
+        dfs = {'background': self.background, 'sample': self.sample, 'net': self.net}
+        if kind not in dfs.keys():
+            raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
+        self.plot_measurements(kind=kind)
+        plt.savefig(f'{folder_path}/{kind}.png')
+
     def process_readings(self, folder_path, time_unit, save=True):
+        # TODO: refactor with new methods
         print(f'Processing readings from {folder_path}.')
         self.get_readings(folder_path)
         self.get_background_measurements()
