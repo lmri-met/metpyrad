@@ -98,7 +98,7 @@ class TestHidexTDCRProcessor:
         df[df.columns[9]] = pd.to_timedelta(df[df.columns[9]])
         df[df.columns[21]] = pd.to_datetime(df[df.columns[21]], format='%Y-%m-%d %H:%M:%S')
         df[df.columns[23]] = pd.to_timedelta(df[df.columns[23]])
-        df[df.columns[28]] = pd.to_timedelta(df[df.columns[28]])
+        df[df.columns[30]] = pd.to_timedelta(df[df.columns[30]])
         return df
 
     def test_radionuclide(self, processor):
@@ -141,4 +141,4 @@ class TestHidexTDCRProcessor:
         pd.testing.assert_frame_equal(processor.net, expected_net)
 
     def test_compilation(self, processor, expected_compilation):
-        pd.testing.assert_frame_equal(processor._compile_measurements(), expected_compilation)
+        pd.testing.assert_frame_equal(processor.measurements, expected_compilation)
