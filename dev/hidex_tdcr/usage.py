@@ -17,12 +17,12 @@ processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
 # TODO: Maybe add methods to export tables as csv and plots as images.
 
 # 1. Simply extract some information of the readings.
-processor.parse_csv_files(folder_path='test_case/input_files')
+processor.parse_readings(folder_path='test_case/input_files')
 print(processor.readings)
 # TODO: Naming: parse_readings instead of parse_csv_files?
 
 # 2. Get a summary of the measurements.
-processor.get_statistics()
+processor.get_reading_statistics()
 print(processor.summary)
 # TODO: Naming: get_measurements_statistics instead of get_statistics?
 # TODO: The user may not only want to see the table, but the complete summary that is printed when __str__ is called
@@ -35,13 +35,13 @@ print(processor.sample)
 # TODO: Maybe the elapsed time may be included in the background and measurements tables
 
 # 4. Compute some net quantities from the background and sample measurements.
-processor.get_net_quantities_df(time_unit='s')
+processor.get_net_measurements(time_unit='s')
 print(processor.net)
 # TODO: Naming: get_net_measurements instead of get_net_quantities_df?
 # TODO: Maybe the cycle, repetition and end time elapsed time should be included in the net quantities table
 
 # 5. Get a compilation of all of these results.
-results = processor.concatenate_results()
+results = processor.compile_measurements()
 print(results)
 # TODO: Minimize columns in output table
 
@@ -55,6 +55,7 @@ plt.show()
 # Plot of the net quantities
 processor.plot_net_quantities()
 plt.show()
+# TODO: method like plot_measurements(type=[background, sample, net])
 
 # 7. Save any of these results to csv
 # Create an output folder

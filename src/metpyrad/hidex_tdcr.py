@@ -55,7 +55,7 @@ class HidexTDCRProcessor:
                     f'Total measurement time: {self.measurement_time} s')
         return msg
 
-    def parse_csv_files(self, folder_path):
+    def parse_readings(self, folder_path):
         input_files = get_csv_files(folder_path)
         extracted_data = []
         for file_number, input_file in enumerate(input_files, start=1):
@@ -90,7 +90,7 @@ class HidexTDCRProcessor:
         df = df.rename(columns=dict(zip(old_names, new_names)))
         self.readings = df
 
-    def get_statistics(self):
+    def get_reading_statistics(self):
         df = self.readings.copy()
         # Initialize a list to store the results
         results = []
@@ -148,7 +148,7 @@ class HidexTDCRProcessor:
         self.background = df_b
         self.sample = df_s
 
-    def get_net_quantities_df(self, time_unit):  # TODO: check time conversion factors
+    def get_net_measurements(self, time_unit):  # TODO: check time conversion factors
         net_cpm = self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)']
         net_counts = self.sample['Counts'] - self.background['Counts']
         u_net_counts = (self.sample['Counts'] + self.background['Counts']).pow(1 / 2)
@@ -166,7 +166,7 @@ class HidexTDCRProcessor:
         data = [elapsed_time, elapsed_time_unit, net_cpm, net_counts, u_net_counts, ur_net_counts]
         self.net = pd.DataFrame(dict(zip(labels, data)))
 
-    def concatenate_results(self):
+    def compile_measurements(self):
         # Sample DataFrames
         df1 = self.background.copy()
         df2 = self.sample.copy()
@@ -238,11 +238,11 @@ class HidexTDCRProcessor:
 
     def process_readings(self, folder_path, time_unit, save=True):
         print(f'Processing readings from {folder_path}.')
-        self.parse_csv_files(folder_path)
-        self.get_statistics()
+        self.parse_readings(folder_path)
+        self.get_reading_statistics()
         self.get_background_sample_df()
-        self.get_net_quantities_df(time_unit)
-        df = self.concatenate_results()
+        self.get_net_measurements(time_unit)
+        df = self.compile_measurements()
         print('Measurements summary:')
         print(self)
         if save:
