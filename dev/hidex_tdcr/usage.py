@@ -14,8 +14,6 @@ from matplotlib import pyplot as plt
 from metpyrad.hidex_tdcr import HidexTDCRProcessor
 
 processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
-# TODO: Maybe add methods to export tables as csv and plots as images.
-# TODO: Set private, public and static methods
 # TODO: Check code coverage
 
 # 1. Simply extract some information of the readings.
@@ -42,49 +40,44 @@ print(results)
 # TODO: Minimize columns in output table
 
 # 2. Get a summary of the measurements.
-processor._get_readings_summary()
-processor._get_readings_summary()
+# processor._get_readings_summary()
+# processor._get_readings_summary()
 # print(processor.summary)
 # TODO: The user may not only want to see the table, but the complete summary that is printed when __str__ is called
 
-# # 6. Make some plots of some of these results.
-# # Plot of the background measurements
-# processor.plot_measurements(kind='background')
-# plt.show()
-# # Plot of the sample measurements
-# processor.plot_measurements(kind='sample')
-# plt.show()
-# # Plot of the net quantities
-# processor.plot_measurements(kind='net')
-# plt.show()
-#
-# # 7. Save any of these results to csv
-# # Create an output folder
-# os.makedirs('output', exist_ok=True)
-# # Save results to csv files.
-# # Readings table
-# processor.readings.to_csv('output/readings.csv', index=False)
-# # Measurements summary table
-# processor.summary.to_csv('output/summary.csv', index=False)
-# # Background measurements table
-# processor.background.to_csv('output/background.csv', index=False)
-# # Sample measurements table
-# processor.sample.to_csv('output/sample.csv', index=False)
-# # Net quantities measurements table
-# processor.net.to_csv('output/net.csv', index=False)
-# # Table with background, sample and net measurements
-# results.to_csv('output/results.csv', index=False)
-# # Save plots to images
-# # Plot of the background measurements
-# processor.plot_measurements(kind='background')
-# plt.savefig('output/background.png')
-# # Plot of the sample measurements
-# processor.plot_measurements(kind='sample')
-# plt.savefig('output/sample.png')
-# # Plot of the net quantities
-# processor.plot_measurements(kind='net')
-# plt.savefig('output/net.png')
-#
+# 6. Make some plots of some of these results.
+# Plot of the background measurements
+processor.plot_measurements(kind='background')
+plt.show()
+# Plot of the sample measurements
+processor.plot_measurements(kind='sample')
+plt.show()
+# Plot of the net quantities
+processor.plot_measurements(kind='net')
+plt.show()
+
+# 7. Save any of these results to csv or images
+# Create an output folder
+os.makedirs('output', exist_ok=True)
+# Save results to csv files.
+# Readings table
+processor.export_measurements_table(kind='readings', folder_path='output')
+# Background measurements table
+processor.export_measurements_table(kind='background', folder_path='output')
+# Sample measurements table
+processor.export_measurements_table(kind='sample', folder_path='output')
+# Net quantities measurements table
+processor.export_measurements_table(kind='net', folder_path='output')
+# Table with background, sample and net measurements # TODO: What about this table? include in export method?
+results.to_csv('output/results.csv', index=False)
+# Save plots to images
+# Plot of the background measurements
+processor.export_measurements_plot(kind='background', folder_path='output')
+# Plot of the sample measurements
+processor.export_measurements_plot(kind='sample', folder_path='output')
+# Plot of the net quantities
+processor.export_measurements_plot(kind='net', folder_path='output')
+
 # # 8. Make a complete analysis that includes all the previous steps.
 # results2 = processor.process_readings(folder_path='test_case/input_files', time_unit='s', save=True)
 # # TODO: The user may want to choose where the output folder is saved

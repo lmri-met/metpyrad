@@ -203,13 +203,13 @@ class HidexTDCRProcessor:
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
 
-    def export_measurements_table(self, kind, folder_path):  # TODO: Check output
+    def export_measurements_table(self, kind, folder_path):
         dfs = {'readings': self.readings, 'background': self.background, 'sample': self.sample, 'net': self.net}
         if kind not in dfs.keys():
             raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample" or "net".')
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
 
-    def export_measurements_plot(self, kind, folder_path):  # TODO: Check output
+    def export_measurements_plot(self, kind, folder_path):
         dfs = {'background': self.background, 'sample': self.sample, 'net': self.net}
         if kind not in dfs.keys():
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample" or "net".')
