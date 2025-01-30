@@ -138,8 +138,9 @@ class HidexTDCRProcessor:
         Returns:
             None
 
-        Raises: # TODO: document exceptions or not? there are more than this one
-            ValueError: If repetitions per cycle are not consistent for all measurements.
+        Raises:
+            ValueError: If repetitions per cycle or real time values are not consistent for all measurements.
+            ValueError: If no readings data or no readings summary is available.
         """
         # Parse the readings from the CSV files in the specified folder
         self.readings = self._parse_readings(folder_path=folder_path)
@@ -199,6 +200,7 @@ class HidexTDCRProcessor:
 
         Raises:
             ValueError: If an invalid measurement kind is provided.
+            ValueError: If readings, background, sample, or net data is not available.
         """
         # Process background measurements
         if kind == 'background':
