@@ -13,6 +13,11 @@
 # 6. Make some plots of some of these results.
 # 7. Save any of these results to csv or images.
 # 8. Make a complete analysis that includes all the previous steps.
+# TODO: update Readme
+# TODO: docs documentation
+# TODO: add tests to increase code coverage
+# TODO: validate tests with spreadsheet
+# TODO: packaging stuff
 import os
 
 from matplotlib import pyplot as plt
