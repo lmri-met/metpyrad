@@ -733,7 +733,7 @@ def _plot_background_sample_measurements(df, kind):
     xlabel = 'End time'
     markersize = 2
     # Create a 3x2 grid of subplots
-    fig, axs = plt.subplots(3, 2, figsize=(2.5 * 8, 2 * 6), sharex=True)
+    fig, axs = plt.subplots(3, 2, figsize=(1.5 * 8, 1.5 * 6), sharex=True)
     # Plot 'Count rate (cpm)' on the first subplot
     axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
     axs[0, 0].set_ylabel('Count rate (cpm)')
