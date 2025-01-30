@@ -36,7 +36,7 @@
 **MetPyRad** is a Python package that provides a collection of tools for radionuclide metrology.
 It is an open source, GPLv3-licensed library for the Python programming language.
 It is compatible with Python 3.
-**MetPyRad** provides tools for processing measurements for a given radionuclide using a Hidex TDCR (Triple to Double
+**MetPyRad** provides tools for processing measurements for a given radionuclide using a **Hidex TDCR** (Triple to Double
 Coincidence Ratio) system.
 It is designed to facilitate the handling, analysis, and summarization of measurement data.
 
@@ -67,18 +67,18 @@ pip install metpyrad
 
 ## Quick user guide
 
-Consider that we made a measurement of the radionuclide Lu-177 starting on November 2023 using a Hidex TDCR system.
+Consider that we made a **measurement** of the **radionuclide** Lu-177 starting on November 2023 using a **Hidex TDCR system**.
 The measurement consists on two cicles of measurements, each one with 2 repetitions.
 Each repetition consists on measuring the background and the sample of Lu-177 consecutively in periods of 100 seconds.
-For each cicle of measurements, Hidex TDCR system provides a CSV file with the readings.
+For each cicle of measurements, Hidex TDCR system provides a **CSV file** with the readings.
 An example of this CSV file is shown at the [Data files](#data-files) section
 
-We want to process the reading files provided by the Hidex TDCR system.
+We want to **process the reading files** provided by the Hidex TDCR system.
 From these files, we want to extract some quantities of interest for each background and sample measurements.
 Then, whe want to compute some net quantities from the background and sample measurements.
-For each background or sample measurement, we are interested in the next quantities:
+For each **background** or **sample measurement**, we are interested in the next quantities:
 cycle, sample, repetition, end time, dead time, real time, live time, elapsed time, count rate, counts and counts uncertainty.
-For each corresponding net measurement, we are interested in the next quantities:
+For each corresponding **net measurement**, we are interested in the next quantities:
 cycle, repetition, elapsed time, count rate, counts and counts uncertainty.
 
 The tool that **MetPyRad** provides to do this is the **HidexTDCRProcessor** class.
@@ -173,13 +173,16 @@ radionuclide using a Hidex TDCR system.
 6. **Plot Measurements**:
    Plot the specified type of measurements (`background`, `sample`, or `net`):
     ```python
+    processor.plot_measurements(kind='sample')
     processor.plot_measurements(kind='net')
     plt.show()
     ```
    Output:
-     ```
-     # TODO: add output plot
-     ```
+ 
+   <img src="assets/sample.png" alt="sample measurements" width="500"/>
+   
+   <img src="assets/net.png" alt="net measurements" width="500"/>
+
 7. **Export Data**:
    Export the measurements to CSV files and plots to PNG files:
     ```python
