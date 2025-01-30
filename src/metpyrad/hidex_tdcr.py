@@ -1,3 +1,11 @@
+"""This module provides tools for processing the measurements for a given radionuclide using a Hidex TDCR system.
+
+TDCR stands for Triple to Double Coincidence Ratio.
+The module includes a class for handling the parsing, processing, summarizing, and exporting of measurement data.
+
+Classes:
+    HidexTDCRProcessor: A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
+"""
 import os
 import shutil
 from calendar import month_name
@@ -7,7 +15,11 @@ import pandas as pd
 
 
 class HidexTDCRProcessor:
-    """A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
+    """
+    A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
+
+    This class provides methods to parse readings from CSV files, process different types of measurements
+    (background, sample, net), generate summaries, and export results.
 
     Attributes:
         radionuclide (str): Name of the radionuclide being measured.
@@ -24,6 +36,29 @@ class HidexTDCRProcessor:
         repetition_time (float or None): Time per repetition in seconds.
         total_measurements (int or None): Total number of measurements.
         measurement_time (float or None): Total measurement time in seconds.
+
+    Methods:
+        parse_readings(self, folder_path):
+            Parses readings from CSV files in the specified folder, generates a summary, and calculates statistics.
+
+        summarize_readings(self, save=False, folder_path=None):
+            Summarizes the readings by printing the string representation of the object.
+            Optionally saves the summary to a text file.
+
+        process_readings(self, kind, time_unit='s'):
+            Processes the specified type of measurements (background, sample, net, or all).
+
+        plot_measurements(self, kind):
+            Plots the specified type of measurements (background, sample, or net).
+
+        export_measurements_table(self, kind, folder_path):
+            Exports the specified type of measurements to a CSV file.
+
+        export_measurements_plot(self, kind, folder_path):
+            Exports the specified type of measurement plot to a PNG file.
+
+        analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
+            Processes readings from the input folder, prints a summary, and optionally saves the results.
     """
     # Rows to extract from the CSV files
     _ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
@@ -95,9 +130,24 @@ class HidexTDCRProcessor:
         return msg
 
     def parse_readings(self, folder_path):
+        """Parses readings from CSV files in the specified folder, generates a summary, and calculates statistics.
+
+        Args:
+            folder_path (str): Path to the folder containing the CSV files.
+
+        Returns:
+            None
+
+        Raises: # TODO: document exceptions or not? there are more than this one
+            ValueError: If repetitions per cycle are not consistent for all measurements.
+        """
+        # Parse the readings from the CSV files in the specified folder
         self.readings = self._parse_readings(folder_path=folder_path)
+        # Generate a summary of the readings
         self.summary = self._get_readings_summary()
+        # Calculate statistics from the readings summary
         statistics = self._get_readings_statistics()
+        # Assign the calculated statistics to the corresponding attributes
         self.cycles = statistics['cycles']
         self.cycle_repetitions = statistics['cycle_repetitions']
         self.repetition_time = statistics['repetition_time']
@@ -137,62 +187,101 @@ class HidexTDCRProcessor:
             print(f'Summary saved to {folder_path}/summary.txt')
 
     def process_readings(self, kind, time_unit='s'):
+        """
+        Processes the specified type of measurements (background, sample, net, or all).
+
+        Args:
+            kind (str): The type of measurements to process. Options are 'background', 'sample', 'net', or 'all'.
+            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If an invalid measurement kind is provided.
+        """
+        # Process background measurements
         if kind == 'background':
             self.background = self._get_background_sample(kind='background', time_unit=time_unit)
+        # Process sample measurements
         elif kind == 'sample':
             self.sample = self._get_background_sample(kind='sample', time_unit=time_unit)
+        # Process net measurements
         elif kind == 'net':
             self.net = self._get_net_measurements(time_unit=time_unit)
+        # Process all types of measurements
         elif kind == 'all':
             self.background = self._get_background_sample(kind='background', time_unit=time_unit)
             self.sample = self._get_background_sample(kind='sample', time_unit=time_unit)
             self.net = self._get_net_measurements(time_unit=time_unit)
             self.measurements = self._compile_measurements()
+        # Raise an error if the kind is invalid
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", "net" or "all".')
 
     def _parse_readings(self, folder_path):
+        """
+        Parses readings from CSV files in the specified folder and returns a DataFrame.
+
+        Args:
+            folder_path (str): Path to the folder containing the CSV files.
+
+        Returns:
+            pd.DataFrame: DataFrame containing the parsed readings.
+
+        Raises:
+            ValueError: If repetitions per cycle are not consistent for all measurements.
+        """
+        # Retrieve a list of CSV files from the specified folder
         input_files = _get_csv_files(folder_path)
+        # Initialize a list to store extracted data
         extracted_data = []
-
+        # Iterate over each CSV file
         for file_number, input_file in enumerate(input_files, start=1):
+            # Open the current CSV file
             with open(input_file, 'r') as file:
+                # Read all lines from the file
                 lines = file.readlines()
-            current_block = {}
-            for line in lines[self._ID_LINES:]:
-                if line.strip() == 'Sample start':
-                    if current_block:
-                        extracted_data.append(current_block)
-                    current_block = {'file': file_number}
-                else:
-                    for row in self._ROWS_TO_EXTRACT:
-                        if line.startswith(row):
-                            current_block[row] = line.split(self._DELIMITER)[1].strip()
-            if current_block:
-                extracted_data.append(current_block)
-
+                # Initialize a dictionary to store the current data block
+                current_block = {}
+                # Iterate over the lines, skipping the initial ID lines
+                for line in lines[self._ID_LINES:]:
+                    # Check if the line indicates the start of a new data block
+                    if line.strip() == self._BLOCK_STARTER:
+                        # If there is an existing data block, append it to the extracted data
+                        if current_block:
+                            extracted_data.append(current_block)
+                        # Initialize a new data block with the file number
+                        current_block = {'file': file_number}
+                    else:
+                        # Extract relevant rows from the line
+                        for row in self._ROWS_TO_EXTRACT:
+                            if line.startswith(row):
+                                current_block[row] = line.split(self._DELIMITER)[1].strip()
+                # Append the last data block if it exists
+                if current_block:
+                    extracted_data.append(current_block)
+        # Convert the extracted data to a DataFrame
         df = pd.DataFrame(extracted_data, columns=self._ROWS_TO_EXTRACT + ['file'])
-
+        # Convert relevant columns to numeric values
         for col in df.columns[:-2]:
             df[col] = pd.to_numeric(df[col])
+        # Convert the date and time column to datetime format
         df[df.columns[-2]] = pd.to_datetime(df[df.columns[-2]], format=self._DATE_TIME_FORMAT)
-
-        # Sort by date time
+        # Sort the DataFrame by the end time
         df = df.sort_values(by='EndTime')
         df = df.reset_index(drop=True)
-
-        # Reassign values to files according to chronological order
+        # Check if repetitions per cycle are consistent for all measurements
         value_counts = df['file'].value_counts()
         if not value_counts.nunique() == 1:
             raise ValueError('Repetitions per cycle are not consistent for all measurements.')
+        # Reassign values to files according to chronological order
         df['file'] = [i for i in range(1, df['file'].unique().size + 1) for _ in range(value_counts.unique()[0])]
-
-        # Moving the last column to be the first
+        # Move the last column to be the first
         cols = df.columns.tolist()
         cols = [cols[-1]] + cols[:-1]
         df = df[cols]
-
-        # Rename columns
+        # Rename columns for clarity
         old_names = ['file', 'Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
         new_names = ['Cycle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
                      'Real time (s)', 'End time']
@@ -200,101 +289,184 @@ class HidexTDCRProcessor:
         return df
 
     def _get_readings_summary(self):
+        """
+        Generates a summary of the readings and returns it as a DataFrame.
+
+        Returns:
+            pd.DataFrame: DataFrame containing the summary of the readings.
+
+        Raises:
+            ValueError: If no readings data is available or if real time values are not consistent for all measurements.
+        """
+        # Check if readings data is available
         if self.readings is not None:
-            # Check if real times are the same for all files
+            # Check if real time values are consistent for all measurements
             if not self.readings['Real time (s)'].nunique() == 1:
                 raise ValueError('Real time values are not consistent for all measurements. Check readings table.')
             # Initialize a list to store the results
             results = []
-            # Iterate over each unique file
+            # Iterate over each unique cycle
             for cycle in self.readings['Cycle'].unique():
-                # Filter the DataFrame for the current file
+                # Filter the DataFrame for the current cycle
                 df = self.readings[self.readings['Cycle'] == cycle]
-                # Get the maximum number of repetitions for the current file
+                # Get the maximum number of repetitions for the current cycle
                 repetitions = df['Repetitions'].max()
-                # Get the time for the repetitions (assuming it's the same for all repetitions of a single file)
+                # Get the real time for the repetitions (assuming it's the same for all repetitions of a single cycle)
                 real_time = df['Real time (s)'].iloc[0]
-                # Get the earliest end time for the current file
+                # Get the earliest end time for the current cycle
                 start_time = df['End time'].min()
                 # Append the results to the list
-                results.append({'Cycle': cycle, 'Repetitions': repetitions, 'Real time (s)': real_time, 'Date': start_time})
+                results.append(
+                    {'Cycle': cycle, 'Repetitions': repetitions, 'Real time (s)': real_time, 'Date': start_time})
             # Convert the results to a DataFrame
             return pd.DataFrame(results, columns=['Cycle', 'Repetitions', 'Real time (s)', 'Date'])
         else:
+            # Raise an error if no readings data is available
             raise ValueError('No readings data to compute readings summary. Please read the CSV files first.')
 
     def _get_readings_statistics(self):
+        """
+        Calculates statistics from the readings summary and returns them as a dictionary.
+
+        Returns:
+            dict: A dictionary containing the calculated statistics.
+
+        Raises:
+            ValueError: If no readings summary data is available or if repetitions per cycle are not consistent for all measurements.
+        """
+        # Check if summary data is available
         if self.summary is not None:
-            # Check if repetitions per cycle are the same for all files
+            # Check if repetitions per cycle are consistent for all measurements
             if not self.summary['Repetitions'].nunique() == 1:
                 raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
-            # Get the number of unique files
+            # Calculate the number of unique cycles
             cycles = self.summary['Cycle'].count()
-            # Assign the total number of measurements
+            # Calculate the total number of measurements
             measurements = self.summary['Repetitions'].sum()
-            # Get the total measurement time
+            # Calculate the total measurement time
             measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
-            # Get the time per repetition
+            # Get the time per repetition (assuming it's the same for all cycles)
             repetition_time = self.summary['Real time (s)'].iloc[0]
-            # Get the repetitions per Cycle
+            # Get the number of repetitions per cycle (assuming it's the same for all cycles)
             cycle_repetitions = self.summary['Repetitions'].iloc[0]
-            # Create a dictionary to store results
+            # Create a dictionary to store the calculated statistics
             labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
             values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
             statistics = dict(zip(labels, values))
             return statistics
         else:
-            raise ValueError('No readings summary data to compute readings statistics. Please get the readings summary.')
+            # Raise an error if no summary data is available
+            raise ValueError(
+                'No readings summary data to compute readings statistics. Please get the readings summary.')
 
     def _get_background_sample(self, kind, time_unit='s'):
+        """
+        Processes background or sample measurements and returns them as a DataFrame.
+
+        Args:
+            kind (str): The type of measurements to process. Options are 'background' or 'sample'.
+            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+
+        Returns:
+            pd.DataFrame: DataFrame containing the processed background or sample measurements.
+
+        Raises:
+            ValueError: If no readings data is available.
+        """
         # TODO: dead time is a factor o a number in seconds?
+        # Check if readings data is available
         if self.readings is not None:
+            # Define identifiers for background and sample measurements
             ids = {'background': self._BACKGROUND_ID, 'sample': self._SAMPLE_ID}
+            # Create a copy of the readings DataFrame
             df = self.readings.copy()
+            # Filter the DataFrame for the specified kind (background or sample)
             df = df[df['Sample'] == ids[kind]].reset_index(drop=True)
+            # Calculate the elapsed time and its unit
             elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit)
+            # Calculate the live time
             df['Live time (s)'] = df['Real time (s)'] / df['Dead time']
+            # Add the elapsed time to the DataFrame
             df['Elapsed time'] = elapsed_time
             df[f'Elapsed time ({time_unit})'] = elapsed_time_unit
+            # Calculate the counts
             df['Counts'] = df['Count rate (cpm)'] * df['Live time (s)'] / 60
+            # Calculate the counts uncertainty
             df['Counts uncertainty'] = df['Counts'].pow(1 / 2)
+            # Calculate the counts uncertainty percentage
             df['Counts uncertainty (%)'] = df['Counts uncertainty'] / df['Counts'] * 100
             return df
         else:
+            # Raise an error if no readings data is available
             raise ValueError(f'No readings data to compute {kind} measurements. Please read the CSV files first.')
 
     def _get_net_measurements(self, time_unit='s'):
-        # TODO: check time conversion factors
+        """
+        Processes net measurements from background and sample measurements and returns them as a DataFrame.
+
+        Args:
+            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+
+        Returns:
+            pd.DataFrame: DataFrame containing the processed net measurements.
+
+        Raises:
+            ValueError: If no background or sample data is available.
+        """
+        # Check if background and sample data are available
         if self.background is not None and self.sample is not None:
-            data = {'Cycle': self.sample['Cycle'], 'Repetitions': self.sample['Repetitions'],
+            # Create a dictionary to store the net measurements
+            data = {
+                'Cycle': self.sample['Cycle'],
+                'Repetitions': self.sample['Repetitions'],
                 'Elapsed time': self.sample['Elapsed time'],
                 f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
+                # Calculate net count rate by subtracting background count rate from sample count rate
                 'Count rate (cpm)': self.sample['Count rate (cpm)'] - self.background['Count rate (cpm)'],
+                # Calculate net counts by subtracting background counts from sample counts
                 'Counts': self.sample['Counts'] - self.background['Counts'],
-                'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2), }
+                # Calculate counts uncertainty using the square root of the sum of sample and background counts
+                'Counts uncertainty': (self.sample['Counts'] + self.background['Counts']).pow(1 / 2),
+            }
+            # Calculate counts uncertainty percentage
             data['Counts uncertainty (%)'] = data['Counts uncertainty'] / data['Counts'] * 100
+            # Return the net measurements as a DataFrame
             return pd.DataFrame(data)
         else:
-            raise ValueError(f'No background and sample data to compute net measurements. Please process the readings first.')
+            # Raise an error if no background or sample data is available
+            raise ValueError(
+                'No background and sample data to compute net measurements. Please process the readings first.')
 
     def _compile_measurements(self):
+        """
+        Compiles background, sample, and net measurements into a single DataFrame with multi-level headers.
+
+        Returns:
+            pd.DataFrame: DataFrame containing the compiled measurements with multi-level headers.
+
+        Raises:
+            ValueError: If background, sample, or net data is not available.
+        """
+        # Check if background, sample, and net data are available
         if self.background is not None and self.sample is not None and self.net is not None:
-            # Sample DataFrames
+            # Create copies of the background, sample, and net DataFrames
             df1 = self.background.copy()
             df2 = self.sample.copy()
             df3 = self.net.copy()
-            # Creating multi-level headers
+            # Create multi-level headers for the DataFrames
             header1 = pd.MultiIndex.from_product([['Background'], df1.columns])
             header2 = pd.MultiIndex.from_product([['Sample'], df2.columns])
             header3 = pd.MultiIndex.from_product([['Net'], df3.columns])
-            # Assigning the multi-level headers to the DataFrames
+            # Assign the multi-level headers to the DataFrames
             df1.columns = header1
             df2.columns = header2
             df3.columns = header3
-            # Concatenating the DataFrames
+            # Concatenate the DataFrames along the columns
             return pd.concat([df1, df2, df3], axis=1)
         else:
-            raise ValueError(f'No background, sample and net data to compile measurements. Please process the readings first.')
+            # Raise an error if background, sample, or net data is not available
+            raise ValueError(
+                'No background, sample, and net data to compile measurements. Please process the readings first.')
 
     def plot_measurements(self, kind):
         """Plots the specified type of measurements.
@@ -395,19 +567,43 @@ class HidexTDCRProcessor:
         plt.savefig(f'{folder_path}/{kind}.png')
 
     def analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
+        """
+        Processes readings from the input folder, prints a summary, and optionally saves the results.
+
+        Args:
+            input_folder (str): Path to the folder containing the CSV files with readings.
+            time_unit (str): The unit of time for the measurements.
+            save (bool): If True, saves the results to the specified output folder. Default is False.
+            output_folder (str or None): Path to the folder where the results will be saved. Required if save is True.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError: If save is True and output_folder is not provided.
+        """
+        # Print a message indicating the start of processing
         print(f'Processing readings from {input_folder}.')
+        # Parse the readings from the CSV files in the input folder
         self.parse_readings(input_folder)
+        # Process all types of measurements
         self.process_readings(kind='all', time_unit=time_unit)
+        # Print the summary of the measurements
         print('Measurements summary:')
         print(self)
+        # If save is True, save the results to the specified output folder
         if save:
+            # Check if the output folder exists, create it if not
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
+            # Create a subfolder for the specific radionuclide, year, and month
             folder = f'{output_folder}/{self.radionuclide}_{self.year}_{self.month}'
             print(f'Saving measurement files to folder {folder}.')
+            # If the subfolder already exists, remove it and create a new one
             if os.path.exists(folder):
                 shutil.rmtree(folder)
             os.makedirs(folder)
+            # Save the CSV files
             print('Saving CSV files')
             shutil.copytree(input_folder, f'{folder}/readings')
             self.export_measurements_table(kind='readings', folder_path=folder)
@@ -415,8 +611,10 @@ class HidexTDCRProcessor:
             self.export_measurements_table(kind='sample', folder_path=folder)
             self.export_measurements_table(kind='net', folder_path=folder)
             self.export_measurements_table(kind='all', folder_path=folder)
+            # Save the summary to a text file
             self.summarize_readings(save=True, folder_path=folder)
-            print(f'Saving figures')
+            # Save the plots
+            print('Saving figures')
             self.export_measurements_plot(kind='background', folder_path=folder)
             self.export_measurements_plot(kind='sample', folder_path=folder)
             self.export_measurements_plot(kind='net', folder_path=folder)
@@ -477,6 +675,7 @@ def _get_elapsed_time(df, time_unit='s'):
         1    28.032222
         dtype: float64
     """
+    # TODO: check time conversion factors
     # Find the earliest 'End time' in the DataFrame
     initial_time = df['End time'].min()
     # Calculate the elapsed time from the initial time for each entry
