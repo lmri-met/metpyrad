@@ -116,7 +116,7 @@ class HidexTDCRProcessor:
         # Create the initial message with the radionuclide and date information
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
         # List of attributes to check for completeness of the summary
-        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time', 'summary']
+        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'total_measurements', 'measurement_time', 'summary']
         # If all relevant attributes are not None, add detailed summary information
         if all(getattr(self, attr) is not None for attr in attributes):
             msg += (f'\nSummary\n'
@@ -157,11 +157,10 @@ class HidexTDCRProcessor:
 
     def summarize_readings(self, save=False, folder_path=None):
         """
-        Summarizes the readings by printing the string representation of the object.
-        Optionally saves the summary to a text file.
+        Summarizes the readings by printing a message or saving it to a text file.
 
         Args:
-            save (bool): If True, saves the summary to a text file. Default is False.
+            save (bool): If True, saves the summary to a text file. Else, prints the summary. Default is False.
             folder_path (str): Path to the folder where the summary file will be saved. Required if save is True.
 
         Returns:
@@ -176,9 +175,6 @@ class HidexTDCRProcessor:
             Measurements of Lu-177 on November 2023
             Summary saved to /path/to/folder/summary.txt
         """
-        # Print the string representation of the object
-        print(self.__str__())
-
         # If save is True, save the summary to a text file
         if save:
             # Open the file in write mode
@@ -186,6 +182,9 @@ class HidexTDCRProcessor:
                 # Write the string representation of the object to the file
                 file.write(self.__str__())
             print(f'Summary saved to {folder_path}/summary.txt')
+        else:
+            # Print the string representation of the object
+            print(self.__str__())
 
     def process_readings(self, kind, time_unit='s'):
         """
@@ -534,6 +533,7 @@ class HidexTDCRProcessor:
             raise ValueError(f'Invalid measurement kind. Choose from "readings", "background", "sample", "net", or "all".')
         # Export the specified DataFrame to a CSV file
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
+        print(f'{kind.capitalize()} measurements CSV saved to "{folder_path}" folder.')
 
     def export_measurements_plot(self, kind, folder_path):
         """Exports the specified type of measurement plot to a PNG file.
@@ -567,6 +567,7 @@ class HidexTDCRProcessor:
         self.plot_measurements(kind=kind)
         # Save the plot to a PNG file
         plt.savefig(f'{folder_path}/{kind}.png')
+        print(f'{kind.capitalize()} measurements PNG saved to "{folder_path}" folder.')
 
     def analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
         """
@@ -590,10 +591,10 @@ class HidexTDCRProcessor:
         self.parse_readings(input_folder)
         # Process all types of measurements
         self.process_readings(kind='all', time_unit=time_unit)
+        # If save is True, save the results to the specified output folder
         # Print the summary of the measurements
         print('Measurements summary:')
         print(self)
-        # If save is True, save the results to the specified output folder
         if save:
             # Check if the output folder exists, create it if not
             if not os.path.exists(output_folder):
@@ -622,6 +623,7 @@ class HidexTDCRProcessor:
             self.export_measurements_plot(kind='net', folder_path=folder)
 
 
+
 def _get_csv_files(folder_path):
     """Retrieves a list of CSV files from the specified folder.
 
@@ -644,7 +646,7 @@ def _get_csv_files(folder_path):
         if file_name.endswith('.csv'):
             # Append the absolute path of the file to the list
             csv_files.append(os.path.abspath(os.path.join(folder_path, file_name)))
-    print(f'Found {len(csv_files)} CSV files in folder {folder_path}:')
+    print(f'Found {len(csv_files)} CSV files in folder {folder_path}')
     return csv_files
 
 
