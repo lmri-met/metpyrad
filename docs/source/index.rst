@@ -1,7 +1,5 @@
-.. MetPyRad documentation master file, created by
-   sphinx-quickstart on Thu Jan 30 18:29:16 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. MetPyRad documentation master file, created by sphinx-quickstart on Thu Jan 30 18:29:16 2025.
+You can adapt this file completely to your liking, but it should at least contain the root `toctree` directive.
 
 MetPyRad documentation
 ======================
@@ -27,7 +25,6 @@ Here's a summary of each section:
 
    This project is under active development. The public API should not be considered stable.
 
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents
@@ -36,26 +33,3 @@ Here's a summary of each section:
    how_tos
    api
    explanations
-
-.. error::
-
-   **Technical reference**:
-   Add examples to all methods.
-
-Tutorials
----------
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Tutorials
-
-   tutorials
-
-How-to guides
--------------
-
-Technical reference
--------------------
-
-Explanations
-------------
