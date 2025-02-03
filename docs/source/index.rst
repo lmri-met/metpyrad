@@ -29,7 +29,7 @@ Here's a summary of each section:
    :maxdepth: 2
    :caption: Contents
 
-   tutorials
-   how_tos
+   tutorials/hidex_tdcr
+   howtos/hidex_tdcr
    api
-   explanations
+   explanations/hidex_tdcr
