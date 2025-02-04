@@ -1,8 +1,5 @@
-Tutorials
-=========
-
-The HidexTDCRProcessor
-----------------------
+Hidex TDCRP processor
+=====================
 
 This tutorial aims to help users understand how to effectively use the ``HidexTDCRProcessor`` class
 for processing the measurements of radionuclides using the Hidex TDCR system.
@@ -22,10 +19,10 @@ The guide is divided into three parts:
    This part help users to visualize their measurements and save their data in various formats for further analysis and presentation.
 
 Getting started
-^^^^^^^^^^^^^^^
+---------------
 
 Install dependencies
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^
 
 Before using the ``HidexTDCRProcessor`` class, ensure you have the necessary dependencies installed. You can install them using `pip`:
 
@@ -35,7 +32,7 @@ Before using the ``HidexTDCRProcessor`` class, ensure you have the necessary dep
     pip install metpyrad
 
 Initialize the processor
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create an instance of the ``HidexTDCRProcessor`` class by providing the radionuclide name and the year and month of the measurements:
 
@@ -59,7 +56,7 @@ Verify that the processor has been initialized with the specified radionuclide, 
     Measurements of Lu-177 on November 2023
 
 Parse the readings
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^^
 
 After instantiating the ``HidexTDCRProcessor`` class, the first thing you may want to do is
 parsing the readings data from the CSV files provided by the Hidex TDCR system.
@@ -79,7 +76,7 @@ If your CSV are located in the folder ``/path/to/csv/files``, you can do this us
     Found 2 CSV files in folder /path/to/csv/files
 
 Inspect the parsed readings
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After parsing the readings, inspect the DataFrame containing the parsed readings to understand its structure and contents.
 In order to show all the columns of the DataFrame, use ``pd.set_option()`` the command:
@@ -106,7 +103,7 @@ In order to show all the columns of the DataFrame, use ``pd.set_option()`` the c
     7      2       2            2         223689.40            335843      1.110           100 2023-12-01 12:56:24
 
 Print a summary of the readings
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After parsing and inspecting the readings, you can print a summary of the readings:
 
@@ -133,13 +130,10 @@ After parsing and inspecting the readings, you can print a summary of the readin
 This summary provides a detailed information of the readings, including the number of cycles, repetitions per cycle, total measurement time, and other relevant details.
 
 Processing the readings data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Parse Readings
-""""""""""""""
+----------------------------
 
 Process background measurements
-"""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Process the background measurements using the ``process_readings`` method:
 
@@ -156,7 +150,7 @@ Process the background measurements using the ``process_readings`` method:
 This output confirms that the background measurements have been processed.
 
 Process sample measurements
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, process the sample measurements:
 
@@ -173,7 +167,7 @@ Next, process the sample measurements:
 This output confirms that the sample measurements have been processed.
 
 Process net measurements
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Then, process the net measurements, which are derived from the background and sample measurements:
 
@@ -190,10 +184,10 @@ Then, process the net measurements, which are derived from the background and sa
 This output confirms that the net measurements have been processed.
 
 Visualizing and exporting measurement data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------------
 
 Plot background measurements
-""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create and customize a plot for the background measurements:
 
@@ -206,7 +200,7 @@ Create and customize a plot for the background measurements:
 A plot window displaying various quantities for background measurements, such as count rate, dead time, real time, live time, counts, and counts uncertainty.
 
 Plot sample measurements
-""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create and customize a plot for the sample measurements:
 
@@ -219,7 +213,7 @@ Create and customize a plot for the sample measurements:
 A plot window displaying various quantities for sample measurements, similar to the background measurements plot.
 
 Plot net measurements
-"""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^
 
 Create and customize a plot for the net measurements:
 
@@ -232,7 +226,7 @@ Create and customize a plot for the net measurements:
 A plot window displaying various quantities for net measurements, such as elapsed time, counts, and counts uncertainty.
 
 Save tables
-"""""""""""
+^^^^^^^^^^^
 
 Save the measurement data as CSV files:
 
@@ -260,7 +254,7 @@ Save the measurement data as CSV files:
 This output confirms that the tables for background, sample, and net measurements have been successfully saved as CSV files in the specified folder.
 
 Save plots
-""""""""""
+^^^^^^^^^^
 
 Save the measurements plots as PNG images:
 

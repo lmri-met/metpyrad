@@ -1,5 +1,5 @@
-How-to guides
-=============
+Hidex TDCR processor
+====================
 
 How-to guide 1
 --------------

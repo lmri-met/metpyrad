@@ -1,5 +1,5 @@
-Technical reference
-===================
+Hidex TDCR processor
+====================
 
 .. autoclass:: hidex_tdcr.HidexTDCRProcessor
 

@@ -1,5 +1,5 @@
-Explanations
-============
+Hidex TDCR processor
+====================
 
 Overview of TDCR Method
 -----------------------
