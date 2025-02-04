@@ -8,4 +8,5 @@ In this section you will find step-by-step lessons that guide beginners through 
     :caption: Tutorials
 
     starting
+    install
     hidex_tdcr
