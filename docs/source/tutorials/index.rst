@@ -1,0 +1,11 @@
+Tutorials
+=========
+
+In this section you will find step-by-step lessons that guide beginners through the initial setup and basic usage of MetPyRad.
+
+.. toctree::
+    :maxdepth: 4
+    :caption: Tutorials
+
+    starting
+    hidex_tdcr
