@@ -1,18 +1,29 @@
-Hidex TDCR processor
-====================
+HidexTDCRprocessor
+==================
 
-.. autoclass:: hidex_tdcr.HidexTDCRProcessor
+.. currentmodule:: metpyrad
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.parse_readings
+Constructor
+-----------
+.. autosummary::
+    :toctree: _autosummary
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.summarize_readings
+    HidexTDCRProcessor
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.process_readings
+Attributes
+----------
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.plot_measurements
+.. autosummary::
+    :toctree: _autosummary
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.export_measurements_table
+    HidexTDCRProcessor.radionuclide
+    HidexTDCRProcessor.year
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.export_measurements_plot
+Methods
+-------
 
-.. automethod:: hidex_tdcr.HidexTDCRProcessor.analyze_readings
+.. autosummary::
+    :toctree: _autosummary
+
+    HidexTDCRProcessor.summarize_readings
+    HidexTDCRProcessor.plot_measurements
