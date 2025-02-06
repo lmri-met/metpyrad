@@ -15,6 +15,7 @@ See more details about these CSV file in the Topic guide.
     Add link to the Topic guide section.
     Add example files to download.
     Add mention to pandas and link to tutorial.
+    Add assumption of all being installed and ref to previous section of the tutorial
 
 .. code-block::
 
@@ -117,42 +118,24 @@ use the ``processor.parse_readings()`` method:
     >>> processor.parse_readings(folder_path)
     Found 2 CSV files in folder input_files
 
-When calling the ``processor.parse_readings()`` method, Python looks for the ``input_files`` folder file in the current working directory.
-If Python cannot locate the folder, you will get an error:
+.. note::
 
-.. code-block:: python
+    When calling the ``processor.parse_readings()`` method, Python looks for the ``input_files`` folder file in the current working directory.
+    If Python cannot locate the folder, you will get an error.
 
-    >>> processor.parse_readings(folder_path)
-    Traceback (most recent call last):
-    FileNotFoundError: [Errno 2] No such file or directory: 'input_files'
+    To avoid this error, import the ``os`` module, get your current working directory with the ``os.getcwd()`` method,
+    and change the current working directory to the parent folder of the ``input_files`` folder with the ``os.chdir()`` method.
 
-To avoid this error, change the current working directory to the parent folder of the ``input_files`` folder.
-To do this, first import the ``os`` module:
+    If your ``input_files`` folder is inside the folder ``/home/my_user/measurements``:
 
-.. code-block:: python
+    .. code-block:: python
 
-    >>> import os
-
-Then, get the current working directory using the ``os.getcwd()`` method:
-
-.. code-block:: python
-
-    >>> os.getcwd()
-    '/home/my_user'
-
-Then, if the ``input_files`` folder is inside the folder ``/home/my_user/measurements``,
-change the working directory using the ``os.chdir()`` method:
-
-.. code-block:: python
-
-    >>> os.chdir('measurements')
-
-You can verify the updated current working directory:
-
-.. code-block:: python
-
-    >>> os.getcwd()
-    '/home/my_user/measurements'
+        >>> import os
+        >>> os.getcwd()
+        '/home/my_user'
+        >>> os.chdir('measurements')
+        >>> os.getcwd()
+        '/home/my_user/measurements'
 
 Inspect the parsed readings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
