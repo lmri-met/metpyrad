@@ -1,5 +1,5 @@
 Processing the readings
------------------------
+=======================
 
 In the previous section, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files.
 You extracted, for each cycle and repetition, the measurements provided by the Hidex TDCR system of
@@ -10,9 +10,9 @@ Also, you may need the net measurements derived from the sample and background m
 Let's see how you can do this using the ``HidexTDCRProcessor`` class.
 
 Process background measurements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
-Take the ``processor`` of the previous section.
+Take the ``processor`` from the previous section.
 Let's get some other quantities of interest from the background readings.
 Process the background measurements using the ``processor.process_readings()`` method and
 specifying the type of measurement you want to process:
@@ -45,7 +45,7 @@ See more details about these quantities in the Topic guide.
     Otherwise, you will get an error.
 
 Process sample measurements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
 Next, you can process the radionuclide sample measurements in the same way you just did for the background measurements.
 Just use the ``processor.process_readings()`` method specifying the type ``sample`` instead of ``background``:
@@ -64,12 +64,12 @@ Then inspect the processed sample readings by calling the ``processor.sample`` a
     Update dataframe
 
 Process net measurements
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 When measuring the activity of a radionuclide,
 you are often interested in the net measurements derived from the sample and background measurements,
 rather than in the sample measurement itself.
-You can process the net measurements in the same way you just did for the background and sample measurements.
+You can process the radionuclide net measurements in the same way you just did for the background and sample measurements.
 Just use the ``processor.process_readings()`` method specifying the type of measurements ``net``:
 
 .. code-block:: python

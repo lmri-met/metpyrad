@@ -1,5 +1,8 @@
 Visualizing measurements
-------------------------
+========================
+
+.. warning::
+    Ploting issue. Only in pycharm? Does the user need to import matplotlib to show the plots?
 
 Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files,
 and processed the to get the background, sample and net measurements.
@@ -9,9 +12,10 @@ The next thing you may want to do is visualize the measurements.
 Visualizing the measurements allow you to find patterns in the measurements,
 check if everything went well or if something may have gone wrong during the measurements,
 diagnose what may have gone wrong if it seems so, or decide if you need to repeat the measurements.
+Let's see how you can do this using the ``HidexTDCRProcessor`` class.
 
 Plot background measurements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 Take the ``processor`` from the previous section.
 Let's get some plots of the quantities of interest for the background measurements.
@@ -38,7 +42,7 @@ See more details about these quantities in the Topic guide.
     Otherwise, you will get an error.
 
 Plot sample measurements
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 Next, you can plot the radionuclide sample measurements in the same way you just did for the background measurements.
 Just use the ``processor.plot_measurements()`` method specifying the type ``sample`` instead of ``background``:
@@ -53,7 +57,7 @@ Create and customize a plot for the sample measurements:
     Add plot.
 
 Plot net measurements
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 Finally, you can process the radionuclide net measurements in the same way you just did for the background and sample measurements.
 Just use the ``processor.plot_measurements()`` method specifying the type of measurements ``net``:

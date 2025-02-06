@@ -15,3 +15,4 @@ It will guide you through the initial setup, processing the readings data, visua
     hidex_tdcr_1
     hidex_tdcr_2
     hidex_tdcr_3
+    hidex_tdcr_4

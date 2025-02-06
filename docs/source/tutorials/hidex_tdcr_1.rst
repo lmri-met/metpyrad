@@ -1,5 +1,5 @@
 Getting started
----------------
+===============
 
 Let's say that you made a set of measurements of the radionuclide Lu-177 starting on November 2023 using a Hidex TDCR system.
 The set of measurements consists on four cicles of measurements, each one with 2 repetitions.
@@ -9,6 +9,12 @@ For each cicle of measurements, the Hidex TDCR system provides a CSV file with t
 Here you can see an example of this CSV file.
 Note that it is not a complete file, it is just a part of it extracted for illustration purposes.
 See more details about these CSV file in the Topic guide.
+
+These measurements may be time consuming, and a lot of CSV files may be generated as a result.
+These CSV files may be very long, with the information about the readings scattered across multiple lines.
+So, to process all the CSV files provided by de Hidex TDCR system, the first thing you need to do is
+to read these files and extract the information you need from them.
+Let's see how you can do this using the ``HidexTDCRProcessor`` class.
 
 .. warning::
 
@@ -58,7 +64,7 @@ See more details about these CSV file in the Topic guide.
     0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
 
 Initialize the processor
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 In order to process all the CSV files provided by de Hidex TDCR system,
 the first thing you need to do initialize the Hidex TCDR processor.
@@ -84,7 +90,7 @@ Verify that the processor has been initialized with the specified radionuclide, 
     Measurements of Lu-177 on November 2023
 
 Parse the readings
-^^^^^^^^^^^^^^^^^^
+------------------
 
 After initializing the processor, the next thing you need to do is reading CSV files provided by the Hidex TDCR system.
 Let's say that you have the four CSV files in a folder called ``input_files``:
@@ -138,7 +144,7 @@ use the ``processor.parse_readings()`` method:
         '/home/my_user/measurements'
 
 Inspect the parsed readings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
 After parsing the readings from the Hidex TDCR CSV files,
 inspect the parsed readings to understand its structure and contents.
@@ -179,7 +185,7 @@ See more details about these quantities in the Topic guide.
     Add link to the Topic guide section.
 
 Print a summary of the readings
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
 After parsing and inspecting the readings, you can print a summary of the readings:
 

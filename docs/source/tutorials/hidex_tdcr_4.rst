@@ -1,5 +1,5 @@
 Exporting measurement data
---------------------------
+================================
 
 Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files,
 and processed them to get the background, sample and net measurements.
@@ -10,10 +10,10 @@ You may also want to export the plots to images to be used in reports or present
 Let's see how you can do this using the ``HidexTDCRProcessor`` class.
 
 Save tables
-^^^^^^^^^^^
+-----------
 
 Save background measurements table
-""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Create a new folder to store the measurements' results.
 Let's say that you create a folder called ``output_files`` inside the ``measurements`` folder where you had the ``input_files`` folder:
@@ -71,7 +71,7 @@ all the quantities of interest for the background measurements for each cycle an
     Otherwise, you will get an error.
 
 Save sample measurements table
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide sample measurements in the same way you just did for the background measurements.
 Just use the ``processor.export_measurements_table()`` method specifying the type ``sample`` instead of ``background``:
@@ -97,7 +97,7 @@ all the quantities of interest for the sample measurements for each cycle and re
     Add link to the Topic guide section.
 
 Save net measurements table
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide net measurements in the same way you just did for the background and sample measurements.
 Just use the ``processor.export_measurements_table()`` method specifying the type of measurements ``net``:
@@ -123,10 +123,10 @@ all the quantities of interest for the sample measurements for each cycle and re
     Add link to the Topic guide section.
 
 Save plots
-^^^^^^^^^^
+----------
 
 Save background measurements plot
-""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that you have exported the measurement tables to CSV files, let's export the measurements plots to PNG images.
 To export the background measurements plot, use the ``processor.export_measurements_plot()`` method and
@@ -145,7 +145,7 @@ plots of the quantities of interest for the background measurements in terms of 
     Add link to the Topic guide section.
 
 Save sample measurements plot
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide sample measurements plot in the same way you just did for the background measurements.
 Just use the ``processor.export_measurements_plot()`` method specifying the type ``sample`` instead of ``background``:
@@ -163,7 +163,7 @@ plots of the quantities of interest for the sample measurements in terms of time
     Add link to the Topic guide section.
 
 Save net measurements plot
-"""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide net measurements plot in the same way you just did for the background and sample measurements.
 Just use the ``processor.export_measurements_plot()`` method specifying the type of measurements ``net``:
