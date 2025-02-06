@@ -5,6 +5,19 @@ The module includes a class for handling the parsing, processing, summarizing, a
 
 Classes:
     HidexTDCRProcessor: A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
+
+TODO: update module docstring
+TODO: update class docstring
+
+TODO: add examples to all public methods
+TODO: add attribute docstrings
+
+TODO: rename class to HidexTDCR?
+TODO: rename export methods to export_table and export_plot
+
+TODO: update test case with four files: script to get the string dataframes, string dataframes in tests, validation excel, examples in docstring and documentation
+
+TODO: complete testing
 """
 import os
 import shutil
@@ -51,7 +64,7 @@ class HidexTDCRProcessor:
         """
         self.radionuclide = radionuclide
         """
-        This is self.radionuclide's docstring.
+        Name of the radionuclide being measured (str).
         
         Examples
         --------
@@ -60,19 +73,162 @@ class HidexTDCRProcessor:
         'Lu-177'
         """
         self.year = year
-        """This is self.year's docstring."""
+        """
+        Year of the measurements (int).
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.year
+        2023
+        """
         self.month = month
+        """
+        Month of the measurements (int).
+                
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.month
+        11
+        """
         self.readings = None
+        """
+        DataFrame containing the readings (pandas.DataFrame or None). Default None.
+                
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.readings
+            Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time 
+        1       1            1             83.97               140      1.000           100 2023-11-30 08:44:20     
+        1       2            1         252623.23            374237      1.125           100 2023-11-30 08:47:44
+        """
         self.background = None
+        """
+        DataFrame containing the background measurements (pandas.DataFrame or None). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.process_readings('all')
+        >>> processor.background
+             Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)    Elapsed time Elapsed time (s)  Counts  Counts uncertainty  Counts uncertainty (%)
+         1       1            1             83.97               140        1.0           100 2023-11-30 08:44:20          100.0 0 days 00:00:00              0.0  139.95           11.830046                8.453052
+         1       1            2             87.57               146        1.0           100 2023-11-30 08:51:04          100.0 0 days 00:06:44            404.0  145.95           12.080977                8.277476
+        """
         self.sample = None
+        """
+        DataFrame containing the sample measurements (pandas.DataFrame or None). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.process_readings('all')
+        >>> processor.sample
+             Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)    Elapsed time Elapsed time (s)         Counts  Counts uncertainty  Counts uncertainty (%)
+         1       2            1         252623.23            374237      1.125           100 2023-11-30 08:47:44      88.888889 0 days 00:00:00              0.0  374256.637037          611.765181                0.163461
+         1       2            2         251953.09            373593      1.124           100 2023-11-30 08:54:28      88.967972 0 days 00:06:44            404.0  373595.922301          611.224936                0.163606
+        """
         self.net = None
+        """
+        DataFrame containing the net measurements (pandas.DataFrame or None). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.process_readings('all')
+        >>> processor.net
+             Cycle  Repetitions    Elapsed time  Elapsed time (s)  Count rate (cpm)        Counts  Counts uncertainty  Counts uncertainty (%)
+         1            1 0 days 00:00:00               0.0         252539.26 374116.687037          611.879553                0.163553
+         1            2 0 days 00:06:44             404.0         251865.52 373449.972301          611.344316                0.163702
+        """
         self.measurements = None
+        """
+        DataFrame containing all measurements (pandas.DataFrame or None). Default None.
+        
+        It is a concatenation of the background, sample and net measurements DataFrames.
+        """
         self.summary = None
+        """
+        A summary of the measurements (str). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.summary
+        Measurements of Lu-177 on November 2023
+        Summary
+        Number of cycles: 2
+        Repetitions per cycle: 2
+        Time per repetition: 100 s
+        Total number of measurements: 4
+        Total measurement time: 400 s
+        Cycles summary
+           Cycle  Repetitions  Real time (s)                Date
+        0      1            2            100 2023-11-30 08:44:20
+        1      2            2            100 2023-12-01 12:46:16
+        """
         self.cycles = None
+        """
+        Number of cycles in the measurements (int). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.cycles
+        2
+        """
         self.cycle_repetitions = None
+        """
+        Number of repetitions per cycle (int). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.cycle_repetitions
+        2
+        """
         self.repetition_time = None
+        """
+        Time per repetition in seconds (int). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.repetition_time
+        100
+        """
         self.total_measurements = None
+        """
+        Total number of measurements (int). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.total_measurements
+        4
+        """
         self.measurement_time = None
+        """
+        Total measurement time in seconds (int). Default None.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('path/to/input/files/folder')
+        >>> processor.measurement_time
+        400
+        """
 
     def __repr__(self):
         return f'DataProcessor(radionuclide={self.radionuclide}, year={self.year}, month={self.month})'
@@ -124,6 +280,12 @@ class HidexTDCRProcessor:
             If repetitions per cycle or real time values are not consistent for all measurements.
         ValueError
             If no readings data or no readings summary is available.
+
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings(folder_path='/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
         """
         # Parse the readings from the CSV files in the specified folder
         self.readings = self._parse_readings(folder_path=folder_path)
@@ -146,16 +308,33 @@ class HidexTDCRProcessor:
         ----------
         save : bool
             If True, saves the summary to a text file. Else, prints the summary. Default is False.
-            folder_path (str): Path to the folder where the summary file will be saved. Required if save is True.
+        folder_path : str
+            Path to the folder where the summary file will be saved. Required if save is True.
 
         Examples
         --------
         >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
         >>> processor.summarize_readings()
         Measurements of Lu-177 on November 2023
-        ...
-        >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
+
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings(folder_path='/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
+        >>> processor.summarize_readings()
         Measurements of Lu-177 on November 2023
+        Summary
+        Number of cycles: 2
+        Repetitions per cycle: 2
+        Time per repetition: 100 s
+        Total number of measurements: 4
+        Total measurement time: 400 s
+        Cycles summary
+           Cycle  Repetitions  Real time (s)                Date
+        0      1            2            100 2023-11-30 08:44:20
+        1      2            2            100 2023-12-01 12:46:16
+
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
         Summary saved to /path/to/folder/summary.txt
         """
         # If save is True, save the summary to a text file
@@ -178,7 +357,8 @@ class HidexTDCRProcessor:
         kind : str
             The type of measurements to process. Options are 'background', 'sample', 'net', or 'all'.
         time_unit : str
-            The unit of time for the measurements. Default is seconds ('s').
+            The unit of time for the measurements. Options are 's' (seconds), 'min' (minutes), 'h' (hours), 'd' (days),
+            'wk' (weeks), 'mo' (months), 'yr' (years). Default is 's'.
 
         Raises
         ------
@@ -186,6 +366,28 @@ class HidexTDCRProcessor:
             If an invalid measurement kind is provided.
         ValueError
             If readings, background, sample, or net data is not available.
+
+        Examples
+        --------
+        Process background measurements
+
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings(folder_path='/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
+        >>> processor.process_readings(kind='background')
+             Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)    Elapsed time Elapsed time (s)  Counts  Counts uncertainty  Counts uncertainty (%)
+         1       1            1             83.97               140        1.0           100 2023-11-30 08:44:20          100.0 0 days 00:00:00              0.0  139.95           11.830046                8.453052
+         1       1            2             87.57               146        1.0           100 2023-11-30 08:51:04          100.0 0 days 00:06:44            404.0  145.95           12.080977                8.277476
+
+        Process sample measurements computing elapsed time in minutes
+
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings(folder_path='/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
+        >>> processor.process_readings(kind='sample', time_unit='min')
+             Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)    Elapsed time Elapsed time (min)         Counts  Counts uncertainty  Counts uncertainty (%)
+         1       2            1         252623.23            374237      1.125           100 2023-11-30 08:47:44      88.888889 0 days 00:00:00              0.0  374256.637037          611.765181                0.163461
+         1       2            2         251953.09            373593      1.124           100 2023-11-30 08:54:28      88.967972 0 days 00:06:44         6.733333  373595.922301          611.224936                0.163606
         """
         # Process background measurements
         if kind == 'background':
@@ -503,6 +705,7 @@ class HidexTDCRProcessor:
         --------
         >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
         >>> processor.plot_measurements('net')
         """
@@ -540,8 +743,10 @@ class HidexTDCRProcessor:
         --------
         >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
-        >>> processor.process_readings('all')
-        >>> processor.export_measurements_table('net', '/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
+        >>> processor.process_readings('sample')
+        >>> processor.export_measurements_table('sample', '/path/to/folder')
+        Sample measurements CSV saved to "/path/to/folder" folder.
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
         dfs = {
@@ -578,8 +783,10 @@ class HidexTDCRProcessor:
         --------
         >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
+        Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
-        >>> processor.export_measurements_plot('net', '/path/to/folder')
+        >>> processor.export_measurements_plot('sample', '/path/to/folder')
+        Sample measurements PNG saved to "/path/to/folder" folder.
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
         dfs = {
@@ -615,6 +822,39 @@ class HidexTDCRProcessor:
         ------
         ValueError
             If save is True and output_folder is not provided.
+
+        Examples
+        --------
+        >>> inp_dir='/path/to/input/folder'
+        >>> out_dir='/path/to/output/folder'
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.analyze_readings(input_folder=inp_dir, time_unit='s', save=True, output_folder=out_dir)
+        Processing readings from /path/to/input/folder.
+        Found 2 CSV files in folder /path/to/input/folder
+        Measurements summary:
+        Measurements of Lu-177 on November 2023
+        Summary
+        Number of cycles: 2
+        Repetitions per cycle: 2
+        Time per repetition: 100 s
+        Total number of measurements: 4
+        Total measurement time: 400 s
+        Cycles summary
+           Cycle  Repetitions  Real time (s)                Date
+        0      1            2            100 2023-11-30 08:44:20
+        1      2            2            100 2023-12-01 12:46:16
+        Saving measurement files to folder /path/to/input/folder/Lu-177_2023_11.
+        Saving CSV files
+        Readings measurements CSV saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Background measurements CSV saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Sample measurements CSV saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Net measurements CSV saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        All measurements CSV saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Summary saved to /path/to/input/folder/Lu-177_2023_11/summary.txt
+        Saving figures
+        Background measurements PNG saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Sample measurements PNG saved to "/path/to/input/folder/Lu-177_2023_11" folder.
+        Net measurements PNG saved to "/path/to/input/folder/Lu-177_2023_11" folder.
         """
         # Print a message indicating the start of processing
         print(f'Processing readings from {input_folder}.')
