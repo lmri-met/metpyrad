@@ -217,7 +217,7 @@ class HidexTDCRProcessor:
 
         Returns
         -------
-        pd.DataFrame
+        pandas.DataFrame
             DataFrame containing the parsed readings.
 
         Raises
@@ -287,7 +287,7 @@ class HidexTDCRProcessor:
 
         Returns
         -------
-        pd.DataFrame
+        pandas.DataFrame
             DataFrame containing the summary of the readings.
 
         Raises
@@ -373,7 +373,7 @@ class HidexTDCRProcessor:
 
         Returns
         -------
-        pd.DataFrame
+        pandas.DataFrame
             DataFrame containing the processed background or sample measurements.
 
         Raises
@@ -419,7 +419,7 @@ class HidexTDCRProcessor:
 
         Returns
         -------
-        pd.DataFrame
+        pandas.DataFrame
             DataFrame containing the processed net measurements.
 
         Raises
@@ -457,7 +457,7 @@ class HidexTDCRProcessor:
 
         Returns
         -------
-        pd.DataFrame
+        pandas.DataFrame
             DataFrame containing the compiled measurements with multi-level headers.
 
         Raises
@@ -693,7 +693,7 @@ def _get_elapsed_time(df, time_unit='s'):
 
     Parameters
     ----------
-    df : pd.DataFrame
+    df : pandas.DataFrame
         DataFrame containing a column 'End time' with datetime values.
     time_unit : str
         The unit of time to convert the elapsed time to. Options are 's' (seconds), 'min' (minutes), 'h' (hours),
@@ -754,7 +754,7 @@ def _plot_background_sample_measurements(df, kind):
 
     Parameters
     ----------
-    df : pd.DataFrame
+    df : pandas.DataFrame
         DataFrame containing the measurement data with columns 'End time', 'Count rate (cpm)', 'Dead time',
         'Real time (s)', 'Live time (s)', 'Counts (reading)', 'Counts', and 'Counts uncertainty (%)'.
     kind : str
@@ -823,7 +823,7 @@ def _plot_net_measurements(df):
 
     Parameters
     ----------
-    df : pd.DataFrame
+    df : pandas.DataFrame
         DataFrame containing the measurement data with columns 'Elapsed time (unit)', 'Counts', and
         'Counts uncertainty (%)'.
 
