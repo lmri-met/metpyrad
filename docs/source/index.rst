@@ -76,7 +76,7 @@ It is designed to facilitate the handling, analysis, and visualization of measur
         In this section you will find discussions about key topics and concepts related to MetPyRad.
         It provides useful background information and in-depth explanations.
 
-        .. button-ref:: explanations
+        .. button-ref:: topics
             :ref-type: ref
             :color: primary
             :shadow:
