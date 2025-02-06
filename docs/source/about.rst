@@ -5,7 +5,7 @@ Get support
 -----------
 
 If you need support, please check the **MetPyRad** `documentation <https://github.com/lmri-met/metpyrad/blob/main/README.md>`_.
-If you need further support, please send an e-mail to `Xandra Campo <mailto:xandra.campo@ciemat.es>`_.
+If you need further support, please `send us an e-mail <mailto:xandra.campo@ciemat.es>`_.
 
 Contribute
 ----------
