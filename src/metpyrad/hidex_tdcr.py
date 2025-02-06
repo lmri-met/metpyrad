@@ -9,9 +9,6 @@ Classes:
 TODO: update module docstring
 TODO: update class docstring
 
-TODO: add examples to all public methods
-TODO: add attribute docstrings
-
 TODO: rename class to HidexTDCR?
 TODO: rename export methods to export_table and export_plot
 
