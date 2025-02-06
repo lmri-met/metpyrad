@@ -20,45 +20,6 @@ class HidexTDCRProcessor:
 
     This class provides methods to parse readings from CSV files, process different types of measurements
     (background, sample, net), generate summaries, and export results.
-
-    Attributes:
-        radionuclide (str): Name of the radionuclide being measured.
-        year (int): Year of the measurements.
-        month (int): Month of the measurements.
-        readings (pd.DataFrame or None): DataFrame containing the readings.
-        background (pd.DataFrame or None): DataFrame containing the background measurements.
-        sample (pd.DataFrame or None): DataFrame containing the sample measurements.
-        net (pd.DataFrame or None): DataFrame containing the net measurements.
-        measurements (pd.DataFrame or None): DataFrame containing all measurements.
-        summary (str or None): A summary of the measurements.
-        cycles (int or None): Number of cycles in the measurements.
-        cycle_repetitions (int or None): Number of repetitions per cycle.
-        repetition_time (float or None): Time per repetition in seconds.
-        total_measurements (int or None): Total number of measurements.
-        measurement_time (float or None): Total measurement time in seconds.
-
-    Methods:
-        parse_readings(self, folder_path):
-            Parses readings from CSV files in the specified folder, generates a summary, and calculates statistics.
-
-        summarize_readings(self, save=False, folder_path=None):
-            Summarizes the readings by printing the string representation of the object.
-            Optionally saves the summary to a text file.
-
-        process_readings(self, kind, time_unit='s'):
-            Processes the specified type of measurements (background, sample, net, or all).
-
-        plot_measurements(self, kind):
-            Plots the specified type of measurements (background, sample, or net).
-
-        export_measurements_table(self, kind, folder_path):
-            Exports the specified type of measurements to a CSV file.
-
-        export_measurements_plot(self, kind, folder_path):
-            Exports the specified type of measurement plot to a PNG file.
-
-        analyze_readings(self, input_folder, time_unit, save=False, output_folder=None):
-            Processes readings from the input folder, prints a summary, and optionally saves the results.
     """
     # Rows to extract from the CSV files
     _ROWS_TO_EXTRACT = ['Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
@@ -76,15 +37,30 @@ class HidexTDCRProcessor:
     _SAMPLE_ID = 2
 
     def __init__(self, radionuclide, year, month):
-        """Initializes the HidexTDCRProcessor with the given radionuclide, year, and month.
+        """
+        Initializes the HidexTDCRProcessor with the given radionuclide, year, and month.
 
-        Args:
-            radionuclide (str): Name of the radionuclide being measured.
-            year (int): Year of the measurements.
-            month (int): Month of the measurements.
+        Parameters
+        ----------
+        radionuclide : str
+            Name of the radionuclide being measured.
+        year : int
+            Year of the measurements.
+        month : int
+            Month of the measurements.
         """
         self.radionuclide = radionuclide
+        """
+        This is self.radionuclide's docstring.
+        
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.radionuclide
+        'Lu-177'
+        """
         self.year = year
+        """This is self.year's docstring."""
         self.month = month
         self.readings = None
         self.background = None
@@ -102,16 +78,20 @@ class HidexTDCRProcessor:
         return f'DataProcessor(radionuclide={self.radionuclide}, year={self.year}, month={self.month})'
 
     def __str__(self):
-        """Returns a string representation of the HidexTDCRProcessor object, summarizing the measurements.
+        """
+        Returns a string representation of the HidexTDCRProcessor object, summarizing the measurements.
 
-        Returns:
-            str: A string summarizing the measurements of the radionuclide for the specified month and year.
-                 If all relevant attributes are not None, includes detailed summary information.
+        Returns
+        -------
+        str
+            A string summarizing the measurements of the radionuclide for the specified month and year.
+            If all relevant attributes are not None, includes detailed summary information.
 
-        Example:
-            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
-            >>> print(processor)
-            Measurements of Lu-177 on November 2023
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> print(processor)
+        Measurements of Lu-177 on November 2023
         """
         # Create the initial message with the radionuclide and date information
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
@@ -130,17 +110,20 @@ class HidexTDCRProcessor:
         return msg
 
     def parse_readings(self, folder_path):
-        """Parses readings from CSV files in the specified folder, generates a summary, and calculates statistics.
+        """
+        Parses readings from CSV files in the specified folder, generates a summary, and calculates statistics.
 
-        Args:
-            folder_path (str): Path to the folder containing the CSV files.
+        Parameters
+        ----------
+        folder_path : str
+            Path to the folder containing the CSV files.
 
-        Returns:
-            None
-
-        Raises:
-            ValueError: If repetitions per cycle or real time values are not consistent for all measurements.
-            ValueError: If no readings data or no readings summary is available.
+        Raises
+        ------
+        ValueError
+            If repetitions per cycle or real time values are not consistent for all measurements.
+        ValueError
+            If no readings data or no readings summary is available.
         """
         # Parse the readings from the CSV files in the specified folder
         self.readings = self._parse_readings(folder_path=folder_path)
@@ -159,21 +142,21 @@ class HidexTDCRProcessor:
         """
         Summarizes the readings by printing a message or saving it to a text file.
 
-        Args:
-            save (bool): If True, saves the summary to a text file. Else, prints the summary. Default is False.
+        Parameters
+        ----------
+        save : bool
+            If True, saves the summary to a text file. Else, prints the summary. Default is False.
             folder_path (str): Path to the folder where the summary file will be saved. Required if save is True.
 
-        Returns:
-            None
-
-        Example:
-            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
-            >>> processor.summarize_readings()
-            Measurements of Lu-177 on November 2023
-            ...
-            >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
-            Measurements of Lu-177 on November 2023
-            Summary saved to /path/to/folder/summary.txt
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.summarize_readings()
+        Measurements of Lu-177 on November 2023
+        ...
+        >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
+        Measurements of Lu-177 on November 2023
+        Summary saved to /path/to/folder/summary.txt
         """
         # If save is True, save the summary to a text file
         if save:
@@ -190,16 +173,19 @@ class HidexTDCRProcessor:
         """
         Processes the specified type of measurements (background, sample, net, or all).
 
-        Args:
-            kind (str): The type of measurements to process. Options are 'background', 'sample', 'net', or 'all'.
-            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+        Parameters
+        ----------
+        kind : str
+            The type of measurements to process. Options are 'background', 'sample', 'net', or 'all'.
+        time_unit : str
+            The unit of time for the measurements. Default is seconds ('s').
 
-        Returns:
-            None
-
-        Raises:
-            ValueError: If an invalid measurement kind is provided.
-            ValueError: If readings, background, sample, or net data is not available.
+        Raises
+        ------
+        ValueError
+            If an invalid measurement kind is provided.
+        ValueError
+            If readings, background, sample, or net data is not available.
         """
         # Process background measurements
         if kind == 'background':
@@ -224,14 +210,20 @@ class HidexTDCRProcessor:
         """
         Parses readings from CSV files in the specified folder and returns a DataFrame.
 
-        Args:
-            folder_path (str): Path to the folder containing the CSV files.
+        Parameters
+        ----------
+        folder_path : str
+            Path to the folder containing the CSV files.
 
-        Returns:
-            pd.DataFrame: DataFrame containing the parsed readings.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the parsed readings.
 
-        Raises:
-            ValueError: If repetitions per cycle are not consistent for all measurements.
+        Raises
+        ------
+        ValueError
+            If repetitions per cycle are not consistent for all measurements.
         """
         # Retrieve a list of CSV files from the specified folder
         input_files = _get_csv_files(folder_path)
@@ -293,11 +285,15 @@ class HidexTDCRProcessor:
         """
         Generates a summary of the readings and returns it as a DataFrame.
 
-        Returns:
-            pd.DataFrame: DataFrame containing the summary of the readings.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the summary of the readings.
 
-        Raises:
-            ValueError: If no readings data is available or if real time values are not consistent for all measurements.
+        Raises
+        ------
+        ValueError
+            If no readings data is available or if real time values are not consistent for all measurements.
         """
         # Check if readings data is available
         if self.readings is not None:
@@ -329,11 +325,15 @@ class HidexTDCRProcessor:
         """
         Calculates statistics from the readings summary and returns them as a dictionary.
 
-        Returns:
-            dict: A dictionary containing the calculated statistics.
+        Returns
+        -------
+        dict
+            A dictionary containing the calculated statistics.
 
-        Raises:
-            ValueError: If no readings summary data is available or if repetitions per cycle are not consistent for all measurements.
+        Raises
+        ------
+        ValueError
+            If no readings summary data is available or if repetitions per cycle are not consistent for all measurements.
         """
         # Check if summary data is available
         if self.summary is not None:
@@ -364,15 +364,22 @@ class HidexTDCRProcessor:
         """
         Processes background or sample measurements and returns them as a DataFrame.
 
-        Args:
-            kind (str): The type of measurements to process. Options are 'background' or 'sample'.
-            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+        Parameters
+        ----------
+        kind : str
+            The type of measurements to process. Options are 'background' or 'sample'.
+        time_unit : str
+            The unit of time for the measurements. Default is seconds ('s').
 
-        Returns:
-            pd.DataFrame: DataFrame containing the processed background or sample measurements.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the processed background or sample measurements.
 
-        Raises:
-            ValueError: If no readings data is available.
+        Raises
+        ------
+        ValueError
+            If no readings data is available.
         """
         # TODO: dead time is a factor o a number in seconds?
         # Check if readings data is available
@@ -405,14 +412,20 @@ class HidexTDCRProcessor:
         """
         Processes net measurements from background and sample measurements and returns them as a DataFrame.
 
-        Args:
-            time_unit (str): The unit of time for the measurements. Default is seconds ('s').
+        Parameters
+        ----------
+        time_unit : str
+            The unit of time for the measurements. Default is seconds ('s').
 
-        Returns:
-            pd.DataFrame: DataFrame containing the processed net measurements.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the processed net measurements.
 
-        Raises:
-            ValueError: If no background or sample data is available.
+        Raises
+        ------
+        ValueError
+            If no background or sample data is available.
         """
         # Check if background and sample data are available
         if self.background is not None and self.sample is not None:
@@ -442,11 +455,15 @@ class HidexTDCRProcessor:
         """
         Compiles background, sample, and net measurements into a single DataFrame with multi-level headers.
 
-        Returns:
-            pd.DataFrame: DataFrame containing the compiled measurements with multi-level headers.
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the compiled measurements with multi-level headers.
 
-        Raises:
-            ValueError: If background, sample, or net data is not available.
+        Raises
+        ------
+        ValueError
+            If background, sample, or net data is not available.
         """
         # Check if background, sample, and net data are available
         if self.background is not None and self.sample is not None and self.net is not None:
@@ -472,20 +489,22 @@ class HidexTDCRProcessor:
     def plot_measurements(self, kind):
         """Plots the specified type of measurements.
 
-        Args:
-            kind (str): The type of measurements to plot. Options are 'background', 'sample', or 'net'.
+        Parameters
+        ----------
+        kind : str
+            The type of measurements to plot. Options are 'background', 'sample', or 'net'.
 
-        Returns:
-            None
+        Raises
+        ------
+        ValueError
+            If an invalid measurement kind is provided.
 
-        Raises:
-            ValueError: If an invalid measurement kind is provided.
-
-        Example:
-            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
-            >>> processor.parse_readings('/path/to/folder')
-            >>> processor.process_readings('all')
-            >>> processor.plot_measurements('net')
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('/path/to/folder')
+        >>> processor.process_readings('all')
+        >>> processor.plot_measurements('net')
         """
         # Check the kind of measurements to plot
         if kind == 'background':
@@ -502,23 +521,27 @@ class HidexTDCRProcessor:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", or "net".')
 
     def export_measurements_table(self, kind, folder_path):
-        """Exports the specified type of measurements to a CSV file.
+        """
+        Exports the specified type of measurements to a CSV file.
 
-        Args:
-            kind (str): The type of measurements to export. Options are 'readings', 'background', 'sample', 'net', or 'all'.
-            folder_path (str): The path to the folder where the CSV file will be saved.
+        Parameters
+        ----------
+        kind : str
+            The type of measurements to export. Options are 'readings', 'background', 'sample', 'net', or 'all'.
+        folder_path : str
+            The path to the folder where the CSV file will be saved.
 
-        Returns:
-            None
+        Raises
+        ------
+        ValueError
+            If an invalid measurement kind is provided.
 
-        Raises:
-            ValueError: If an invalid measurement kind is provided.
-
-        Example:
-            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
-            >>> processor.parse_readings('/path/to/folder')
-            >>> processor.process_readings('all')
-            >>> processor.export_measurements_table('net', '/path/to/folder')
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('/path/to/folder')
+        >>> processor.process_readings('all')
+        >>> processor.export_measurements_table('net', '/path/to/folder')
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
         dfs = {
@@ -536,23 +559,27 @@ class HidexTDCRProcessor:
         print(f'{kind.capitalize()} measurements CSV saved to "{folder_path}" folder.')
 
     def export_measurements_plot(self, kind, folder_path):
-        """Exports the specified type of measurement plot to a PNG file.
+        """
+        Exports the specified type of measurement plot to a PNG file.
 
-        Args:
-            kind (str): The type of measurements to plot. Options are 'background', 'sample', or 'net'.
-            folder_path (str): The path to the folder where the PNG file will be saved.
+        Parameters
+        ----------
+        kind : str
+            The type of measurements to plot. Options are 'background', 'sample', or 'net'.
+        folder_path : str
+            The path to the folder where the PNG file will be saved.
 
-        Returns:
-            None
+        Raises
+        ------
+        ValueError
+            If an invalid measurement kind is provided.
 
-        Raises:
-            ValueError: If an invalid measurement kind is provided.
-
-        Example:
-            >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
-            >>> processor.parse_readings('/path/to/folder')
-            >>> processor.process_readings('all')
-            >>> processor.export_measurements_plot('net', '/path/to/folder')
+        Examples
+        --------
+        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor.parse_readings('/path/to/folder')
+        >>> processor.process_readings('all')
+        >>> processor.export_measurements_plot('net', '/path/to/folder')
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
         dfs = {
@@ -573,17 +600,21 @@ class HidexTDCRProcessor:
         """
         Processes readings from the input folder, prints a summary, and optionally saves the results.
 
-        Args:
-            input_folder (str): Path to the folder containing the CSV files with readings.
-            time_unit (str): The unit of time for the measurements.
-            save (bool): If True, saves the results to the specified output folder. Default is False.
-            output_folder (str or None): Path to the folder where the results will be saved. Required if save is True.
+        Parameters
+        ----------
+        input_folder : str
+            Path to the folder containing the CSV files with readings.
+        time_unit : str
+            The unit of time for the measurements.
+        save : bool
+            If True, saves the results to the specified output folder. Default is False.
+        output_folder (str or None):
+            Path to the folder where the results will be saved. Required if save is True.
 
-        Returns:
-            None
-
-        Raises:
-            ValueError: If save is True and output_folder is not provided.
+        Raises
+        ------
+        ValueError
+            If save is True and output_folder is not provided.
         """
         # Print a message indicating the start of processing
         print(f'Processing readings from {input_folder}.')
@@ -625,18 +656,24 @@ class HidexTDCRProcessor:
 
 
 def _get_csv_files(folder_path):
-    """Retrieves a list of CSV files from the specified folder.
+    """
+    Retrieves a list of CSV files from the specified folder.
 
-    Args:
-        folder_path (str): The path to the folder containing the files.
+    Parameters
+    ----------
+    folder_path : str
+        The path to the folder containing the files.
 
-    Returns:
-        list: A list of full paths to the CSV files found in the folder.
+    Returns
+    -------
+    list
+        A list of full paths to the CSV files found in the folder.
 
-    Example:
-        >>> _get_csv_files('/path/to/folder')
-        Found 3 CSV files in folder /path/to/folder:
-        ['/path/to/folder/file1.csv', '/path/to/folder/file2.csv', '/path/to/folder/file3.csv']
+    Examples
+    --------
+    >>> _get_csv_files('/path/to/folder')
+    Found 3 CSV files in folder /path/to/folder:
+    ['/path/to/folder/file1.csv', '/path/to/folder/file2.csv', '/path/to/folder/file3.csv']
     """
     # List to store csv files with their full paths
     csv_files = []
@@ -651,33 +688,41 @@ def _get_csv_files(folder_path):
 
 
 def _get_elapsed_time(df, time_unit='s'):
-    """Calculate the elapsed time from the minimum 'End time' in a dataframe and convert it to the specified time unit.
+    """
+    Calculate the elapsed time from the minimum 'End time' in a dataframe and convert it to the specified time unit.
 
-    Args:
-        df (pd.DataFrame): DataFrame containing a column 'End time' with datetime values.
-        time_unit (str): The unit of time to convert the elapsed time to.
-                         Options are 's' (seconds), 'min' (minutes), 'h' (hours), 'd' (days),
-                         'wk' (weeks), 'mo' (months), 'yr' (years). Default is 's'.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing a column 'End time' with datetime values.
+    time_unit : str
+        The unit of time to convert the elapsed time to. Options are 's' (seconds), 'min' (minutes), 'h' (hours),
+        'd' (days), 'wk' (weeks), 'mo' (months), 'yr' (years). Default is 's'.
 
-    Returns:
-        tuple: A tuple containing:
-            - pd.Series: Elapsed time in the original time delta format.
-            - pd.Series: Elapsed time converted to the specified time unit.
+    Returns
+    -------
+    tuple
+        A tuple containing:
+        - pd.Series: Elapsed time in the original time delta format.
+        - pd.Series: Elapsed time converted to the specified time unit.
 
-    Raises:
-        ValueError: If an invalid time unit is provided.
+    Raises
+    ------
+    ValueError
+        If an invalid time unit is provided.
 
-    Example:
-        >>> df = pd.DataFrame({'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16'])})
-        >>> elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit='h')
-        >>> print(elapsed_time)
-        0   0 days 00:00:00
-        1   1 days 04:01:56
-        Name: End time, dtype: timedelta64[ns]
-        >>> print(elapsed_time_unit)
-        0     0.000000
-        1    28.032222
-        dtype: float64
+    Examples
+    --------
+    >>> df = pd.DataFrame({'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16'])})
+    >>> elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit='h')
+    >>> print(elapsed_time)
+    0   0 days 00:00:00
+    1   1 days 04:01:56
+    Name: End time, dtype: timedelta64[ns]
+    >>> print(elapsed_time_unit)
+    0     0.000000
+    1    28.032222
+    dtype: float64
     """
     # TODO: check time conversion factors
     # Find the earliest 'End time' in the DataFrame
@@ -704,30 +749,37 @@ def _get_elapsed_time(df, time_unit='s'):
 
 
 def _plot_background_sample_measurements(df, kind):
-    """Plots various quantities for background or sample measurements from the given DataFrame.
+    """
+    Plots various quantities for background or sample measurements from the given DataFrame.
 
-    Args:
-        df (pd.DataFrame): DataFrame containing the measurement data with columns 'End time', 'Count rate (cpm)',
-                           'Dead time', 'Real time (s)', 'Live time (s)', 'Counts (reading)', 'Counts', and 'Counts uncertainty (%)'.
-        kind (str): A string indicating the type of measurements (e.g., 'background' or 'sample').
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing the measurement data with columns 'End time', 'Count rate (cpm)', 'Dead time',
+        'Real time (s)', 'Live time (s)', 'Counts (reading)', 'Counts', and 'Counts uncertainty (%)'.
+    kind : str
+        A string indicating the type of measurements (e.g., 'background' or 'sample').
 
-    Returns:
-        matplotlib.figure.Figure: The figure object containing the plots.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The figure object containing the plots.
 
-    Example:
-        >>> df = pd.DataFrame({
-        ...     'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16']),
-        ...     'Count rate (cpm)': [100, 150],
-        ...     'Dead time': [0.1, 0.2],
-        ...     'Real time (s)': [60, 120],
-        ...     'Live time (s)': [50, 110],
-        ...     'Counts (reading)': [5000, 7500],
-        ...     'Counts': [4950, 7400],
-        ...     'Counts uncertainty (%)': [1.0, 1.2]
-        ... })
-        >>> fig = _plot_background_sample_measurements(df, 'background')
-        >>> plt.show()
-        """
+    Examples
+    --------
+    >>> df = pd.DataFrame({
+    ...     'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16']),
+    ...     'Count rate (cpm)': [100, 150],
+    ...     'Dead time': [0.1, 0.2],
+    ...     'Real time (s)': [60, 120],
+    ...     'Live time (s)': [50, 110],
+    ...     'Counts (reading)': [5000, 7500],
+    ...     'Counts': [4950, 7400],
+    ...     'Counts uncertainty (%)': [1.0, 1.2]
+    ... })
+    >>> fig = _plot_background_sample_measurements(df, 'background')
+    >>> plt.show()
+    """
     # Extract the 'End time' column for the x-axis
     x = df['End time']
     xlabel = 'End time'
@@ -766,23 +818,29 @@ def _plot_background_sample_measurements(df, kind):
 
 
 def _plot_net_measurements(df):
-    """Plots various quantities for net measurements from the given DataFrame.
+    """
+    Plots various quantities for net measurements from the given DataFrame.
 
-    Args:
-        df (pd.DataFrame): DataFrame containing the measurement data with columns 'Elapsed time (unit)',
-                           'Counts', and 'Counts uncertainty (%)'.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing the measurement data with columns 'Elapsed time (unit)', 'Counts', and
+        'Counts uncertainty (%)'.
 
-    Returns:
-        matplotlib.figure.Figure: The figure object containing the plots.
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The figure object containing the plots.
 
-    Example:
-        >>> df = pd.DataFrame({
-        ...     'Elapsed time (s)': [0, 10, 20, 30],
-        ...     'Counts': [100, 150, 200, 250],
-        ...     'Counts uncertainty (%)': [1.0, 1.2, 1.1, 1.3]
-        ... })
-        >>> fig = _plot_net_measurements(df)
-        >>> plt.show()
+    Examples
+    --------
+    >>> df = pd.DataFrame({
+    ...     'Elapsed time (s)': [0, 10, 20, 30],
+    ...     'Counts': [100, 150, 200, 250],
+    ...     'Counts uncertainty (%)': [1.0, 1.2, 1.1, 1.3]
+    ... })
+    >>> fig = _plot_net_measurements(df)
+    >>> plt.show()
     """
     # Extracting the unit from the column label
     etime_column = [col for col in df.columns if col.startswith('Elapsed time (')][0]
