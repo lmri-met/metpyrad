@@ -1,13 +1,13 @@
-# 1. Import the `HidexTDCRProcessor` class
+# 1. Import the `HidexTDCR` class
 import pandas as pd
 from matplotlib import pyplot as plt
 
-from metpyrad import HidexTDCRProcessor
+from metpyrad import HidexTDCR
 
 pd.set_option('display.max_columns', None)
 
-# 2. Initialize the Processor: Create an instance of the `HidexTDCRProcessor` class by specifying the radionuclide, year, and month of the measurements:
-processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
+# 2. Initialize the Processor: Create an instance of the `HidexTDCR` class by specifying the radionuclide, year, and month of the measurements:
+processor = HidexTDCR(radionuclide='Lu-177', year=2023, month=11)
 print(processor)
 
 # 3. Parse Readings: Parse the readings from CSV files provided by the instrument located in a specified folder:

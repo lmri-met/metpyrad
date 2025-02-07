@@ -3,9 +3,9 @@ Hidex TDCR processor
 
 This tutorial aims to help users understand how to process the measurements of a radionuclide obtained by a
 Hidex TDCR system using MetPyRad.
-The tool that MetPyRad provides to do this is the ``HidexTDCRProcessor`` class.
+The tool that MetPyRad provides to do this is the ``HidexTDCR`` class.
 
-This tutorial provides the users with a basic understanding of the ``HidexTDCRProcessor`` class.
+This tutorial provides the users with a basic understanding of the ``HidexTDCR`` class.
 It will guide you through the initial setup, processing the readings data, visualizing the measurements, and exporting the measurement data.
 
 .. toctree::

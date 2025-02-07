@@ -13,5 +13,5 @@ Generating readings summaries
 Calculating background, sample and net quantities
 -------------------------------------------------
 
-Output files of the HidexTDCRProcessor class
+Output files of the HidexTDCR class
 --------------------------------------------

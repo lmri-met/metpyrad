@@ -81,19 +81,19 @@ cycle, sample, repetition, end time, dead time, real time, live time, elapsed ti
 For each corresponding **net measurement**, we are interested in the next quantities:
 cycle, repetition, elapsed time, count rate, counts and counts uncertainty.
 
-The tool that **MetPyRad** provides to do this is the **HidexTDCRProcessor** class.
-Here is a step-by-step guide to using **HidexTDCRProcessor** for processing and summarizing the measurements of a given 
+The tool that **MetPyRad** provides to do this is the **HidexTDCR** class.
+Here is a step-by-step guide to using **HidexTDCR** for processing and summarizing the measurements of a given 
 radionuclide using a Hidex TDCR system.
 
-1. **Import** the `HidexTDCRProcessor` class
+1. **Import** the `HidexTDCR` class
     ```python
-    from metpyrad import HidexTDCRProcessor
+    from metpyrad import HidexTDCR
     ```
 2. **Initialize the Processor**:
-   Create an instance of the `HidexTDCRProcessor` class by specifying the radionuclide, year, and month of the
+   Create an instance of the `HidexTDCR` class by specifying the radionuclide, year, and month of the
    measurements:
     ```python
-    processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
+    processor = HidexTDCR(radionuclide='Lu-177', year=2023, month=11)
     print(processor)
     ```
    Output:

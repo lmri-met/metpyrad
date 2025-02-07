@@ -4,17 +4,7 @@ TDCR stands for Triple to Double Coincidence Ratio.
 The module includes a class for handling the parsing, processing, summarizing, and exporting of measurement data.
 
 Classes:
-    HidexTDCRProcessor: A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
-
-TODO: update module docstring
-TODO: update class docstring
-
-TODO: rename class to HidexTDCR?
-TODO: rename export methods to export_table and export_plot
-
-TODO: update test case with four files: script to get the string dataframes, string dataframes in tests, validation excel, examples in docstring and documentation
-
-TODO: complete testing
+    HidexTDCR: A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
 """
 import os
 import shutil
@@ -24,7 +14,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-class HidexTDCRProcessor:
+class HidexTDCR:
     """
     A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
 
@@ -48,7 +38,7 @@ class HidexTDCRProcessor:
 
     def __init__(self, radionuclide, year, month):
         """
-        Initializes the HidexTDCRProcessor with the given radionuclide, year, and month.
+        Initializes the HidexTDCR with the given radionuclide, year, and month.
 
         Parameters
         ----------
@@ -65,7 +55,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.radionuclide
         'Lu-177'
         """
@@ -75,7 +65,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.year
         2023
         """
@@ -85,7 +75,7 @@ class HidexTDCRProcessor:
                 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.month
         11
         """
@@ -95,7 +85,7 @@ class HidexTDCRProcessor:
                 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.readings
             Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time 
@@ -108,7 +98,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.process_readings('all')
         >>> processor.background
@@ -122,7 +112,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.process_readings('all')
         >>> processor.sample
@@ -136,7 +126,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.process_readings('all')
         >>> processor.net
@@ -156,7 +146,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.summary
         Measurements of Lu-177 on November 2023
@@ -177,7 +167,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.cycles
         2
@@ -188,7 +178,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.cycle_repetitions
         2
@@ -199,7 +189,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.repetition_time
         100
@@ -210,7 +200,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.total_measurements
         4
@@ -221,7 +211,7 @@ class HidexTDCRProcessor:
         
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('path/to/input/files/folder')
         >>> processor.measurement_time
         400
@@ -232,7 +222,7 @@ class HidexTDCRProcessor:
 
     def __str__(self):
         """
-        Returns a string representation of the HidexTDCRProcessor object, summarizing the measurements.
+        Returns a string representation of the HidexTDCR object, summarizing the measurements.
 
         Returns
         -------
@@ -242,7 +232,7 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> print(processor)
         Measurements of Lu-177 on November 2023
         """
@@ -280,7 +270,7 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         """
@@ -310,11 +300,11 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.summarize_readings()
         Measurements of Lu-177 on November 2023
 
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.summarize_readings()
@@ -330,7 +320,7 @@ class HidexTDCRProcessor:
         0      1            2            100 2023-11-30 08:44:20
         1      2            2            100 2023-12-01 12:46:16
 
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
         Summary saved to /path/to/folder/summary.txt
         """
@@ -368,7 +358,7 @@ class HidexTDCRProcessor:
         --------
         Process background measurements
 
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings(kind='background')
@@ -378,7 +368,7 @@ class HidexTDCRProcessor:
 
         Process sample measurements computing elapsed time in minutes
 
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings(kind='sample', time_unit='min')
@@ -700,7 +690,7 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
@@ -738,7 +728,7 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('sample')
@@ -778,7 +768,7 @@ class HidexTDCRProcessor:
 
         Examples
         --------
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
@@ -824,7 +814,7 @@ class HidexTDCRProcessor:
         --------
         >>> inp_dir='/path/to/input/folder'
         >>> out_dir='/path/to/output/folder'
-        >>> processor = HidexTDCRProcessor('Lu-177', 2023, 11)
+        >>> processor = HidexTDCR('Lu-177', 2023, 11)
         >>> processor.analyze_readings(input_folder=inp_dir, time_unit='s', save=True, output_folder=out_dir)
         Processing readings from /path/to/input/folder.
         Found 2 CSV files in folder /path/to/input/folder

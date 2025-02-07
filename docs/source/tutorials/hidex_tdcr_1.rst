@@ -14,7 +14,7 @@ These measurements may be time consuming, and a lot of CSV files may be generate
 These CSV files may be very long, with the information about the readings scattered across multiple lines.
 So, to process all the CSV files provided by de Hidex TDCR system, the first thing you need to do is
 to read these files and extract the information you need from them.
-Let's see how you can do this using the ``HidexTDCRProcessor`` class.
+Let's see how you can do this using the ``HidexTDCR`` class.
 
 .. warning::
 
@@ -69,18 +69,18 @@ Initialize the processor
 In order to process all the CSV files provided by de Hidex TDCR system,
 the first thing you need to do initialize the Hidex TCDR processor.
 
-In a Python shell, import ``HidexTDCRProcessor`` class from ``metpyrad``:
+In a Python shell, import ``HidexTDCR`` class from ``metpyrad``:
 
 .. code-block:: python
 
-    >>> from metpyrad import HidexTDCRProcessor
+    >>> from metpyrad import HidexTDCR
 
-Then, initialize the ``processor`` by creating an instance of the ``HidexTDCRProcessor`` class.
-Call the ``HidexTDCRProcessor`` class and providing the radionuclide name and the year and month of the measurements:
+Then, initialize the ``processor`` by creating an instance of the ``HidexTDCR`` class.
+Call the ``HidexTDCR`` class and providing the radionuclide name and the year and month of the measurements:
 
 .. code-block:: python
 
-    >>> processor = HidexTDCRProcessor(radionuclide='Lu-177', year=2023, month=11)
+    >>> processor = HidexTDCR(radionuclide='Lu-177', year=2023, month=11)
 
 Verify that the processor has been initialized with the specified radionuclide, year, and month:
 

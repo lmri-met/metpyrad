@@ -4,7 +4,7 @@ import pandas as pd
 
 # Data from two Hidex TDCR output csv files Lu-177 2023/11/30 and Lu-177 2023/12/01.
 # From both files, the data are from the repetitions 1 and 2.
-# CSV formated as the "readings" attribute from "HidexTDCRProcessor" class
+# CSV formated as the "readings" attribute from "HidexTDCR" class
 _readings_csv = """Cycle,Sample,Repetitions,Count rate (cpm),Counts (reading),Dead time,Real time (s),End time
     1,1,1,83.97,140,1.0,100,2023-11-30 08:44:20
     1,2,1,252623.23,374237,1.125,100,2023-11-30 08:47:44
@@ -19,7 +19,7 @@ readings = pd.read_csv(StringIO(_readings_csv))
 readings[readings.columns[-1]] = pd.to_datetime(readings[readings.columns[-1]], format='%Y-%m-%d %H:%M:%S')
 
 # Compute background and sample measurements dataframes in the format of the attributes "background" and "sample" from
-# "HidexTDCRProcessor" class
+# "HidexTDCR" class
 _df = readings.copy()
 _df['Live time (s)'] = _df['Real time (s)'] / _df['Dead time']
 _df['Counts'] = _df['Count rate (cpm)'] * _df['Live time (s)'] / 60
@@ -28,7 +28,7 @@ _df['Counts uncertainty (%)'] = _df['Counts uncertainty'] / _df['Counts'] * 100
 background = _df[_df['Sample'] == _df['Sample'].unique()[0]].reset_index(drop=True)
 sample = _df[_df['Sample'] == _df['Sample'].unique()[1]].reset_index(drop=True)
 
-# Compute net quantities dataframes in the format of the attribute "net" from "HidexTDCRProcessor" class
+# Compute net quantities dataframes in the format of the attribute "net" from "HidexTDCR" class
 _net_cpm = sample['Count rate (cpm)'] - background['Count rate (cpm)']
 _net_counts = sample['Counts'] - background['Counts']
 _u_net_counts = (sample['Counts'] + background['Counts']).pow(1 / 2)
@@ -80,7 +80,7 @@ results.to_csv(_csv_buffer, index=False)
 results_csv = _csv_buffer.getvalue()
 
 # Print attribute DataFrames as CSV strings
-# These CSV strings can be copied to the corresponding test fixtures for the "HidexTDCRProcessor" class
+# These CSV strings can be copied to the corresponding test fixtures for the "HidexTDCR" class
 print(readings_csv)
 print(background_csv)
 print(sample_csv)

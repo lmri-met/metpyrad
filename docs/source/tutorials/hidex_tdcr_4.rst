@@ -7,7 +7,7 @@ You have all this information organized and stored in tables, and you made some 
 
 The next thing you may want to do is exporting the tables to text file for further processing or reporting.
 You may also want to export the plots to images to be used in reports or presentations.
-Let's see how you can do this using the ``HidexTDCRProcessor`` class.
+Let's see how you can do this using the ``HidexTDCR`` class.
 
 Save tables
 -----------
