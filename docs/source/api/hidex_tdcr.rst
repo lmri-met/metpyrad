@@ -41,6 +41,6 @@ Methods
     HidexTDCRProcessor.summarize_readings
     HidexTDCRProcessor.process_readings
     HidexTDCRProcessor.plot_measurements
-    HidexTDCRProcessor.export_measurements_table
-    HidexTDCRProcessor.export_measurements_plot
+    HidexTDCRProcessor.export_table
+    HidexTDCRProcessor.export_plot
     HidexTDCRProcessor.analyze_readings

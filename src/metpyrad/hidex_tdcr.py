@@ -720,7 +720,7 @@ class HidexTDCRProcessor:
             # Raise an error if the kind is invalid
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", or "net".')
 
-    def export_measurements_table(self, kind, folder_path):
+    def export_table(self, kind, folder_path):
         """
         Exports the specified type of measurements to a CSV file.
 
@@ -742,7 +742,7 @@ class HidexTDCRProcessor:
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('sample')
-        >>> processor.export_measurements_table('sample', '/path/to/folder')
+        >>> processor.export_table('sample', '/path/to/folder')
         Sample measurements CSV saved to "/path/to/folder" folder.
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
@@ -760,7 +760,7 @@ class HidexTDCRProcessor:
         dfs[kind].to_csv(f'{folder_path}/{kind}.csv', index=False)
         print(f'{kind.capitalize()} measurements CSV saved to "{folder_path}" folder.')
 
-    def export_measurements_plot(self, kind, folder_path):
+    def export_plot(self, kind, folder_path):
         """
         Exports the specified type of measurement plot to a PNG file.
 
@@ -782,7 +782,7 @@ class HidexTDCRProcessor:
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
-        >>> processor.export_measurements_plot('sample', '/path/to/folder')
+        >>> processor.export_plot('sample', '/path/to/folder')
         Sample measurements PNG saved to "/path/to/folder" folder.
         """
         # Dictionary mapping measurement kinds to their corresponding DataFrames
@@ -877,18 +877,18 @@ class HidexTDCRProcessor:
             # Save the CSV files
             print('Saving CSV files')
             shutil.copytree(input_folder, f'{folder}/readings')
-            self.export_measurements_table(kind='readings', folder_path=folder)
-            self.export_measurements_table(kind='background', folder_path=folder)
-            self.export_measurements_table(kind='sample', folder_path=folder)
-            self.export_measurements_table(kind='net', folder_path=folder)
-            self.export_measurements_table(kind='all', folder_path=folder)
+            self.export_table(kind='readings', folder_path=folder)
+            self.export_table(kind='background', folder_path=folder)
+            self.export_table(kind='sample', folder_path=folder)
+            self.export_table(kind='net', folder_path=folder)
+            self.export_table(kind='all', folder_path=folder)
             # Save the summary to a text file
             self.summarize_readings(save=True, folder_path=folder)
             # Save the plots
             print('Saving figures')
-            self.export_measurements_plot(kind='background', folder_path=folder)
-            self.export_measurements_plot(kind='sample', folder_path=folder)
-            self.export_measurements_plot(kind='net', folder_path=folder)
+            self.export_plot(kind='background', folder_path=folder)
+            self.export_plot(kind='sample', folder_path=folder)
+            self.export_plot(kind='net', folder_path=folder)
 
 
 

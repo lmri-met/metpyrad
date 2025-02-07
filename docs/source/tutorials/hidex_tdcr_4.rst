@@ -40,12 +40,12 @@ Define the path to the folder that contains the input files:
     >>> folder_path = 'output_files'
 
 Let's export the background measurements to a CSV file.
-To do this, use the ``processor.export_measurements_table()`` method and
+To do this, use the ``processor.export_table()`` method and
 specify the type of measurement you want to process and the output folder to save the file:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_table(kind='background', folder_path=output_folder)
+    >>> processor.export_table(kind='background', folder_path=output_folder)
     Background measurements CSV saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``background.csv`` containing
@@ -65,7 +65,7 @@ all the quantities of interest for the background measurements for each cycle an
 
 .. note::
 
-    To export measurements tables using the ``processor.export_measurements_table()`` method,
+    To export measurements tables using the ``processor.export_table()`` method,
     you need to parse the readings first using the ``processor.parse_readings()`` method and
     and process the readings using the ``processor.process_readings()`` method.
     Otherwise, you will get an error.
@@ -74,11 +74,11 @@ Save sample measurements table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide sample measurements in the same way you just did for the background measurements.
-Just use the ``processor.export_measurements_table()`` method specifying the type ``sample`` instead of ``background``:
+Just use the ``processor.export_table()`` method specifying the type ``sample`` instead of ``background``:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_table(kind='sample', folder_path=output_folder)
+    >>> processor.export_table(kind='sample', folder_path=output_folder)
     Background measurements CSV saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``sample.csv`` containing
@@ -100,11 +100,11 @@ Save net measurements table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide net measurements in the same way you just did for the background and sample measurements.
-Just use the ``processor.export_measurements_table()`` method specifying the type of measurements ``net``:
+Just use the ``processor.export_table()`` method specifying the type of measurements ``net``:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_table(kind='net', folder_path=output_folder)
+    >>> processor.export_table(kind='net', folder_path=output_folder)
     Net measurements CSV saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``net.csv`` containing
@@ -129,12 +129,12 @@ Save background measurements plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that you have exported the measurement tables to CSV files, let's export the measurements plots to PNG images.
-To export the background measurements plot, use the ``processor.export_measurements_plot()`` method and
+To export the background measurements plot, use the ``processor.export_plot()`` method and
 specify the type of measurement you want to process and the output folder to save the file:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_plot(kind='background', folder_path=output_folder)
+    >>> processor.export_plot(kind='background', folder_path=output_folder)
     Background measurements PNG saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``background.png`` containing
@@ -148,11 +148,11 @@ Save sample measurements plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide sample measurements plot in the same way you just did for the background measurements.
-Just use the ``processor.export_measurements_plot()`` method specifying the type ``sample`` instead of ``background``:
+Just use the ``processor.export_plot()`` method specifying the type ``sample`` instead of ``background``:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_plot(kind='sample', folder_path=output_folder)
+    >>> processor.export_plot(kind='sample', folder_path=output_folder)
     Background measurements PNG saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``sample.png`` containing
@@ -166,11 +166,11 @@ Save net measurements plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next, you can export the radionuclide net measurements plot in the same way you just did for the background and sample measurements.
-Just use the ``processor.export_measurements_plot()`` method specifying the type of measurements ``net``:
+Just use the ``processor.export_plot()`` method specifying the type of measurements ``net``:
 
 .. code-block:: python
 
-    >>> processor.export_measurements_plot(kind='net', folder_path=output_folder)
+    >>> processor.export_plot(kind='net', folder_path=output_folder)
     Net measurements PNG saved to "output_files" folder.
 
 Now if you navigate to the ``output_files`` folder you will find a file called ``net.png`` containing

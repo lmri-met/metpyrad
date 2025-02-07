@@ -186,8 +186,8 @@ radionuclide using a Hidex TDCR system.
 7. **Export Data**:
    Export the measurements to CSV files and plots to PNG files:
     ```python
-    processor.export_measurements_table(kind='net', folder_path='output')
-    processor.export_measurements_plot(kind='net', folder_path='output')
+    processor.export_table(kind='net', folder_path='output')
+    processor.export_plot(kind='net', folder_path='output')
     ```
    Output:
      ```
