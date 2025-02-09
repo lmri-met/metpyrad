@@ -11,4 +11,4 @@ It assumes some understanding of the key concepts.
     :maxdepth: 2
     :caption: API reference
 
-    hidex_tdcr
+    hidex300

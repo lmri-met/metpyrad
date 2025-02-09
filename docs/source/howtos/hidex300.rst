@@ -1,5 +1,5 @@
-Hidex TDCR processor
-====================
+Hidex 300 SL processor
+======================
 
 How-to guide 1
 --------------

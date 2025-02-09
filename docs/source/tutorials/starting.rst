@@ -6,13 +6,13 @@ What is MetPyRad
 
 **MetPyRad** is an open source, GPLv3-licensed library providing a collection of tools for radionuclide metrology for the Python programming language.
 
-MetPyRad allows processing measurements of a radionuclide using a **Hidex TDCR** (Triple to Double Coincidence Ratio) system.
+MetPyRad allows processing measurements of a radionuclide using a **Hidex 300 SL** automatic liquid scintillator counter.
 It is designed to facilitate the handling, analysis, and visualization of measurement data.
 
 Main features
 -------------
 
-**MetPyRad** provides five main features for processing measurements of a radionuclide using a Hidex TDCR system:
+**MetPyRad** provides five main features for processing measurements of a radionuclide using a Hidex 300 SL automatic liquid scintillator counter:
 
 1. **Data parsing and processing**: It includes tools to parse measurement data from CSV files, process different types of measurements (background, sample, net), and compile the results into comprehensive data structures.
 2. **Measurement summarization**: It includes tools to generate detailed summaries of the measurements, including statistical analysis and cycle information.

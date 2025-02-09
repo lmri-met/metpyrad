@@ -11,4 +11,4 @@ In this section you will find step-by-step lessons that guide beginners through 
 
     starting
     install
-    hidex_tdcr
+    hidex300

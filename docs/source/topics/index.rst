@@ -11,4 +11,4 @@ It provides useful background information and in-depth explanations.
     :caption: Explanations
 
     rad_met
-    hidex_tdcr
+    hidex300

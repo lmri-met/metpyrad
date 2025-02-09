@@ -4,7 +4,7 @@ Visualizing measurements
 .. warning::
     Ploting issue. Only in pycharm? Does the user need to import matplotlib to show the plots?
 
-Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files,
+Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex 300 SL automatic liquid scintillator counter CSV files,
 and processed the to get the background, sample and net measurements.
 Now you have all this information organized and stored in tables.
 The next thing you may want to do is visualize the measurements.

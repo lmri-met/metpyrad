@@ -1,18 +1,18 @@
 Getting started
 ===============
 
-Let's say that you made a set of measurements of the radionuclide Lu-177 starting on November 2023 using a Hidex TDCR system.
+Let's say that you made a set of measurements of the radionuclide Lu-177 starting on November 2023 using a Hidex 300 SL automatic liquid scintillator counter.
 The set of measurements consists on four cicles of measurements, each one with 2 repetitions.
 Each repetition consists on measuring the background and the sample of Lu-177 consecutively in periods of 100 seconds.
 
-For each cicle of measurements, the Hidex TDCR system provides a CSV file with the readings.
+For each cicle of measurements, the Hidex 300 SL automatic liquid scintillator counter provides a CSV file with the readings.
 Here you can see an example of this CSV file.
 Note that it is not a complete file, it is just a part of it extracted for illustration purposes.
 See more details about these CSV file in the Topic guide.
 
 These measurements may be time consuming, and a lot of CSV files may be generated as a result.
 These CSV files may be very long, with the information about the readings scattered across multiple lines.
-So, to process all the CSV files provided by de Hidex TDCR system, the first thing you need to do is
+So, to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter, the first thing you need to do is
 to read these files and extract the information you need from them.
 Let's see how you can do this using the ``HidexTDCR`` class.
 
@@ -66,7 +66,7 @@ Let's see how you can do this using the ``HidexTDCR`` class.
 Initialize the processor
 ------------------------
 
-In order to process all the CSV files provided by de Hidex TDCR system,
+In order to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter,
 the first thing you need to do initialize the Hidex TCDR processor.
 
 In a Python shell, import ``HidexTDCR`` class from ``metpyrad``:
@@ -92,7 +92,7 @@ Verify that the processor has been initialized with the specified radionuclide, 
 Parse the readings
 ------------------
 
-After initializing the processor, the next thing you need to do is reading CSV files provided by the Hidex TDCR system.
+After initializing the processor, the next thing you need to do is reading CSV files provided by the Hidex 300 SL automatic liquid scintillator counter.
 Let's say that you have the four CSV files in a folder called ``input_files``:
 
 .. code-block:: console
@@ -116,7 +116,7 @@ Define the path to the folder that contains the input files:
 
 In these file there is a lot of information about the measurements, but you may not be interested in all of it.
 You may be interested in just a few quantities for some calculation you need to do later.
-To read the CSV files provided by the Hidex TDCR system and extract some quantities of interest,
+To read the CSV files provided by the Hidex 300 SL automatic liquid scintillator counter and extract some quantities of interest,
 use the ``processor.parse_readings()`` method:
 
 .. code-block:: python
@@ -146,7 +146,7 @@ use the ``processor.parse_readings()`` method:
 Inspect the parsed readings
 ---------------------------
 
-After parsing the readings from the Hidex TDCR CSV files,
+After parsing the readings from the Hidex 300 SL automatic liquid scintillator counter CSV files,
 inspect the parsed readings to understand its structure and contents.
 The ``processor`` store the parsed readings as a table using a pandas DataFrame,
 so first you need to import pandas:
@@ -176,7 +176,7 @@ Access the parsed readings by calling the ``processor.readings`` attribute:
     6      2       1            2             85.17               142      1.000           100 2023-12-01 12:53:00
     7      2       2            2         223689.40            335843      1.110           100 2023-12-01 12:56:24
 
-This table compiles, for each cycle and repetition, the measurements provided by the Hidex TDCR system of
+This table compiles, for each cycle and repetition, the measurements provided by the Hidex 300 SL automatic liquid scintillator counter of
 count rate, counts, real time, dead time and end time, both for the radionuclide sample and the background.
 See more details about these quantities in the Topic guide.
 

@@ -1,8 +1,8 @@
 Processing the readings
 =======================
 
-In the previous section, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files.
-You extracted, for each cycle and repetition, the measurements provided by the Hidex TDCR system of
+In the previous section, you parsed the readings of your measurements of Lu-177 from the Hidex 300 SL automatic liquid scintillator counter CSV files.
+You extracted, for each cycle and repetition, the measurements provided by the Hidex 300 SL automatic liquid scintillator counter of
 count rate, counts, real time, dead time and end time, both for the radionuclide sample and the background.
 
 But you may need some extra information about the background and sample measurements.
@@ -30,7 +30,7 @@ Access the background measurements by calling the ``processor.background`` attri
     >>> print(processor.background)
 
 This table compiles all the quantities of interest for the background measurements for each cycle and repetition.
-In addition to the quantities parsed directly from the Hidex TDCR system CSV files
+In addition to the quantities parsed directly from the Hidex 300 SL automatic liquid scintillator counter CSV files
 (count rate, counts, real time, dead time and end time), it compiles the live time, elpased time, and counts value and uncertainty.
 See more details about these quantities in the Topic guide.
 

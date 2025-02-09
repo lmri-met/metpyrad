@@ -1,7 +1,7 @@
 Exporting measurement data
 ================================
 
-Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex TDCR system CSV files,
+Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex 300 SL automatic liquid scintillator counter CSV files,
 and processed them to get the background, sample and net measurements.
 You have all this information organized and stored in tables, and you made some plots of the measurements.
 
