@@ -10,7 +10,7 @@ processor = HidexTDCR(radionuclide='Lu-177', year=2023, month=11)
 print(processor)
 
 # Path to the folder containing the CSV files
-folder_path = '../hidex_tdcr/test_case/input_files'
+folder_path = '../hidex300/test_case/input_files'
 
 # Parse the readings
 processor.parse_readings(folder_path)
