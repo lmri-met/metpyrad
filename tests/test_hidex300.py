@@ -171,4 +171,4 @@ class TestHidexTDCR:
         pd.testing.assert_frame_equal(processor.net, expected_net)
 
     def test_compilation(self, processor, expected_compilation):
-        pd.testing.assert_frame_equal(processor.measurements, expected_compilation)
+        pd.testing.assert_frame_equal(processor._compile_measurements(), expected_compilation)

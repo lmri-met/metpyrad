@@ -134,12 +134,6 @@ class Hidex300:
          1            1 0 days 00:00:00               0.0         252539.26 374116.687037          611.879553                0.163553
          1            2 0 days 00:06:44             404.0         251865.52 373449.972301          611.344316                0.163702
         """
-        self.measurements = None
-        """
-        DataFrame containing all measurements (pandas.DataFrame or None). Default None.
-        
-        It is a concatenation of the background, sample and net measurements DataFrames.
-        """
         self.summary = None
         """
         A summary of the measurements (str). Default None.
@@ -390,7 +384,6 @@ class Hidex300:
             self.background = self._get_background_sample(kind='background', time_unit=time_unit)
             self.sample = self._get_background_sample(kind='sample', time_unit=time_unit)
             self.net = self._get_net_measurements(time_unit=time_unit)
-            self.measurements = self._compile_measurements()
         # Raise an error if the kind is invalid
         else:
             raise ValueError(f'Invalid measurement kind. Choose from "background", "sample", "net" or "all".')

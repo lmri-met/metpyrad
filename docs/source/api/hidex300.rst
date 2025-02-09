@@ -23,7 +23,6 @@ Attributes
     Hidex300.background
     Hidex300.sample
     Hidex300.net
-    Hidex300.measurements
     Hidex300.summary
     Hidex300.cycles
     Hidex300.cycle_repetitions

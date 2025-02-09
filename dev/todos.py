@@ -15,4 +15,5 @@
 
 # Source
 # TODO: some method of hidex class should not assign attributes but return methods
+# self.measurements = None
 # Should HidexTDCR methods return the dataframe aside for assigning the attributes?
