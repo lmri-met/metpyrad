@@ -465,7 +465,7 @@ class HidexTDCR:
         df = df[cols]
         # Rename columns for clarity
         old_names = ['file', 'Samp.', 'Repe.', 'CPM', 'Counts', 'DTime', 'Time', 'EndTime']
-        new_names = ['Cycle', 'Sample', 'Repetitions', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
+        new_names = ['Cycle', 'Sample', 'Repetition', 'Count rate (cpm)', 'Counts (reading)', 'Dead time',
                      'Real time (s)', 'End time']
         df = df.rename(columns=dict(zip(old_names, new_names)))
         return df
@@ -496,7 +496,7 @@ class HidexTDCR:
                 # Filter the DataFrame for the current cycle
                 df = self.readings[self.readings['Cycle'] == cycle]
                 # Get the maximum number of repetitions for the current cycle
-                repetitions = df['Repetitions'].max()
+                repetitions = df['Repetition'].max()
                 # Get the real time for the repetitions (assuming it's the same for all repetitions of a single cycle)
                 real_time = df['Real time (s)'].iloc[0]
                 # Get the earliest end time for the current cycle
@@ -621,7 +621,7 @@ class HidexTDCR:
             # Create a dictionary to store the net measurements
             data = {
                 'Cycle': self.sample['Cycle'],
-                'Repetitions': self.sample['Repetitions'],
+                'Repetition': self.sample['Repetition'],
                 'Elapsed time': self.sample['Elapsed time'],
                 f'Elapsed time ({time_unit})': self.sample[f'Elapsed time ({time_unit})'],
                 # Calculate net count rate by subtracting background count rate from sample count rate
