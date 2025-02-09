@@ -5,8 +5,7 @@
 # Deploy on GitHubPages
 
 # Test case
-# TODO: update test case with four files: script to get the string dataframes, string dataframes in tests, validation excel, examples in docstring and documentation
-# TODO: update scripts that generates the data for tests and docs
+# TODO: update scripts that generates the data docs
 
 # Testing
 # TODO: complete testing
