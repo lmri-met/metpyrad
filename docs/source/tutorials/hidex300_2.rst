@@ -7,7 +7,7 @@ count rate, counts, real time, dead time and end time, both for the radionuclide
 
 But you may need some extra information about the background and sample measurements.
 Also, you may need the net measurements derived from the sample and background measurements.
-Let's see how you can do this using the ``HidexTDCR`` class.
+Let's see how you can do this using the ``Hidex300`` class.
 
 Process background measurements
 -------------------------------

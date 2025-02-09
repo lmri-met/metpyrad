@@ -87,7 +87,7 @@ radionuclide using a Hidex TDCR system.
 
 1. **Import** the `HidexTDCR` class
     ```python
-    from metpyrad import HidexTDCR
+    from metpyrad import Hidex300
     ```
 2. **Initialize the Processor**:
    Create an instance of the `HidexTDCR` class by specifying the radionuclide, year, and month of the

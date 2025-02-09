@@ -1,5 +1,5 @@
 # MetPyRad public API
 
-from .hidex_tdcr import HidexTDCR
+from .hidex300 import Hidex300
 
-__all__ = ['HidexTDCR', ]
+__all__ = ['Hidex300', ]

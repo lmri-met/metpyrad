@@ -14,7 +14,5 @@
 # Publish first version
 
 # Source
-# TODO: rename Hidex 300 related modules to hidex
-# TODO: rename class to Hidex300
 # TODO: some method of hidex class should not assign attributes but return methods
 # Should HidexTDCR methods return the dataframe aside for assigning the attributes?

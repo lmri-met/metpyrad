@@ -1,4 +1,4 @@
-HidexTDCR
+Hidex300
 =========
 
 .. currentmodule:: metpyrad
@@ -8,7 +8,7 @@ Constructor
 .. autosummary::
     :toctree: _autosummary
 
-    HidexTDCR
+    Hidex300
 
 Attributes
 ----------
@@ -16,20 +16,20 @@ Attributes
 .. autosummary::
     :toctree: _autosummary
 
-    HidexTDCR.radionuclide
-    HidexTDCR.year
-    HidexTDCR.month
-    HidexTDCR.readings
-    HidexTDCR.background
-    HidexTDCR.sample
-    HidexTDCR.net
-    HidexTDCR.measurements
-    HidexTDCR.summary
-    HidexTDCR.cycles
-    HidexTDCR.cycle_repetitions
-    HidexTDCR.repetition_time
-    HidexTDCR.total_measurements
-    HidexTDCR.measurement_time
+    Hidex300.radionuclide
+    Hidex300.year
+    Hidex300.month
+    Hidex300.readings
+    Hidex300.background
+    Hidex300.sample
+    Hidex300.net
+    Hidex300.measurements
+    Hidex300.summary
+    Hidex300.cycles
+    Hidex300.cycle_repetitions
+    Hidex300.repetition_time
+    Hidex300.total_measurements
+    Hidex300.measurement_time
 
 Methods
 -------
@@ -37,10 +37,10 @@ Methods
 .. autosummary::
     :toctree: _autosummary
 
-    HidexTDCR.parse_readings
-    HidexTDCR.summarize_readings
-    HidexTDCR.process_readings
-    HidexTDCR.plot_measurements
-    HidexTDCR.export_table
-    HidexTDCR.export_plot
-    HidexTDCR.analyze_readings
+    Hidex300.parse_readings
+    Hidex300.summarize_readings
+    Hidex300.process_readings
+    Hidex300.plot_measurements
+    Hidex300.export_table
+    Hidex300.export_plot
+    Hidex300.analyze_readings

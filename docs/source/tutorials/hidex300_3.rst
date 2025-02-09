@@ -12,7 +12,7 @@ The next thing you may want to do is visualize the measurements.
 Visualizing the measurements allow you to find patterns in the measurements,
 check if everything went well or if something may have gone wrong during the measurements,
 diagnose what may have gone wrong if it seems so, or decide if you need to repeat the measurements.
-Let's see how you can do this using the ``HidexTDCR`` class.
+Let's see how you can do this using the ``Hidex300`` class.
 
 Plot background measurements
 ----------------------------

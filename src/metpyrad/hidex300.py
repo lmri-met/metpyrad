@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-class HidexTDCR:
+class Hidex300:
     """
     A class to process and summarize measurements for a given radionuclide with a Hidex TDCR.
 
@@ -232,7 +232,7 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> print(processor)
         Measurements of Lu-177 on November 2023
         """
@@ -270,7 +270,7 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         """
@@ -300,11 +300,11 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.summarize_readings()
         Measurements of Lu-177 on November 2023
 
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.summarize_readings()
@@ -320,7 +320,7 @@ class HidexTDCR:
         0      1            2            100 2023-11-30 08:44:20
         1      2            2            100 2023-12-01 12:46:16
 
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
         Summary saved to /path/to/folder/summary.txt
         """
@@ -358,7 +358,7 @@ class HidexTDCR:
         --------
         Process background measurements
 
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings(kind='background')
@@ -368,7 +368,7 @@ class HidexTDCR:
 
         Process sample measurements computing elapsed time in minutes
 
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings(folder_path='/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings(kind='sample', time_unit='min')
@@ -690,7 +690,7 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
@@ -728,7 +728,7 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('sample')
@@ -768,7 +768,7 @@ class HidexTDCR:
 
         Examples
         --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.parse_readings('/path/to/folder')
         Found 2 CSV files in folder /path/to/folder
         >>> processor.process_readings('all')
@@ -814,7 +814,7 @@ class HidexTDCR:
         --------
         >>> inp_dir='/path/to/input/folder'
         >>> out_dir='/path/to/output/folder'
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
+        >>> processor = Hidex300('Lu-177', 2023, 11)
         >>> processor.analyze_readings(input_folder=inp_dir, time_unit='s', save=True, output_folder=out_dir)
         Processing readings from /path/to/input/folder.
         Found 2 CSV files in folder /path/to/input/folder

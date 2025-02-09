@@ -3,7 +3,7 @@ from io import StringIO
 import pandas as pd
 import pytest
 
-from metpyrad.hidex_tdcr import HidexTDCR
+from metpyrad.hidex300 import Hidex300
 
 summary = """Measurements of Lu-177 on November 2023
 Summary
@@ -87,7 +87,7 @@ Cycle,Sample,Repetition,Count rate (cpm),Counts (reading),Dead time,Real time (s
 class TestHidexTDCR:
     @pytest.fixture
     def processor(self):
-        processor = HidexTDCR(radionuclide='Lu-177', year=2023, month=11)
+        processor = Hidex300(radionuclide='Lu-177', year=2023, month=11)
         processor.analyze_readings(input_folder='./data/hidex_tdcr', time_unit='s', save=False)
         return processor
 
