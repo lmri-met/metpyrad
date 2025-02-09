@@ -134,27 +134,6 @@ class Hidex300:
          1            1 0 days 00:00:00               0.0         252539.26 374116.687037          611.879553                0.163553
          1            2 0 days 00:06:44             404.0         251865.52 373449.972301          611.344316                0.163702
         """
-        self.summary = None
-        """
-        A summary of the measurements (str). Default None.
-        
-        Examples
-        --------
-        >>> processor = HidexTDCR('Lu-177', 2023, 11)
-        >>> processor.parse_readings('path/to/input/files/folder')
-        >>> processor.summary
-        Measurements of Lu-177 on November 2023
-        Summary
-        Number of cycles: 2
-        Repetitions per cycle: 2
-        Time per repetition: 100 s
-        Total number of measurements: 4
-        Total measurement time: 400 s
-        Cycles summary
-           Cycle  Repetitions  Real time (s)                Date
-        0      1            2            100 2023-11-30 08:44:20
-        1      2            2            100 2023-12-01 12:46:16
-        """
         self.cycles = None
         """
         Number of cycles in the measurements (int). Default None.
@@ -233,7 +212,7 @@ class Hidex300:
         # Create the initial message with the radionuclide and date information
         msg = f'Measurements of {self.radionuclide} on {month_name[self.month]} {self.year}'
         # List of attributes to check for completeness of the summary
-        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'total_measurements', 'measurement_time', 'summary']
+        attributes = ['cycles', 'cycle_repetitions', 'repetition_time', 'total_measurements', 'measurement_time']
         # If all relevant attributes are not None, add detailed summary information
         if all(getattr(self, attr) is not None for attr in attributes):
             msg += (f'\nSummary\n'
@@ -243,7 +222,7 @@ class Hidex300:
                     f'Total number of measurements: {self.total_measurements}\n'
                     f'Total measurement time: {self.measurement_time} s\n'
                     f'Cycles summary\n'
-                    f'{self.summary}')
+                    f'{self._get_readings_summary()}')
         return msg
 
     def parse_readings(self, folder_path):
@@ -270,8 +249,6 @@ class Hidex300:
         """
         # Parse the readings from the CSV files in the specified folder
         self.readings = self._parse_readings(folder_path=folder_path)
-        # Generate a summary of the readings
-        self.summary = self._get_readings_summary()
         # Calculate statistics from the readings summary
         statistics = self._get_readings_statistics()
         # Assign the calculated statistics to the corresponding attributes
@@ -515,32 +492,27 @@ class Hidex300:
         Raises
         ------
         ValueError
-            If no readings summary data is available or if repetitions per cycle are not consistent for all measurements.
+            If repetitions per cycle are not consistent for all measurements.
         """
-        # Check if summary data is available
-        if self.summary is not None:
-            # Check if repetitions per cycle are consistent for all measurements
-            if not self.summary['Repetitions'].nunique() == 1:
-                raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
-            # Calculate the number of unique cycles
-            cycles = self.summary['Cycle'].count()
-            # Calculate the total number of measurements
-            measurements = self.summary['Repetitions'].sum()
-            # Calculate the total measurement time
-            measurement_time = (self.summary['Repetitions'] * self.summary['Real time (s)']).sum()
-            # Get the time per repetition (assuming it's the same for all cycles)
-            repetition_time = self.summary['Real time (s)'].iloc[0]
-            # Get the number of repetitions per cycle (assuming it's the same for all cycles)
-            cycle_repetitions = self.summary['Repetitions'].iloc[0]
-            # Create a dictionary to store the calculated statistics
-            labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
-            values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
-            statistics = dict(zip(labels, values))
-            return statistics
-        else:
-            # Raise an error if no summary data is available
-            raise ValueError(
-                'No readings summary data to compute readings statistics. Please get the readings summary.')
+        summary = self._get_readings_summary()
+        # Check if repetitions per cycle are consistent for all measurements
+        if not summary['Repetitions'].nunique() == 1:
+            raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
+        # Calculate the number of unique cycles
+        cycles = summary['Cycle'].count()
+        # Calculate the total number of measurements
+        measurements = summary['Repetitions'].sum()
+        # Calculate the total measurement time
+        measurement_time = (summary['Repetitions'] * summary['Real time (s)']).sum()
+        # Get the time per repetition (assuming it's the same for all cycles)
+        repetition_time = summary['Real time (s)'].iloc[0]
+        # Get the number of repetitions per cycle (assuming it's the same for all cycles)
+        cycle_repetitions = summary['Repetitions'].iloc[0]
+        # Create a dictionary to store the calculated statistics
+        labels = ['cycles', 'cycle_repetitions', 'repetition_time', 'measurements', 'measurement_time']
+        values = [cycles, cycle_repetitions, repetition_time, measurements, measurement_time]
+        statistics = dict(zip(labels, values))
+        return statistics
 
     def _get_background_sample(self, kind, time_unit='s'):
         """
