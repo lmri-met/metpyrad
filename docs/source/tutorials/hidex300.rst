@@ -1,5 +1,5 @@
 Hidex 300 SL processor
-====================
+======================
 
 This tutorial aims to help users understand how to process the measurements of a radionuclide obtained by a
 Hidex 300 SL automatic liquid scintillator counter TDCR system using MetPyRad.
