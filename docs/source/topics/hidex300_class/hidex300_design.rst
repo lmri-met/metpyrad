@@ -15,11 +15,13 @@ Initialization
 --------------
 
 The workflow begins with the initialization of the ``Hidex300`` class.
-During this step, the user provides essential information about the radionuclide being measured, as well as the year and month of the measurements.
+During this step, the user provides information about the radionuclide being measured,
+such as the name of the radionuclide, and the year and month of the measurements.
 This setup ensures that the class is configured with the correct context for the data it will process.
 
 During the initialization, the constructor (``__init__``) is called with parameters for the ``radionuclide``, ``year``, and ``month`` of the measurements.
 These parameters are stored as the configuration attributes of the class instance (``radionuclide``, ``year``, and ``month``).
+
 Data storage attributes (``readings``, ``background``, ``sample``, ``net``)
 and measurement attributes (``cycles``, ``cycle_repetitions``, ``repetition_time``, ``total_measurements``, ``measurement_time``)
 are initialized to ``None``.
@@ -28,25 +30,107 @@ Parsing readings
 ----------------
 
 Once the class is initialized, the next step is to parse the measurement data.
-The user specifies the folder containing the CSV files with the raw data.
-The ``parse_readings`` method reads these files, extracts the relevant information, and organizes it into a structured format.
-This parsed data is stored in the ``readings`` attribute, making it ready for further processing.
+The user specifies the folder containing the CSV files provided by the Hidex 300 SL automatic counter from the measurement of the radionuclide.
 
-The ``parse_readings`` method is responsible for reading and parsing measurement data from CSV files located in a specified folder.
-This method uses the ``_parse_readings`` private method to handle the actual parsing logic.
+Then, the ``parse_readings`` method orchestrates the parsing of measurement data from CSV files located in this folder.
+It reads the CSV files in this folder, extracts the relevant information, and organizes it into a structured format.
 
-- **Steps**:
+Parsing the CSV files
+^^^^^^^^^^^^^^^^^^^^^
 
-  - Retrieve a list of CSV files from the specified folder using ``_get_csv_files``.
-  - Iterate over each file, reading lines and extracting relevant data based on predefined rows and delimiters.
-  - Convert the extracted data into a DataFrame, ensuring consistency in repetitions per cycle.
-  - Store the parsed data in the ``readings`` attribute.
+The ``parse_readings`` method calls the ``_parse_readings`` private method to handle the detailed parsing logic,
+which includes reading the files, extracting relevant data, and organizing it into a structured DataFrame.
 
-- **Key Considerations**:
+Getting the CSV files
+"""""""""""""""""""""
 
-  - Consistency checks for repetitions per cycle.
-  - Conversion of date and time strings to datetime format.
-  - Sorting and resetting the index of the DataFrame.
+The ``_parse_readings`` method retrieves a list of relevant CSV files that need to be processed
+calling to the ``_get_csv_files`` helper function.
+This function iterates over all the files in the given folder, checks if each file has a ``.csv`` extension,
+and appends the absolute path of each CSV file to a list.
+The method then prints the number of CSV files found and returns the list of full paths to these files.
+
+Identifying information blocks
+""""""""""""""""""""""""""""""
+
+Then, the ``_parse_readings`` method iterate over the CSV files.
+For each file, it reads the file line by line, and extracts relevant data based on predefined parameters.
+These parameters are defined as class private constants.
+
+The method assign to each file an identification number.
+The method skips 4 of initial metadata lines (specified by the ``_ID_LINES`` class constant).
+It identifies the start of new data blocks by the key ``Sample start``
+(defined in the ``_BLOCK_STARTER`` class constant).
+
+Extracting block information
+""""""""""""""""""""""""""""
+
+Then, for each new data block, the ``_parse_readings`` method extracts the values in the rows that starts with
+``Samp.``, ``Repe.``, ``CPM``, ``Counts``, ``DTime``, ``Time`` or ``EndTime``.
+These keys are defined in the ``_ROWS_TO_EXTRACT`` class constant.
+
+These values represent respectively the type of sample (background or radionuclide sample), the number of the repetition,
+the count rate, the total counts, the dead time, the measurement time and the end time of the measurement.
+The delimiter to use when parsing the values is ``;``, defined in the ``_DELIMITER`` class constant.
+
+The method compiles the extracted information for each block into a dictionary, adding also the file identification number.
+Then, it compiles the extracted information for all blocks into a list.
+
+Structuring the data
+""""""""""""""""""""
+
+Then, ``_parse_readings`` method structures all the extracted data in a DataFrame,
+being the columns the key words defined in the ``_ROWS_TO_EXTRACT`` class constant,
+and each row corresponding to a single measurement of background or radionuclide sample.
+
+Then, it converts the strings of all the columns to numeric format, except for the ``EndTime`` column.
+It converts date and time strings of the ``EndTime`` column to ``datetime`` objects
+using the format ``%d/%m/%Y %H:%M:%S`` (specified in the ``_DATE_TIME_FORMAT`` class constant).
+
+Then, it sorts the DataFrame by end time of the measurements,
+and reassign the file identification number to match the chronological order of the measurements.
+It ensures consistency in repetitions per cycle. If not it will raise a ``ValueError``.
+
+Assigning attributes
+""""""""""""""""""""
+
+Finally, the ``_parse_readings`` method renames columns for clarity and returns the structured DataFrame.
+The ``parse_readings`` method assign this DataFrame to the ``readings`` class attribute.
+
+Getting readings statistics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After parsing the readings to a structured DataFrame, the ``parse_readings`` method generates
+a summary of the measurement cycles and their key attributes using the ``_get_readings_statistics`` private method.
+
+Summary of measurement cycles
+"""""""""""""""""""""""""""""
+
+The ``_get_readings_statistics`` starts generating a summary of the measurement cycles and their key attributes
+using the ``_get_readings_summary`` private method.
+
+The ``_get_readings_summary`` iterates over each unique cycle in the readings DataFrame, stored in the ``readings`` class attribute.
+For each cycle, it filters the DataFrame, determines the number of repetitions per cycle,
+retrieves the real time of measurement for the repetitions, and identifies the earliest end time of the measurements.
+
+It compiles these details into a list of results, which is then converted into a summary DataFrame
+containing the cycle, repetitions per cycle, real time of the measurement, and the date and time of the measurement cycle.
+
+If the real time values are not consistent for all measurements, it will raise a ``ValueError``.
+If the ``readings`` class attribute is ``None``, it will raise a ``ValueError``,
+indicating that the readings must be parsed first from the CSV files.
+
+Summary of all measurements
+"""""""""""""""""""""""""""
+
+After getting the measurement cycles summary DataFrame, the ``_get_readings_statistics`` method
+checks for consistency in repetitions per cycle. If they are not consistent, it will raise a ``ValueError``.
+
+Then, from this Dataframe, it calculates the number of cycles, the total number of measurements, the total measurement time,
+the time per repetition, and the number of repetitions per cycle.
+These statistics are compiled into a dictionary and returned.
+
+Finally, the ``parse_readings`` method assigns these statistics to the corresponding measurement attributes of the class.
 
 Processing measurements
 -----------------------
