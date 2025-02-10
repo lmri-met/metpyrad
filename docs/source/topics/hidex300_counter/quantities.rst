@@ -1,7 +1,7 @@
 Processing the measurements
 ===========================
 
-In this section we summarize the quantities of interest for characterizing the radioactive decay over time for a radionuclide.
+In this section we summarize the **quantities of interest** for characterizing the radioactive decay over time for a radionuclide.
 It shows which of tese quantities can be found in the output CSV files provided by the Hidex 300 SL automatic scintillator counter.
 It also shows how to obtain the rest of them, including uncertainty determination.
 
@@ -126,7 +126,7 @@ we can derive the next net quantities of interest:
 
     .. math::
 
-        u_r(C)=u(C)/C*100
+        u_r(C)=\frac{u(C)}{C}\cdot 100
 
 Find more details about the uncertainty determination for activity measurements in this
 `article by K. Kossert et al. <https://doi.org/10.1016/j.apradiso.2012.02.084>`_.

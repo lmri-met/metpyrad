@@ -2,19 +2,18 @@ Making measurements
 ===================
 
 One of the common uses of the Hidex 300 SL in radionuclide metrology
-is to measure the activity of a radionuclide in terms of time.
+is to **measure the activity** of a radionuclide in terms of time.
 This type of measure allows to see how the activity of the radionuclide decays over time.
-From such a measure you can derive important quantities that characterize the radionuclide being measured.
-One of this quantities is the half-life (:math:`t_{1/2}`),
-which is the time taken for the activity of a given radionuclide to decay to half of its initial value.
+From such a measure you can derive important quantities that characterize the radionuclide being measured,
+such us the half-life (:math:`t_{1/2}`) of the radionuclide.
 
 Measurement structure
 ---------------------
 
-This measure involves making repeated measurements of the radionuclide in the same conditions along several days.
+This measure involves making **repeated measurements** of the radionuclide in the same conditions along several days.
 So this measure is really a set of measurements.
-This set of measurements consists on a number of cycles of measurement, each one with a number of repetitions.
-Each repetition consists on measuring the sample of the radionuclide and background (a measurement without sample)
+This set of measurements consists on a number of **cycles** of measurement, each one with a number of repetitions.
+Each **repetition** consists on measuring the sample of the radionuclide and background (a measurement without sample)
 during a specific period of time.
 
 .. code-block::
@@ -56,7 +55,7 @@ during a specific period of time.
 
 To make such a set of measurements, you can program the Hidex 300 SL,
 configuring the number of repetitions per cycle and the measurement time per repetition.
-For each cicle of measurements, the Hidex 300 SL provides a CSV file with the results of the measurements.
+For each cicle of measurements, the Hidex 300 SL provides a **CSV file** with the results of the measurements.
 
 Measurement example
 -------------------
