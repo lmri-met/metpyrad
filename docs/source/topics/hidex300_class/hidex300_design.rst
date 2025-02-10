@@ -35,14 +35,14 @@ The user specifies the folder containing the CSV files provided by the Hidex 300
 Then, the ``parse_readings`` method orchestrates the parsing of measurement data from CSV files located in this folder.
 It reads the CSV files in this folder, extracts the relevant information, and organizes it into a structured format.
 
-Parsing the CSV files
-^^^^^^^^^^^^^^^^^^^^^
+Parsing CSV files
+^^^^^^^^^^^^^^^^^
 
 The ``parse_readings`` method calls the ``_parse_readings`` private method to handle the detailed parsing logic,
 which includes reading the files, extracting relevant data, and organizing it into a structured DataFrame.
 
-Getting the CSV files
-"""""""""""""""""""""
+Getting CSV files
+"""""""""""""""""
 
 The ``_parse_readings`` method retrieves a list of relevant CSV files that need to be processed
 calling to the ``_get_csv_files`` helper function.
@@ -132,52 +132,164 @@ These statistics are compiled into a dictionary and returned.
 
 Finally, the ``parse_readings`` method assigns these statistics to the corresponding measurement attributes of the class.
 
+Summarizing measurements
+------------------------
+
+With the raw data of the readings parsed and the statistics of the readings generated,
+the class can generate a summary of the parsed readings in a user friendly format.
+This summary includes the key aspects of the measurement cycles
+as well as of the complete set of measurements including all cycles.
+The ``summarize_readings`` method handles this task,
+providing a concise overview of the measurements structure as well as of the class's current data and processing state.
+
+This method can show the summary directly in the console or write it to a text file.
+This behaviour is determined by the parameter ``save``.
+
+- By default, the ``save`` parameter is set to False, then the method print the summary through the console.
+- However, if the ``save`` parameter is set to ``True``, it writes the summary to a text file called ``summary.txt``
+  in the folder specified in the parameter ``folder_path``.
+
+In any case, the method calls the ``__str__`` dunder method to create the summary as a string.
+The summary string generated depends on the class's current data and processing state.
+
+- If the readings of the measurements **have not been parsed** from the Hidex 300 SL CSV files
+  (meaning the ``readings`` attribute is ``None``), the method compile the information of the configuration attributes
+  (radionuclide, year, month) and returns them in a readable way.
+- If the readings of the measurements **have been parsed** from the Hidex 300 SL CSV files
+  (meaning the ``readings`` attribute is not ``None``),
+  the method compile the information of the configuration attributes, the measurement attributes
+  (number of cycles, repetitions per cicle, measurement time per repetition, total number of measurements and total measurement time)
+  and the summary of the measurement cycles returned by the ``_get_readings_summary`` private method and returns them in a readable way.
+
 Processing measurements
 -----------------------
 
-With the raw data parsed, the class proceeds to process the measurements.
-This involves categorizing the data into different types: background measurements, sample measurements, and net measurements.
-The ``process_readings`` method handles this task, ensuring that each type of measurement is correctly identified and processed.
-The processed data is then stored in the respective attributes (``background``, ``sample``, ``net``),
-providing a clear separation of the different measurement types.
+With the raw data of the readings parsed and the statistics of the readings generated, the class can proceeds to process the measurements.
+**Processing the readings** involves computing certain quantities of interest for the characterization of the radionuclide being measured
+from the quantities extracted from the CSV files provided by the Hidex 300 SL.
+This involves categorizing the data into **different types**: background measurements, sample measurements, and net measurements.
 
-The ``process_readings`` method processes the parsed data to generate background, sample, and net measurements. It calls specific private methods based on the type of measurements to be processed.
+The ``process_readings`` method handles this task.
+It processes different types of measurements (background, sample, net, or all)
+and updates the corresponding attributes with the processed data for further use.
+It calls specific private methods to handle each type of measurement and raises an error if an invalid type is provided.
 
-- **Steps**:
+The **type of measurement** to proces is defined by the ``kind`` parameter.
+Options are 'background', 'sample', 'net', or 'all'.
+In any case, one of the quantities to calculate is the **elapsed time** between measurements of the same type.
+The user can choose the unit of this quantity setting it in the ``time_unit`` parameter.
+Default is 's' (seconds). Other options include 'min' (minutes), 'h' (hours), 'd' (days), 'wk' (weeks), 'mo' (months), and 'yr' (years).
 
-  - For background measurements, call ``_get_background_sample`` with ``kind='background'``.
-  - For sample measurements, call ``_get_background_sample`` with ``kind='sample'``.
-  - For net measurements, call ``_get_net_measurements``.
-  - For all measurements, process background, sample, and net sequentially.
+To **process background measurements**, the ``kind`` must be set to ``background``
+Then the method calls the ``_get_background_sample`` with the same ``kind`` and ``time_unit`` parameters.
+This method returns the processed background measurements as a DataFrame,
+which is stored in the ``background`` class attribute.
+The processed background measurements are stored in the ``background`` class attribute.
 
-- **Key Considerations**:
+To **process sample measurements**, the ``kind`` must be set to ``sample``
+Then the method calls the ``_get_background_sample`` with the same ``kind`` and ``time_unit`` parameters.
+This method returns the processed sample measurements as a DataFrame,
+which is stored in the ``sample`` class attribute.
 
-  - Calculation of elapsed time and live time.
-  - Handling of different time units (seconds, minutes, hours, etc.).
-  - Calculation of counts and counts uncertainty.
+To **process net measurements**, the ``kind`` must be set to ``net``
+Then the method calls the ``_get_background_sample`` with the same ``kind`` and ``time_unit`` parameters.
+This method returns the processed background measurements as a DataFrame,
+which is stored in the ``net`` class attribute.
 
-Summarizing data
-----------------
+If the ``kind`` parameter is set to ``all``, the method processes all types of measurements (background, sample and net) and stores in the corresponding class attributes.
 
-After processing the measurements, the class generates a summary of the data.
-The ``summarize_readings`` method compiles key statistics and information, offering a concise overview of the measurements.
-This summary can be printed directly for immediate review or saved to a text file for future reference.
-The summary includes details such as the number of cycles, repetitions per cycle, total measurement time, and other relevant metrics.
+Processing background/sample measurements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``summarize_readings`` method generates a summary of the processed data. It can print the summary directly or save it to a text file.
+The ``_get_background_sample`` method processes either background or sample measurements from the parsed measurement readings
+and returns them as a DataFrame.
+It takes a parameter ``kind`` to specify whether it is processing background or sample data.
+Options are ``background`` or ``sample``.
+It also take a ``time_unit`` parameter to specify the unit to calculate the elapsed time between measurements.
+In the class workflow, both parameters are set by the ``process_readings`` method.
 
-- **Steps**:
+The method first **check for data availability**. If ``readings`` class attribute is ``None``, it raises a ``ValueError``,
+indicating that no readings data is available.
 
-  - Generate a summary string using the ``__str__`` method, which compiles key statistics and information.
-  - If ``save=True``, write the summary to a text file in the specified folder.
+Then, the method **filters the** ``readings`` **DataFrame** based on the ``kind`` parameter
+to isolate the background or sample measurements in a new Dataframe.
+In order to do this, it defines a dictionary that maps the measurement types (background and sample)
+to their respective identifiers (set in the ``_BACKGROUND_ID`` and ``_SAMPLE_ID`` class constants).
 
-- **Key Considerations**:
+It then calculates the **quantities of interest** for each repetition within each cycle from those stored in the filtered Dataframe.
 
-  - Inclusion of detailed summary information if all relevant attributes are not ``None``.
-  - Handling of file operations for saving the summary.
+- It calculates the **live time** (in seconds) by dividing the real time (in seconds) by the dead time (:math:`\ge 1`)
+- It calculates the **elapsed time** between measurements in ``datetime`` format and in the specified unit
+  by calling the ``_get_elapsed_time`` helper function and passing the filtered DataFrame and the specified ``time_unit``.
+- It calculates the **counts** by multiplying the count rate (in counts per minute) by the live time (in seconds) and dividing by 60.
+- It calculates the **counts uncertainty** as the square root of the counts.
+- It calculates the **counts relative uncertainty** (in %) by dividing the counts uncertainty by the counts and multiplying by 100.
 
-Exporting results
------------------
+These quantities are added as new columns to the filtered DataFrame, which is then returned.
+
+Processing net measurements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``_get_net_measurements`` method processes net measurements from the background and sample measurements
+and returns them as a DataFrame.
+It takes a parameter ``time_unit`` to specify the unit to calculate the elapsed time between measurements.
+In the class workflow, both parameters are set by the ``process_readings`` method.
+
+The method first **check for data availability**. If ``background`` and ``sample`` class attribute are ``None``,
+it raises a ``ValueError`` indicating that the necessary data is not available.
+
+Then, some of the quantities **quantities of interest** for each repetition within each cycle are taken directly from the ``sample`` DataFrame:
+cycle, repetition, and elapsed time in ``datetime`` format and in the specified unit.
+Some other **quantities of interest** for each repetition within each cycle
+from those stored in the ``background`` and ``sample`` Dataframes.
+
+- It calculates the **net count rate** (in cpm) by subtracting the background count rate from the sample count rate.
+- It calculates the **net counts** by subtracting the background counts from the sample counts.
+- It calculates the **net counts uncertainty** as the square root of the sum of sample and background counts.
+- It calculates the **relative net counts uncertainty** (in %) calculated as the counts uncertainty divided by the net counts and multiplied by 100.
+
+The method compiles the results in a dictionary which is finally returned as a Dataframe.
+
+Computing elapsed time
+^^^^^^^^^^^^^^^^^^^^^^
+
+The ``_get_elapsed_time`` method calculates the elapsed between measurements in ``datetime`` format from a specified
+DataFrame (set in the ``df`` parameter) and converts it to the specified time unit (set in the ``time_unit``).
+In the class workflow, both parameters are set by the ``_get_background_sample`` method.
+
+First, the method get the **initial time** of the measurement by finding the earliest measurement end time
+in the `background` or `sample` DataFrame.
+Then it calculates the elapsed time between measurements by subtracting the initial_time from the end time values.
+This results in a pandas Series of time deltas.
+
+Then, the method defines a **time conversion dictionary** that maps each time unit to its corresponding conversion factor from seconds.
+The next conversion factors are used:
+
+- 1 minute = 60 seconds
+- 1 hour = 60 minutes
+- 1 day = 24 hours
+- 1 week = 7 days
+- 1 month = 30.44 days
+- 1 year =  365.25 days
+
+Then, the method **validate the time unit**, checking if the provided ``time_unit`` is present in the time conversion dictionary.
+Options are 's' (seconds), 'min' (minutes), 'h' (hours), 'd' (days), 'wk' (weeks), 'mo' (months), and 'yr' (years).
+If it is not, it raises a `ValueError` exception.
+
+Then, the method **converts the elapsed time** from ``datetime`` to seconds using the ``datetime`` builtin function ``total_seconds()``.
+Then it converts the elapsed time from seconds to the specified unit by multiplying by the corresponding time conversion factor.
+
+Finally, the method returns a tuple containing the original elapsed time (as time deltas) and
+the elapsed time converted to the specified unit.
+
+Plotting measurements
+---------------------
+
+After parsing the readings from the CSV files provided by the Hidex 300 SL and processing the different types of
+measurements, the class is ready to plot relevant information of the measurements in terms of time.
+
+Exporting measurements
+----------------------
 
 To facilitate further analysis and reporting, the class provides methods for exporting the processed data and visualizations.
 Users can export the data tables to CSV files using the ``export_table`` method, making it easy to share and analyze the data in other applications.
