@@ -7,7 +7,7 @@ In this section you will find discussions about key topics and concepts related 
 It provides useful background information and in-depth explanations.
 
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 2
     :caption: Explanations
 
     rad_met/index

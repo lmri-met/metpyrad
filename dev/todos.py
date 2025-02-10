@@ -2,7 +2,7 @@
 # TODO: update module docstring
 # TODO: update class docstring
 # TODO: add how tos and topics section
-# Deploy on GitHubPages
+# TODO: Deploy on GitHubPages
 
 # Test case
 # TODO: update scripts that generates the data docs
@@ -11,6 +11,6 @@
 # TODO: complete testing
 
 # Packaging
-# Publish first version
+# TODO: Publish first version
 
 # Source

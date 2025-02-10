@@ -11,7 +11,7 @@ It will then guide you through the workflow of the Hidex300 class, detailing eac
 to processing measurements, summarizing data, exporting results, and performing comprehensive analyses.
 
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 2
     :caption: Contents
 
     hidex300_components

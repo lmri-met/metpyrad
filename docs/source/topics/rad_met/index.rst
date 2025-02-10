@@ -12,7 +12,7 @@ Additionally, it explores the primary measurement techniques employed in this fi
 and the Triple-to-Double Coincidence Ratio (TDCR) method, which are essential for achieving high-precision results.
 
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 2
     :caption: Explanations
 
     rad_met

@@ -9,7 +9,7 @@ This tutorial provides the users with a basic understanding of the ``Hidex300`` 
 It will guide you through the initial setup, processing the readings data, visualizing the measurements, and exporting the measurement data.
 
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 2
     :caption: Contents
 
     hidex300_1
