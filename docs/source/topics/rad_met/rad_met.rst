@@ -27,9 +27,6 @@ Radionuclide metrology laboratories try to met this goal through:
   probabilities of various types of radiation (x rays, gamma rays, alpha particles, conversion electrons, Auger
   electrons), and evaluated decay schemes of the most important radionuclides.
 
-Find more details about radionuclide metrology in this
-`JRC technical report <https://publications.jrc.ec.europa.eu/repository/handle/JRC129308>`_.
-
 Radionuclide standardization
 ----------------------------
 
@@ -76,5 +73,7 @@ These quantities ensure accurate and reliable measurements for various applicati
 - **Branching ratios**: The probabilities of different decay paths that a radionuclide can take.
   This helps in understanding the complete decay scheme of the radionuclide.
 
-Find more details about radionuclide standarization in this
+Find more details about radionuclide metrology in this
+`JRC technical report <https://publications.jrc.ec.europa.eu/repository/handle/JRC129308>`_
+and in this
 `academic article by R. Collé <http://doi.org/10.1007/s10967-009-0509-5>`_.
