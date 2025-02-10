@@ -10,5 +10,5 @@ It provides useful background information and in-depth explanations.
     :maxdepth: 4
     :caption: Explanations
 
-    rad_met
-    hidex300
+    rad_met/index
+    hidex300/index
