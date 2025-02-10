@@ -11,4 +11,5 @@ It provides useful background information and in-depth explanations.
     :caption: Explanations
 
     rad_met/index
-    hidex300/index
+    hidex300_counter/index
+    hidex300_class/index
