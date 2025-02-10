@@ -2,7 +2,7 @@ Key components of the class
 ===========================
 
 The ``Hidex300`` class is composed of several types of components, each serving a specific purpose in the overall functionality of the class.
-These components include attributes, public methods, private methods, and helper functions.
+These components include attributes, constants, public methods, private methods, and helper functions.
 Here's a general description of each type.
 
 Attributes
@@ -38,7 +38,7 @@ These are the attributes in the ``Hidex300`` class:
 Public methods
 --------------
 
-Public methods are designed to interact with the user and provide the primary interface for using the class.
+Public methods in the ``Hidex300`` class are designed to interact with the user and provide the primary interface for using the class.
 These methods include functionalities for initializing the class, parsing readings from CSV files,
 processing different types of measurements, summarizing the data, and visualizing and exporting results.
 Public methods are the main tools that users will call to perform tasks and obtain results from the class.
@@ -90,9 +90,11 @@ Constants
 ---------
 
 The ``Hidex300`` class includes several private constants that are used to define specific parameters and configurations
-for processing measurement data from Hidex 300 SL outpu CSV files.
+for processing measurement data from Hidex 300 SL output CSV files.
 These constants help standardize the data parsing and processing operations, ensuring consistency and accuracy.
-Here is a description of each class constant and its purpose:
+These constants are not intended to be called directly by the user but are essential for the internal workings of the class.
+
+These are the private constants in the ``Hidex300`` class:
 
 1. **_ROWS_TO_EXTRACT**:
    Specifies the rows to extract from the CSV files.
@@ -126,7 +128,7 @@ Here is a description of each class constant and its purpose:
 Private Methods
 ---------------
 
-Private methods provide internal functionalities that support the operations of the public methods.
+Private methods in the ``Hidex300`` class provide internal functionalities that support the operations of the public methods.
 They handle specific tasks such as parsing the raw data, calculating statistics, generating summaries, and plotting measurements.
 These methods are not intended to be called directly by the user but are essential for the internal workings of the class.
 They help to modularize the code and keep the public methods clean and focused on user interactions.
@@ -180,7 +182,7 @@ Helper functions
 ----------------
 
 Helper functions are designed to perform specific tasks that support the main operations of the ``Hidex300`` class.
-They are not part of the ``Hidex300`` class, but they are included in the ``hidex300.py``.
+They are not part of the ``Hidex300`` class, but they are included in the ``hidex300`` module.
 They handle tasks such as file retrieval, time calculations, and data plotting.
 These functions are essential for the smooth operation of the class but are not intended to be directly interacted with by the end user.
 
