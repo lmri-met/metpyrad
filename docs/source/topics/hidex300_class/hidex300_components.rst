@@ -1,5 +1,5 @@
-Hidex300 class key components
-=============================
+Key components of the class
+===========================
 
 The ``Hidex300`` class is composed of several types of components, each serving a specific purpose in the overall functionality of the class.
 These components include attributes, public methods, and private methods. Here's a general description of each type and how they are used:

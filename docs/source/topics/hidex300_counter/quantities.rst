@@ -1,12 +1,12 @@
-Quantities of interest from the Hidex 300 SL
---------------------------------------------
+Processing the measurements
+===========================
 
 In this section we summarize the quantities of interest for characterizing the radioactive decay over time for a radionuclide.
 It shows which of tese quantities can be found in the output CSV files provided by the Hidex 300 SL automatic scintillator counter.
 It also shows how to obtain the rest of them, including uncertainty determination.
 
 Measured quantities
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 Suppose we have a set of :math:`n` measurements for the background and a set of another :math:`n` measurements for the sample.
 For each measurement :math:`i` of the background and sample, the Hidex 300 SL provides the next quantities of interest
@@ -34,7 +34,7 @@ for characterizing the radioactive decay over time for a radionuclide:
     It is labeled as ``CPM`` in the Hidex 300 SL output CSV file.
 
 Derived quantities
-^^^^^^^^^^^^^^^^^^
+------------------
 
 Now, for each measurement :math:`i` of the background and sample, we can derive the next quantities of interest
 from that provided by the Hidex 300 SL:
@@ -94,7 +94,7 @@ from that provided by the Hidex 300 SL:
         u_r(C)=\frac{u(C)}{C}\cdot 100
 
 Net quantities
-^^^^^^^^^^^^^^
+--------------
 
 Next, we need to determine the net quantities.
 These quantities are necessary to accurately determine the activity of the sample by eliminating the influence of background radiation.

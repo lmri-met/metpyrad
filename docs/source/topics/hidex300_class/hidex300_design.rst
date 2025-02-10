@@ -1,5 +1,5 @@
-Hidex300 class workflow
-=======================
+Workflow of the class
+=====================
 
 The workflow of the class involves several key steps, each contributing to the overall process of handling measurement data.
 Here is a general description of the workflow:

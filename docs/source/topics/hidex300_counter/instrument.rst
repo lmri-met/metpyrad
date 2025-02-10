@@ -1,5 +1,5 @@
-The Hidex 300 SL automatic counter
-==================================
+The Hidex 300 SL
+================
 
 The **Hidex 300 SL** is a an automatic liquid scintillation counter
 with an automatic sample changer and a triple photomultiplier tube detection assembly.

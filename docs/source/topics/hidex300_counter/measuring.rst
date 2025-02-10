@@ -1,5 +1,5 @@
-Measuring with the Hidex 300 SL
-===============================
+Making measurements
+===================
 
 One of the common uses of the Hidex 300 SL in radionuclide metrology
 is to measure the activity of a radionuclide in terms of time.

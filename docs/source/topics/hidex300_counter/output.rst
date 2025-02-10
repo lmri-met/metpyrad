@@ -1,5 +1,5 @@
-Output files of the Hidex 300 SL
-================================
+Output files
+============
 
 File example
 ------------
