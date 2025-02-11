@@ -255,7 +255,7 @@ DataFrame (set in the ``df`` parameter) and converts it to the specified time un
 In the class workflow, both parameters are set by the ``_get_background_sample`` method.
 
 First, the method get the **initial time** of the measurement by finding the earliest measurement end time
-in the `background` or `sample` DataFrame.
+in the ``background`` or ``sample`` DataFrame.
 Then it calculates the elapsed time between measurements by subtracting the initial_time from the end time values.
 This results in a pandas Series of time deltas.
 
@@ -271,7 +271,7 @@ The next conversion factors are used:
 
 Then, the method **validate the time unit**, checking if the provided ``time_unit`` is present in the time conversion dictionary.
 Options are 's' (seconds), 'min' (minutes), 'h' (hours), 'd' (days), 'wk' (weeks), 'mo' (months), and 'yr' (years).
-If it is not, it raises a `ValueError` exception.
+If it is not, it raises a ``ValueError`` exception.
 
 Then, the method **converts the elapsed time** from ``datetime`` to seconds using the ``datetime`` builtin function ``total_seconds()``.
 Then it converts the elapsed time from seconds to the specified unit by multiplying by the corresponding time conversion factor.
@@ -326,109 +326,61 @@ It sets the title of the figure to ``Net quantities measurements``.
 Exporting measurements
 ----------------------
 
+After parsing the readings from the CSV files provided by the Hidex 300 SL and processing the different types of
+measurements, the class is ready to save the processed data and visualizations to CSV and PNG files for further analysis and reporting.
 
-export_table
-^^^
+Exporting tables
+^^^^^^^^^^^^^^^^
 
-The `export_table` method exports measurement data to a CSV file. It takes the data from a specified DataFrame (e.g., background, sample, net), formats it appropriately, and writes it to a CSV file using pandas' `to_csv` method. This allows for easy sharing and further analysis of the measurement data outside the program.
+The ``export_table`` method saves specified types of measurements as a CSV file to the specified folder path.
+It determines the type of measurements to plot based on the ``kind`` parameter
+(``readings``, ``background``, ``sample``, ``net``, or ``all``).
 
-The `export_table` method in the `Hidex300` class exports measurement data to a CSV file. Here's a detailed breakdown of its logic:
+First, the method maps the ``kind`` parameter to the corresponding DataFrame attributes (``readings``, ``background``,
+``sample``, ``net``, or a the compiled DataFrame returned by the ``_compile_measurements`` method for ``all``).
+Then, it validates the ``kind`` parameter by ensuring it exists in the dictionary keys.
+If the ``kind`` is invalid, it raises a ``ValueError`` exception.
 
-1. **Parameters**:
-   - `kind`: A string indicating the type of measurements to export. Options are 'background', 'sample', 'net', or 'all'.
-   - `filename`: The name of the CSV file to which the data will be exported.
+Then, it retrieves the corresponding DataFrame from the dictionary and
+exports it to a CSV file in the specified ``folder_path`` using the ``to_csv`` method of the DataFrame.
+The CSV file is named after the ``kind`` parameter.
+Finally, it prints a confirmation message indicating the successful export.
 
-2. **Select Data to Export**:
-   - The method selects the appropriate DataFrame to export based on the `kind` parameter:
-     - If `kind` is 'background', it selects `self.background`.
-     - If `kind` is 'sample', it selects `self.sample`.
-     - If `kind` is 'net', it selects `self.net`.
-     - If `kind` is 'all', it concatenates `self.background`, `self.sample`, and `self.net` into a single DataFrame.
+Exporting plots
+^^^^^^^^^^^^^^^
 
-3. **Check for Data Availability**:
-   - It checks if the selected DataFrame(s) are not `None`. If any required DataFrame is `None`, it raises a `ValueError` indicating that there is no data available to export.
+The ``export_plot`` method class saves the plot of a specified type of measurements as a PNG file to the specified folder path.
+It determines the type of measurements to plot based on the ``kind`` parameter
+(``background``, ``sample``, or ``net``).
 
-4. **Export Data to CSV**:
-   - The method uses pandas' `to_csv` method to write the selected DataFrame(s) to the specified CSV file. It ensures that the data is formatted correctly and saved for further use or analysis.
+First, the method maps the ``kind`` parameter to the corresponding DataFrame attributes (``readings``, ``background`` or ``sample``).
+Then, it validates the ``kind`` parameter by ensuring it exists in the dictionary keys.
+If the ``kind`` is invalid, it raises a ``ValueError`` exception.
 
-export_plot
-^^^
-
-The `export_plot` method saves a plot of measurement data to an image file. It generates the plot using specified columns and plot type, then saves the plot to a file using matplotlib's `savefig` method. This allows for easy sharing and documentation of the visualized data.
-
-The `export_plot` method in the `Hidex300` class saves a plot of measurement data to an image file. Here's a detailed breakdown of its logic:
-
-1. **Parameters**:
-   - `x_column`: The name of the column to be used for the x-axis.
-   - `y_column`: The name of the column to be used for the y-axis.
-   - `filename`: The name of the image file to save the plot.
-   - `kind`: The type of plot to create (e.g., 'line', 'scatter', 'bar'). Default is 'line'.
-   - `title`: The title of the plot. Default is `None`.
-   - `xlabel`: The label for the x-axis. Default is `None`.
-   - `ylabel`: The label for the y-axis. Default is `None`.
-
-2. **Check for Data Availability**:
-   - The method first checks if `self.net` is not `None`. If it is `None`, it raises a `ValueError` indicating that there is no net measurement data available to plot.
-
-3. **Create the Plot**:
-   - It uses the `plot` method from pandas to create the plot. The `plot` method is called on the `self.net` DataFrame, with the specified `x_column` and `y_column`, and the plot type (`kind`).
-
-4. **Customize the Plot**:
-   - If a `title` is provided, it sets the plot title using `plt.title`.
-   - If an `xlabel` is provided, it sets the x-axis label using `plt.xlabel`.
-   - If a `ylabel` is provided, it sets the y-axis label using `plt.ylabel`.
-
-5. **Save the Plot**:
-   - The method saves the plot to the specified image file using `plt.savefig(filename)`.
-
-6. **Close the Plot**:
-   - Finally, it calls `plt.close()` to close the plot and free up memory.
+Then, it calls the ``plot_measurements`` method to generate the plot and
+exports it to a PNG file in the specified ``folder_path`` using the ``savefig`` method of ``matplotlib``.
+The PNG file is named after the ``kind`` parameter.
+Finally, it prints a confirmation message indicating the successful export.
 
 Comprehensive analysis
 ----------------------
 
-analyze_readings
-^^^
+The ``Hidex300`` class allows to run a full comprehensive analysis of the readings,
+combining all the previous steps into a single workflow, including
+including parsing, processing and summarizing the readings and exporting the results to CSV and PNG files.
+The ``analyze_readings`` method handles this task.
 
-The `analyze_readings` method performs a comprehensive analysis of the measurement data. It processes the readings, calculates statistical summaries, and generates visualizations. This method ensures that the data is thoroughly examined, providing insights and identifying patterns or anomalies in the measurements.
+First, the method **parses the readings** of the CSV files provided by the Hidex 300 SL from the specified
+``input_folder``, by calling the calling the ``parse_readings`` method.
+Then, it **processes all types of measurements** (background, sample and net) by calling the ``process_readings``
+method with ``kind='all'`` and the specified ``time_unit``.
+Finally, it **prints a summary** of the measurements by calling the ``__str__`` method.
 
-The `analyze_readings` method in the `Hidex300` class performs a comprehensive analysis of the measurement data. Here's a detailed breakdown of its logic:
-
-1. **Process All Readings**:
-   - The method starts by calling `process_readings` with `kind='all'` to ensure that background, sample, and net measurements are processed and available for analysis.
-
-2. **Generate Statistical Summaries**:
-   - It calculates statistical summaries for the processed data, such as mean, median, standard deviation, and other relevant statistics. These summaries provide insights into the distribution and variability of the measurements.
-
-3. **Create Visualizations**:
-   - The method generates various plots to visualize the data. This includes line plots, scatter plots, histograms, or any other relevant visualizations that help in understanding the data patterns and trends.
-
-4. **Identify Patterns and Anomalies**:
-   - It analyzes the visualizations and statistical summaries to identify any patterns, trends, or anomalies in the data. This step is crucial for detecting any irregularities or significant findings in the measurements.
-
-5. **Compile Results**:
-   - The method compiles the results of the analysis, including the statistical summaries and visualizations, into a comprehensive report or output format. This ensures that the findings are well-documented and can be easily reviewed.
-
-_compile_measurements
-^^^
-
-The `_compile_measurements` method aggregates and compiles measurement data from multiple files into a single DataFrame. It reads each file, processes the data, and appends it to a list. Finally, it concatenates the list of DataFrames into one comprehensive DataFrame, ensuring all measurements are combined for further analysis.
-
-The `_compile_measurements` method in the `Hidex300` class aggregates measurement data from multiple files into a single DataFrame. Here's a detailed breakdown of its logic:
-
-1. **Initialize an Empty List**:
-   - The method starts by initializing an empty list named `data_frames` to store the DataFrames created from each file.
-
-2. **Iterate Over Files**:
-   - It iterates over each file in the `self.files` list. For each file:
-     - Reads the file into a DataFrame using `pd.read_csv`.
-     - Adds a new column to the DataFrame to indicate the file source, which helps in identifying the origin of the data.
-
-3. **Append DataFrames**:
-   - Each DataFrame created from the files is appended to the `data_frames` list.
-
-4. **Concatenate DataFrames**:
-   - After processing all files, the method concatenates all DataFrames in the `data_frames` list into a single comprehensive DataFrame using `pd.concat`.
-
-5. **Return the Compiled DataFrame**:
-   - The method returns the compiled DataFrame, which contains all the measurement data from the multiple files combined.
+Optionally, the method can **save the results** (CSV files and plots) to the specified ``output_folder``
+if the ``save`` parameter is ``True``.
+The method checks if the ``output_folder`` exists and creates it if it doesn't.
+It also creates a subfolder for the specific radionuclide, year, and month to store the results.
+Then it saves the background, sample, net, and compiled measurements as CSV files to this folder
+by calling the ``export_table`` method.
+It also saves the summary of the readings to a text file by calling the ``summarize_readings``.
+Finally, it saves plots of background, sample, and net measurements to PNG files by calling the ``export_plot`` method.
