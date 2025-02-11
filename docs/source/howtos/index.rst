@@ -10,4 +10,4 @@ It assumes some knowledge of how MetPyRad works.
     :maxdepth: 2
     :caption: How-to guides
 
-    hidex300
+    hidex300/index
