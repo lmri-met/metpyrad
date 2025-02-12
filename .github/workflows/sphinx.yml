@@ -27,12 +27,12 @@ jobs:
           persist-credentials: false
 
 
-      - name: Install metpyrad
-        run: pip install git+https://github.com/lmri-met/metpyrad.git
-
       # Step 2: Build the HTML documentation using Sphinx
       - name: Build HTML
         uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/source"
+          build-command: "sphinx-build -b html docs/source docs/build/html"
 
 
 #      - name: Install dependencies
