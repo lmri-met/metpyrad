@@ -88,7 +88,7 @@ class TestHidex300Validation:
     @pytest.fixture
     def processor(self):
         processor = Hidex300(radionuclide='Lu-177', year=2023, month=11)
-        processor.analyze_readings(input_folder='./data/hidex_tdcr', time_unit='s', save=False)
+        processor.analyze_readings(input_folder='./data/hidex300', time_unit='s', save=False)
         return processor
 
     @pytest.fixture

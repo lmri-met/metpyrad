@@ -2,7 +2,6 @@ import os
 
 import pandas as pd
 import pytest
-from matplotlib import pyplot as plt
 
 from metpyrad.hidex300 import Hidex300
 
@@ -16,7 +15,7 @@ class TestHidex300Analyze:
         self.output_dir = tmpdir.mkdir("output")
 
     def test_analyze_readings_save(self):
-        self.processor.analyze_readings(input_folder='./data/hidex_tdcr', time_unit='s', save=True,
+        self.processor.analyze_readings(input_folder='./data/hidex300', time_unit='s', save=True,
                                         output_folder=self.output_dir)
         # Check if the output files were created
         assert os.path.exists(os.path.join(self.output_dir, 'Lu-177_2023_11', 'readings.csv'))
@@ -116,7 +115,7 @@ class TestHidex300Exceptions:
 
     def test_parse_readings_inconsistent_repetitions(self):
         # Delete a row by index
-        df = self.processor.readings.drop(index=1)
+        self.processor.readings.drop(index=1)
         with pytest.raises(ValueError, match='Repetitions per cycle are not consistent for all measurements.'):
             self.processor._parse_readings(self.folder)
 

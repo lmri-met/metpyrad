@@ -21,7 +21,7 @@ Bureau International des Poids et Mesures (BIPM) for the international reference
 
 Find more details about the LSC technique in this
 `academic article by R. Broda et al. <http://doi.org/10.1088/0026-1394/44/4/S06>`_
-For a more user-frindly approach, check this
+For a more user-friendly approach, check this
 `Introduction to liquid scintillation <https://www.hidex.com/hidex-methods/introduction/triple-coincidence-applications>`_.
 
 Triple-to-double coincidence ratio (TDCR)
@@ -42,5 +42,5 @@ The knowledge of the radionuclide decay scheme data is precondition.
 
 Find more details about the TDCR method in this
 `academic article by R. Broda <https://doi.org/10.1016/S0969-8043(03)00056-3>`_.
-For a more user-frindly approach, check this
+For a more user-friendly approach, check this
 `Introduction to liquid scintillation <https://www.hidex.com/hidex-methods/introduction/triple-coincidence-applications>`_.

@@ -16,7 +16,7 @@
 [![Static Badge](https://img.shields.io/badge/Distribution-PyPi-orange)](https://pypi.org/project/metpyrad/)
 [![Static Badge](https://img.shields.io/badge/License-GPLv3.0-orange)](https://choosealicense.com/licenses/gpl-3.0/)
 ![Static Badge](https://img.shields.io/badge/Tests-Passing-green)
-![Static Badge](https://img.shields.io/badge/CodeCov-64%25-green)
+![Static Badge](https://img.shields.io/badge/CodeCov-99%25-green)
 
 ## Table of Contents
 

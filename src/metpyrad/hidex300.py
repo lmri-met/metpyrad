@@ -244,7 +244,7 @@ class Hidex300:
         Examples
         --------
         >>> processor = Hidex300('Lu-177', 2023, 11)
-        >>> processor.parse_readings(folder_path='/path/to/folder')
+        >>> processor.parse_readings(folder_path='/path/to/folder/')
         Found 2 CSV files in folder /path/to/folder
         """
         # Parse the readings from the CSV files in the specified folder
@@ -292,7 +292,7 @@ class Hidex300:
         1      2            2            100 2023-12-01 12:46:16
 
         >>> processor = Hidex300('Lu-177', 2023, 11)
-        >>> processor.summarize_readings(save=True, folder_path='/path/to/folder')
+        >>> processor.summarize_readings(save=True, folder_path='/path/to/folder/')
         Summary saved to /path/to/folder/summary.txt
         """
         # If save is True, save the summary to a text file
@@ -377,7 +377,7 @@ class Hidex300:
         Returns
         -------
         pandas.DataFrame
-            DataFrame containing the parsed readings.
+            The parsed readings.
 
         Raises
         ------
@@ -447,7 +447,7 @@ class Hidex300:
         Returns
         -------
         pandas.DataFrame
-            DataFrame containing the summary of the readings.
+            The summary of the readings.
 
         Raises
         ------
@@ -525,7 +525,7 @@ class Hidex300:
         Returns
         -------
         pandas.DataFrame
-            DataFrame containing the processed background or sample measurements.
+            The processed background or sample measurements.
 
         Raises
         ------
@@ -571,7 +571,7 @@ class Hidex300:
         Returns
         -------
         pandas.DataFrame
-            DataFrame containing the processed net measurements.
+            The processed net measurements.
 
         Raises
         ------
@@ -609,7 +609,7 @@ class Hidex300:
         Returns
         -------
         pandas.DataFrame
-            DataFrame containing the compiled measurements with multi-level headers.
+            The compiled measurements with multi-level headers.
 
         Raises
         ------
@@ -764,7 +764,7 @@ class Hidex300:
             The unit of time for the measurements.
         save : bool
             If True, saves the results to the specified output folder. Default is False.
-        output_folder (str or None):
+        output_folder : str or None
             Path to the folder where the results will be saved. Required if save is True.
 
         Raises
@@ -883,7 +883,7 @@ def _get_elapsed_time(df, time_unit='s'):
     Parameters
     ----------
     df : pandas.DataFrame
-        DataFrame containing a column 'End time' with datetime values.
+        The time data containing a column 'End time' with datetime values.
     time_unit : str
         The unit of time to convert the elapsed time to. Options are 's' (seconds), 'min' (minutes), 'h' (hours),
         'd' (days), 'wk' (weeks), 'mo' (months), 'yr' (years). Default is 's'.
@@ -902,13 +902,13 @@ def _get_elapsed_time(df, time_unit='s'):
 
     Examples
     --------
-    >>> df = pd.DataFrame({'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16'])})
-    >>> elapsed_time, elapsed_time_unit = _get_elapsed_time(df, time_unit='h')
-    >>> print(elapsed_time)
+    >>> my_df = pd.DataFrame({'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16'])})
+    >>> e_time, e_time_unit = _get_elapsed_time(my_df, time_unit='h')
+    >>> print(e_time)
     0   0 days 00:00:00
     1   1 days 04:01:56
     Name: End time, dtype: timedelta64[ns]
-    >>> print(elapsed_time_unit)
+    >>> print(e_time_unit)
     0     0.000000
     1    28.032222
     dtype: float64
@@ -944,7 +944,7 @@ def _plot_background_sample_measurements(df, kind):
     Parameters
     ----------
     df : pandas.DataFrame
-        DataFrame containing the measurement data with columns 'End time', 'Count rate (cpm)', 'Dead time',
+        The measurement data with columns 'End time', 'Count rate (cpm)', 'Dead time',
         'Real time (s)', 'Live time (s)', 'Counts (reading)', 'Counts', and 'Counts uncertainty (%)'.
     kind : str
         A string indicating the type of measurements (e.g., 'background' or 'sample').
@@ -956,7 +956,7 @@ def _plot_background_sample_measurements(df, kind):
 
     Examples
     --------
-    >>> df = pd.DataFrame({
+    >>> my_df = pd.DataFrame({
     ...     'End time': pd.to_datetime(['2023-11-30 08:44:20', '2023-12-01 12:46:16']),
     ...     'Count rate (cpm)': [100, 150],
     ...     'Dead time': [0.1, 0.2],
@@ -966,38 +966,38 @@ def _plot_background_sample_measurements(df, kind):
     ...     'Counts': [4950, 7400],
     ...     'Counts uncertainty (%)': [1.0, 1.2]
     ... })
-    >>> fig = _plot_background_sample_measurements(df, 'background')
+    >>> my_fig = _plot_background_sample_measurements(my_df, 'background')
     >>> plt.show()
     """
     # Extract the 'End time' column for the x-axis
     x = df['End time']
-    xlabel = 'End time'
-    markersize = 2
+    x_label = 'End time'
+    marker_size = 2
     # Create a 3x2 grid of subplots
     fig, axs = plt.subplots(3, 2, figsize=(1.5 * 8, 1.5 * 6), sharex=True)
     # Plot 'Count rate (cpm)' on the first subplot
-    axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=markersize)
+    axs[0, 0].plot(x, df['Count rate (cpm)'], 'o-', markersize=marker_size)
     axs[0, 0].set_ylabel('Count rate (cpm)')
     # Plot 'Dead time' on the second subplot
-    axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=markersize)
+    axs[0, 1].plot(x, df['Dead time'], 'o-', markersize=marker_size)
     axs[0, 1].set_ylabel('Dead time')
     # Plot 'Real time (s)' on the third subplot
-    axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=markersize)
+    axs[1, 0].plot(x, df['Real time (s)'], 'o-', markersize=marker_size)
     axs[1, 0].set_ylabel('Real time (s)')
     # Plot 'Live time (s)' on the fourth subplot
-    axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=markersize)
+    axs[1, 1].plot(x, df['Live time (s)'], 'o-', markersize=marker_size)
     axs[1, 1].set_ylabel('Live time (s)')
     # Plot 'Counts (reading)' and 'Counts' on the fifth subplot
-    axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=markersize)
-    axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=markersize)
+    axs[2, 0].plot(x, df['Counts (reading)'], 'o-', label='Measured', markersize=marker_size)
+    axs[2, 0].plot(x, df['Counts'], 'o-', label='Calculated', markersize=marker_size)
     axs[2, 0].set_ylabel('Counts')
     axs[2, 0].legend()
-    axs[2, 0].set_xlabel(xlabel)
+    axs[2, 0].set_xlabel(x_label)
     axs[2, 0].tick_params(axis='x', rotation=45)
     # Plot 'Counts uncertainty (%)' on the sixth subplot
-    axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
+    axs[2, 1].plot(x, df['Counts uncertainty (%)'], 'o-', markersize=marker_size)
     axs[2, 1].set_ylabel('Counts uncertainty (%)')
-    axs[2, 1].set_xlabel(xlabel)
+    axs[2, 1].set_xlabel(x_label)
     axs[2, 1].tick_params(axis='x', rotation=45)
     # Set the overall title for the figure
     fig.suptitle(f'{kind.capitalize()} measurements')
@@ -1013,7 +1013,7 @@ def _plot_net_measurements(df):
     Parameters
     ----------
     df : pandas.DataFrame
-        DataFrame containing the measurement data with columns 'Elapsed time (unit)', 'Counts', and
+        The measurement data with columns 'Elapsed time (unit)', 'Counts', and
         'Counts uncertainty (%)'.
 
     Returns
@@ -1023,12 +1023,12 @@ def _plot_net_measurements(df):
 
     Examples
     --------
-    >>> df = pd.DataFrame({
+    >>> my_df = pd.DataFrame({
     ...     'Elapsed time (s)': [0, 10, 20, 30],
     ...     'Counts': [100, 150, 200, 250],
     ...     'Counts uncertainty (%)': [1.0, 1.2, 1.1, 1.3]
     ... })
-    >>> fig = _plot_net_measurements(df)
+    >>> my_fig = _plot_net_measurements(my_df)
     >>> plt.show()
     """
     # Extracting the unit from the column label
@@ -1036,19 +1036,19 @@ def _plot_net_measurements(df):
     unit = etime_column.split('(')[-1].strip(')')
     # Extract the 'Elapsed time' column for the x-axis
     x = df[f'Elapsed time ({unit})']
-    xlabel = f'Elapsed time ({unit})'
-    markersize = 2
+    x_label = f'Elapsed time ({unit})'
+    marker_size = 2
     # Create a 2x1 grid of subplots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
     # Plot 'Counts' on the first subplot
-    ax1.plot(x, df['Counts'], 'o-', markersize=markersize)
+    ax1.plot(x, df['Counts'], 'o-', markersize=marker_size)
     ax1.set_ylabel('Counts')
-    ax1.set_xlabel(xlabel)
+    ax1.set_xlabel(x_label)
     ax1.tick_params(axis='x', rotation=45)
     # Plot 'Counts uncertainty (%)' on the second subplot
-    ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=markersize)
+    ax2.plot(x, df['Counts uncertainty (%)'], 'o-', markersize=marker_size)
     ax2.set_ylabel('Counts uncertainty (%)')
-    ax2.set_xlabel(xlabel)
+    ax2.set_xlabel(x_label)
     ax2.tick_params(axis='x', rotation=45)
     # Set the overall title for the figure
     fig.suptitle('Net quantities measurements')

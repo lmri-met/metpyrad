@@ -41,7 +41,7 @@ Access the background measurements by calling the ``processor.background`` attri
 
 This table compiles all the quantities of interest for the background measurements for each cycle and repetition.
 In addition to the quantities parsed directly from the Hidex 300 SL automatic liquid scintillator counter CSV files
-(count rate, counts, real time, dead time and end time), it compiles the live time, elpased time, and counts value and uncertainty.
+(count rate, counts, real time, dead time and end time), it compiles the live time, elapsed time, and counts value and uncertainty.
 See more details about these quantities in the Topic guide.
 
 .. note::
