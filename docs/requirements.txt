@@ -2,3 +2,4 @@
 sphinx~=7.1.2
 sphinx_design~=0.5.0
 pydata_sphinx_theme~=0.14.4
+metpyrad
