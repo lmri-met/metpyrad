@@ -495,9 +495,6 @@ class Hidex300:
             If repetitions per cycle are not consistent for all measurements.
         """
         summary = self._get_readings_summary()
-        # Check if repetitions per cycle are consistent for all measurements
-        if not summary['Repetitions'].nunique() == 1:
-            raise ValueError('Repetitions per cycle are not consistent for all measurements. Check summary table.')
         # Calculate the number of unique cycles
         cycles = summary['Cycle'].count()
         # Calculate the total number of measurements
