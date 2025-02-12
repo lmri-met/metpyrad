@@ -1,5 +1,5 @@
 # Workflow name
-name: "Sphinx: Render docs"
+name: "Deploy Sphinx documentation"
 
 # Workflow trigger event: Trigger the workflow on every push to the repository
 on: push
@@ -21,7 +21,7 @@ jobs:
 
       # Step 1: Check out the repository code
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
         with:
           # Do not persist credentials in the local git configuration
           persist-credentials: false
