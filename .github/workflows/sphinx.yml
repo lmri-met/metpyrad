@@ -26,10 +26,12 @@ jobs:
           # Do not persist credentials in the local git configuration
           persist-credentials: false
 
+      - name: Install dependencies
+        run: pip install -r docs/requirements.txt
+
         # Step 2: Build the HTML documentation using Sphinx
       - name: Build HTML
-        run: |
-          sphinx-build html docs/source/ docs/build/
+        run: sphinx-build html docs/source/ docs/build/
 
         # Step 3: Upload the generated HTML files as artifacts
       - name: Upload artifacts
