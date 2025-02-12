@@ -26,7 +26,8 @@ jobs:
           # Do not persist credentials in the local git configuration
           persist-credentials: false
 
-      - uses: actions/setup-python@v3
+      - name: Install metpyrad
+        run: pip install git+https://github.com/lmri-met/metpyrad.git
 
         # Step 2: Build the HTML documentation using Sphinx
       - name: Build HTML
