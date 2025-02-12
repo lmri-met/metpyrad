@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "metpyrad"
+version = "0.0.1"
+description = 'Tools for radionuclide metrology'
+keywords = ["metrology", "radionuclide", "TDCR"]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = ["pandas", "matplotlib", "numpy"]
+authors = [
+  { name = "Xandra Campo", email = "xandra.campo@ciemat.es" }
+]
+maintainers = [
+  { name = "Xandra Campo", email = "xandra.campo@ciemat.es" }
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Physics",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov"]
+docs = ["sphinx", "sphinx_design", "pydata_sphinx_theme"]
+
+[project.urls]
+Repository = "https://github.com/lmri-met/metpyrad"
+Documentation = "https://github.com/lmri-met/metpyrad#readme"
+Issues = "https://github.com/lmri-met/metpyrad/issues"
