@@ -10,18 +10,6 @@ Here you can see an example of this CSV file.
 Note that it is not a complete file, it is just a part of it extracted for illustration purposes.
 See more details about these CSV file in the Topic guide.
 
-These measurements may be time consuming, and a lot of CSV files may be generated as a result.
-These CSV files may be very long, with the information about the readings scattered across multiple lines.
-So, to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter, the first thing you need to do is
-to read these files and extract the information you need from them.
-Let's see how you can do this using the ``Hidex300`` class.
-
-.. warning::
-
-    Add example files to download.
-    Add mention to pandas and link to tutorial.
-    Add assumption of all being installed and ref to previous section of the tutorial
-
 .. code-block::
 
     Lu-177 HS3 301123_ciclo1
@@ -61,6 +49,27 @@ Let's see how you can do this using the ``Hidex300`` class.
     (...)
     0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
     0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+
+.. note::
+
+    Download the examples of Hidex 300 SL CSV file for this tutorial from
+    `here <https://github.com/lmri-met/metpyrad/tree/main/dev/hidex300/test_case/input_files>`_
+
+These measurements may be time consuming, and a lot of CSV files may be generated as a result.
+These CSV files may be very long, with the information about the readings scattered across multiple lines.
+So, to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter, the first thing you need to do is
+to read these files and extract the information you need from them.
+Let's see how you can do this using the ``Hidex300`` class.
+
+.. note::
+
+    This tutorial assumes that you have Pyhton and MetPyRad library installed.
+    If not, please check the installation tutorial.
+
+    MetPyRad uses the pandas DataFrames to store the measurements.
+    You should be familiar with pandas library to take advantage of this.
+    If you are not familiar with pandas, check its
+    `beginners tutorial <https://pandas.pydata.org/docs/user_guide/10min.html>`_.
 
 Initialize the processor
 ------------------------
