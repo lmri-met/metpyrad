@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.cycle\_repetitions
+====================================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.cycle_repetitions

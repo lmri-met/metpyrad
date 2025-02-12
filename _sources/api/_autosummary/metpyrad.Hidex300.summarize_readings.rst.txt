@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.summarize\_readings
+=====================================
+
+.. currentmodule:: metpyrad
+
+.. automethod:: Hidex300.summarize_readings

@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.repetition\_time
+==================================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.repetition_time

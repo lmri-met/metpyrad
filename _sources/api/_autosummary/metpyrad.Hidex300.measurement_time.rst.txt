@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.measurement\_time
+===================================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.measurement_time

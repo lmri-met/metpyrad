@@ -1,0 +1,663 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to process Hidex 300 SL readings &#8212; MetPyRad 0.0.1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/hidex300/hidex300_1';</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How to visualize and export measurements" href="hidex300_2.html" />
+    <link rel="prev" title="Hidex 300 SL processor" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MetPyRad 0.0.1</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../topics/index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../topics/index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Hidex 300 SL processor</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">How to process Hidex 300 SL readings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hidex300_2.html">How to visualize and export measurements</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">How-to guides</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Hidex 300 SL processor</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How to process Hidex 300 SL readings</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-process-hidex-300-sl-readings">
+<h1>How to process Hidex 300 SL readings<a class="headerlink" href="#how-to-process-hidex-300-sl-readings" title="Link to this heading">#</a></h1>
+<p>This guide will walk you through the steps to process the readings of the Hidex 300 SL counter using the <cite>Hidex300</cite> class.
+You will learn how to parse measurement data from CSV files, process different types of measurements, and generate a summary of the readings.</p>
+<p>Prerequisites:</p>
+<ul class="simple">
+<li><p>Python installed on your system.</p></li>
+<li><p>Required libraries: <code class="docutils literal notranslate"><span class="pre">metpyrad</span></code></p></li>
+<li><p>CSV files containing the measurement data.</p></li>
+</ul>
+<section id="how-to-parse-the-readings">
+<h2>How to parse the readings<a class="headerlink" href="#how-to-parse-the-readings" title="Link to this heading">#</a></h2>
+<p>To parse the measurement readings from the CSV files provided by the Hidex 300 SL counter, you need to:</p>
+<ul class="simple">
+<li><p>Import the <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class from <code class="docutils literal notranslate"><span class="pre">metpyrad</span></code>.</p></li>
+<li><p>Initialize an instance of <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code>.</p></li>
+<li><p>Call the <code class="docutils literal notranslate"><span class="pre">Hidex300.parse_readings</span></code> method providing the folder containing the CSV files.</p></li>
+</ul>
+<p>Then, you can access the parsed readings calling the <code class="docutils literal notranslate"><span class="pre">Hidex300.readings</span></code> attribute.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metpyrad</span> <span class="kn">import</span> <span class="n">Hidex300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">Hidex300</span><span class="p">(</span><span class="n">radionuclide</span><span class="o">=</span><span class="s1">&#39;Lu-177&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">parse_readings</span><span class="p">(</span><span class="n">folder_path</span><span class="o">=</span><span class="s1">&#39;/path/to/input/files/folder&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">readings</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned DataFrame will look like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time</span>
+<span class="go">0      1       1            1             83.97               140      1.000           100 2023-11-30 08:44:20</span>
+<span class="go">1      1       2            1         252623.23            374237      1.125           100 2023-11-30 08:47:44</span>
+<span class="go">2      1       1            2             87.57               146      1.000           100 2023-11-30 08:51:04</span>
+<span class="go">3      1       2            2         251953.09            373593      1.124           100 2023-11-30 08:54:28</span>
+<span class="go">4      2       1            1             97.77               163      1.000           100 2023-12-01 12:46:16</span>
+<span class="go">5      2       2            1         223744.10            335987      1.110           100 2023-12-01 12:49:40</span>
+<span class="go">6      2       1            2             85.17               142      1.000           100 2023-12-01 12:53:00</span>
+<span class="go">7      2       2            2         223689.40            335843      1.110           100 2023-12-01 12:56:24</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-process-different-types-of-measurements">
+<h2>How to process different types of measurements<a class="headerlink" href="#how-to-process-different-types-of-measurements" title="Link to this heading">#</a></h2>
+<p>Parse the measurement readings from the CSV files:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metpyrad</span> <span class="kn">import</span> <span class="n">Hidex300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">Hidex300</span><span class="p">(</span><span class="n">radionuclide</span><span class="o">=</span><span class="s1">&#39;Lu-177&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">parse_readings</span><span class="p">(</span><span class="n">folder_path</span><span class="o">=</span><span class="s1">&#39;/path/to/input/files/folder&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To process different types of measurements from the parsed readings, call the <code class="docutils literal notranslate"><span class="pre">Hidex300.process_readings</span></code> method,
+setting the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to the type of measurements to process.</p>
+<p>Then, you can access the processed measurements calling the corresponding <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> attribute.</p>
+<p>Process the background measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">process_readings</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned DataFrame will look like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   Cycle  Sample  Repetition  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)     Elapsed time Elapsed time (s)      Counts  Counts uncertainty  Counts uncertainty (%)</span>
+<span class="go">0      1       1           1             83.97               140        1.0           100 2023-11-30 08:44:20          100.0  0 days 00:00:00              0.0  139.950000           11.830046                8.453052</span>
+<span class="go">1      1       1           2             87.57               146        1.0           100 2023-11-30 08:51:04          100.0  0 days 00:06:44            404.0  145.950000           12.080977                8.277476</span>
+<span class="go">2      2       1           1             92.36               154        1.0           100 2023-12-06 10:23:19          100.0  6 days 01:38:59         524339.0  153.933333           12.406987                8.059974</span>
+<span class="go">3      2       1           2             87.56               146        1.0           100 2023-12-06 10:30:03          100.0  6 days 01:45:43         524743.0  145.933333           12.080287                8.277949</span>
+<span class="go">4      3       1           1             82.16               137        1.0           100 2023-12-12 08:41:22          100.0 11 days 23:57:02        1036622.0  136.933333           11.701852                8.545656</span>
+<span class="go">5      3       1           2             82.77               138        1.0           100 2023-12-12 08:48:04          100.0 12 days 00:03:44        1037024.0  137.950000           11.745212                8.514108</span>
+<span class="go">6      4       1           1             98.36               164        1.0           100 2023-12-22 08:47:48          100.0 22 days 00:03:28        1901008.0  163.933333           12.803645                7.810276</span>
+<span class="go">7      4       1           2             76.17               127        1.0           100 2023-12-22 08:54:28          100.0 22 days 00:10:08        1901408.0  126.950000           11.267209                8.875312</span>
+</pre></div>
+</div>
+<p>Process the sample measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">process_readings</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;sample&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned DataFrame will look like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   Cycle  Sample  Repetition  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time  Live time (s)     Elapsed time Elapsed time (s)         Counts  Counts uncertainty  Counts uncertainty (%)</span>
+<span class="go">0      1       2           1         252623.23            374237      1.125           100 2023-11-30 08:47:44      88.888889  0 days 00:00:00              0.0  374256.637037          611.765181                0.163461</span>
+<span class="go">1      1       2           2         251953.09            373593      1.124           100 2023-11-30 08:54:28      88.967972  0 days 00:06:44            404.0  373595.922301          611.224936                0.163606</span>
+<span class="go">2      2       2           1         134111.43            209724      1.066           100 2023-12-06 10:26:44      93.808630  6 days 01:39:00         524340.0  209680.159475          457.908462                0.218384</span>
+<span class="go">3      2       2           2         134390.68            210125      1.066           100 2023-12-06 10:33:27      93.808630  6 days 01:45:43         524743.0  210116.760475          458.384948                0.218157</span>
+<span class="go">4      3       2           1          72225.71            116255      1.035           100 2023-12-12 08:44:45      96.618357 11 days 23:57:01        1036621.0  116305.491143          341.035909                0.293224</span>
+<span class="go">5      3       2           2          72340.56            116440      1.035           100 2023-12-12 08:51:27      96.618357 12 days 00:03:43        1037023.0  116490.434783          341.306951                0.292991</span>
+<span class="go">6      4       2           1          25236.95             41565      1.012           100 2023-12-22 08:51:10      98.814229 22 days 00:03:26        1901006.0   41562.829381          203.869638                0.490510</span>
+<span class="go">7      4       2           2          25656.06             42239      1.012           100 2023-12-22 08:57:50      98.814229 22 days 00:10:06        1901406.0   42253.063241          205.555499                0.486487</span>
+</pre></div>
+</div>
+<p>Process the net measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">process_readings</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;net&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">net</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The returned DataFrame will look like:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">   Cycle  Repetition     Elapsed time  Elapsed time (s)  Count rate (cpm)        Counts  Counts uncertainty  Counts uncertainty (%)</span>
+<span class="go">0      1           1  0 days 00:00:00               0.0         252539.26 374116.687037          611.879553                0.163553</span>
+<span class="go">1      1           2  0 days 00:06:44             404.0         251865.52 373449.972301          611.344316                0.163702</span>
+<span class="go">2      2           1  6 days 01:39:00          524340.0         134019.07 209526.226141          458.076514                0.218625</span>
+<span class="go">3      2           2  6 days 01:45:43          524743.0         134303.12 209970.827142          458.544102                0.218385</span>
+<span class="go">4      3           1 11 days 23:57:01         1036621.0          72143.55 116168.557810          341.236611                0.293743</span>
+<span class="go">5      3           2 12 days 00:03:43         1037023.0          72257.79 116352.484783          341.508982                0.293512</span>
+<span class="go">6      4           1 22 days 00:03:26         1901006.0          25138.59  41398.896047          204.271297                0.493422</span>
+<span class="go">7      4           2 22 days 00:10:06         1901406.0          25579.89  42126.113241          205.864065                0.488685</span>
+</pre></div>
+</div>
+<p>Process all types of measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">process_readings</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">background</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">net</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that to process the background or sample measurements, the readings must be parsed first.
+Similarly, to process the net measurements, the background and sample measurements must be processed first.</p>
+</section>
+<section id="how-to-summarize-the-readings">
+<h2>How to summarize the readings<a class="headerlink" href="#how-to-summarize-the-readings" title="Link to this heading">#</a></h2>
+<p>Parse the measurement readings from the CSV files:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metpyrad</span> <span class="kn">import</span> <span class="n">Hidex300</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">Hidex300</span><span class="p">(</span><span class="n">radionuclide</span><span class="o">=</span><span class="s1">&#39;Lu-177&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">parse_readings</span><span class="p">(</span><span class="n">folder_path</span><span class="o">=</span><span class="s1">&#39;/path/to/input/files/folder&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To print a summary of the parsed readings, call the <code class="docutils literal notranslate"><span class="pre">Hidex300.summarize_readings</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">summarize_readings</span><span class="p">()</span>
+<span class="go">Measurements of Lu-177 on November 2023</span>
+<span class="go">Summary</span>
+<span class="go">Number of cycles: 4</span>
+<span class="go">Repetitions per cycle: 2</span>
+<span class="go">Time per repetition: 100 s</span>
+<span class="go">Total number of measurements: 8</span>
+<span class="go">Total measurement time: 800 s</span>
+<span class="go">Cycles summary</span>
+<span class="go">   Cycle  Repetitions  Real time (s)                Date</span>
+<span class="go">0      1            2            100 2023-11-30 08:44:20</span>
+<span class="go">1      2            2            100 2023-12-06 10:23:19</span>
+<span class="go">2      3            2            100 2023-12-12 08:41:22</span>
+<span class="go">3      4            2            100 2023-12-22 08:47:48</span>
+</pre></div>
+</div>
+<p>To save a summary of the parsed readings to a text file, call the <code class="docutils literal notranslate"><span class="pre">Hidex300.summarize_readings</span></code> method,
+set the parameter <code class="docutils literal notranslate"><span class="pre">save=True</span></code> and provide the <code class="docutils literal notranslate"><span class="pre">folder_path</span></code> to save the file to.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;&gt; processor.summarize_readings(save=True, folder_path=&#39;/path/to/output/folder&#39;)</span>
+</pre></div>
+</div>
+<p>The file is saved as <code class="docutils literal notranslate"><span class="pre">summary.txt</span></code>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hidex 300 SL processor</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="hidex300_2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How to visualize and export measurements</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-parse-the-readings">How to parse the readings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-process-different-types-of-measurements">How to process different types of measurements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-summarize-the-readings">How to summarize the readings</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/howtos/hidex300/hidex300_1.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Xandra Campo.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

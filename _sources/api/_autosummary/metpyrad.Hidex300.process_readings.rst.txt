@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.process\_readings
+===================================
+
+.. currentmodule:: metpyrad
+
+.. automethod:: Hidex300.process_readings

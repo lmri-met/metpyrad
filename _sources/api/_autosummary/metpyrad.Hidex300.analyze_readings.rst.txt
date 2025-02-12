@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.analyze\_readings
+===================================
+
+.. currentmodule:: metpyrad
+
+.. automethod:: Hidex300.analyze_readings

@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.cycles
+========================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.cycles

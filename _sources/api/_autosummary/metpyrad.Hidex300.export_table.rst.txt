@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.export\_table
+===============================
+
+.. currentmodule:: metpyrad
+
+.. automethod:: Hidex300.export_table

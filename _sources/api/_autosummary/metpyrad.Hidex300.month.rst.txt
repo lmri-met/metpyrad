@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.month
+=======================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.month

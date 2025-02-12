@@ -1,3 +1,0 @@
-# Documentation
-sphinx_design~=0.6.1
-pydata_sphinx_theme~=0.16.1

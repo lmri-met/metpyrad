@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.total\_measurements
+=====================================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.total_measurements

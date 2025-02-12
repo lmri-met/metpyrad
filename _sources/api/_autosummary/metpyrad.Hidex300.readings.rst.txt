@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.readings
+==========================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.readings

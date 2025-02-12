@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Getting started &#8212; MetPyRad 0.0.1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/hidex300/hidex300_1';</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Processing the readings" href="hidex300_2.html" />
+    <link rel="prev" title="Hidex 300 SL processor" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MetPyRad 0.0.1</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../howtos/index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../topics/index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../howtos/index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../topics/index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../starting.html">Package overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Hidex 300 SL processor</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hidex300_2.html">Processing the readings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hidex300_3.html">Visualizing measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hidex300_4.html">Exporting measurement data</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Tutorials</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Hidex 300 SL processor</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Getting started</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
+<p>Let’s say that you made a set of measurements of the radionuclide Lu-177 starting on November 2023 using a Hidex 300 SL automatic liquid scintillator counter.
+The set of measurements consists on four cicles of measurements, each one with 2 repetitions.
+Each repetition consists on measuring the background and the sample of Lu-177 consecutively in periods of 100 seconds.</p>
+<p>For each cicle of measurements, the Hidex 300 SL automatic liquid scintillator counter provides a CSV file with the readings.
+Here you can see an example of this CSV file.
+Note that it is not a complete file, it is just a part of it extracted for illustration purposes.
+See more details about these CSV file in the Topic guide.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Lu</span><span class="o">-</span><span class="mi">177</span> <span class="n">HS3</span> <span class="mi">301123</span><span class="n">_ciclo1</span>
+<span class="n">Start</span> <span class="n">Time</span> <span class="mi">8</span><span class="p">:</span><span class="mi">40</span><span class="p">:</span><span class="mi">58</span>
+<span class="o">-</span> <span class="n">ROI1</span> <span class="n">Free</span> <span class="n">Channel</span> <span class="n">Limits</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">1023</span><span class="p">,</span> <span class="n">Type</span> <span class="n">Beta</span>
+<span class="n">Counting</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Low</span>
+<span class="n">Sample</span> <span class="n">start</span>
+<span class="n">Samp</span><span class="o">.</span><span class="p">;</span><span class="mi">1</span>
+<span class="n">Repe</span><span class="o">.</span><span class="p">;</span><span class="mi">1</span>
+<span class="n">Vial</span><span class="p">;</span><span class="mi">1</span>
+<span class="n">WName</span><span class="p">;</span><span class="n">A01</span>
+<span class="n">CPM</span><span class="p">;</span><span class="mf">83.970</span>
+<span class="n">DPM</span><span class="p">;</span><span class="mi">126</span>
+<span class="n">TDCR</span><span class="p">;</span><span class="mf">0.664</span>
+<span class="n">Chemi</span><span class="p">;</span><span class="mf">0.380</span>
+<span class="n">Counts</span><span class="p">;</span><span class="mi">140</span>
+<span class="n">DTime</span><span class="p">;</span><span class="mf">1.000</span>
+<span class="n">Time</span><span class="p">;</span><span class="mi">100</span>
+<span class="n">EndTime</span><span class="p">;</span><span class="mi">30</span><span class="o">/</span><span class="mi">11</span><span class="o">/</span><span class="mi">2023</span> <span class="mi">08</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mi">20</span>
+<span class="n">QPE</span><span class="p">;</span><span class="mf">786.730</span>
+<span class="n">QPI</span><span class="p">;</span><span class="mf">350.220</span>
+<span class="n">LumiCPS</span><span class="p">;</span><span class="mi">276</span>
+<span class="n">Temp</span><span class="p">;</span><span class="mf">24.10</span>
+<span class="n">Column</span> <span class="mi">17</span><span class="p">;</span><span class="mi">0</span>
+<span class="n">Column</span> <span class="mi">18</span><span class="p">;</span><span class="mi">0</span>
+<span class="n">Column</span> <span class="mi">19</span><span class="p">;</span><span class="mi">0</span>
+<span class="n">Column</span> <span class="mi">20</span><span class="p">;</span><span class="mi">0</span>
+<span class="n">Spectrum</span><span class="p">:;</span><span class="n">Alpha</span><span class="p">;</span><span class="n">Beta</span><span class="p">;</span><span class="n">Alpha</span> <span class="n">Triple</span><span class="p">;</span><span class="n">Beta</span> <span class="n">Triple</span>
+<span class="mi">1</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="mi">2</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="mi">1023</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="mi">1024</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="n">Alpha</span><span class="p">:</span>
+<span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Download the examples of Hidex 300 SL CSV file for this tutorial from
+<a class="reference external" href="https://github.com/lmri-met/metpyrad/tree/main/dev/hidex300/test_case/input_files">here</a></p>
+</div>
+<p>These measurements may be time consuming, and a lot of CSV files may be generated as a result.
+These CSV files may be very long, with the information about the readings scattered across multiple lines.
+So, to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter, the first thing you need to do is
+to read these files and extract the information you need from them.
+Let’s see how you can do this using the <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tutorial assumes that you have Pyhton and MetPyRad library installed.
+If not, please check the installation tutorial.</p>
+<p>MetPyRad uses the pandas DataFrames to store the measurements.
+You should be familiar with pandas library to take advantage of this.
+If you are not familiar with pandas, check its
+<a class="reference external" href="https://pandas.pydata.org/docs/user_guide/10min.html">beginners tutorial</a>.</p>
+</div>
+<section id="initialize-the-processor">
+<h2>Initialize the processor<a class="headerlink" href="#initialize-the-processor" title="Link to this heading">#</a></h2>
+<p>In order to process all the CSV files provided by de Hidex 300 SL automatic liquid scintillator counter,
+the first thing you need to do initialize the Hidex TCDR processor.</p>
+<p>In a Python shell, import <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class from <code class="docutils literal notranslate"><span class="pre">metpyrad</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">metpyrad</span> <span class="kn">import</span> <span class="n">Hidex300</span>
+</pre></div>
+</div>
+<p>Then, initialize the <code class="docutils literal notranslate"><span class="pre">processor</span></code> by creating an instance of the <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class.
+Call the <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class and providing the radionuclide name and the year and month of the measurements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">Hidex300</span><span class="p">(</span><span class="n">radionuclide</span><span class="o">=</span><span class="s1">&#39;Lu-177&#39;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Verify that the processor has been initialized with the specified radionuclide, year, and month:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+<span class="go">Measurements of Lu-177 on November 2023</span>
+</pre></div>
+</div>
+</section>
+<section id="parse-the-readings">
+<h2>Parse the readings<a class="headerlink" href="#parse-the-readings" title="Link to this heading">#</a></h2>
+<p>After initializing the processor, the next thing you need to do is reading CSV files provided by the Hidex 300 SL automatic liquid scintillator counter.
+Let’s say that you have the four CSV files in a folder called <code class="docutils literal notranslate"><span class="pre">input_files</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">measurements/</span>
+<span class="go">    input_files/</span>
+<span class="go">        Lu-177_2023_11_30.csv</span>
+<span class="go">        Lu-177_2023_12_06.csv</span>
+<span class="go">        Lu-177_2023_12_12.csv</span>
+<span class="go">        Lu-177_2023_12_22.csv</span>
+</pre></div>
+</div>
+<p>Define the path to the folder that contains the input files:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">folder_path</span> <span class="o">=</span> <span class="s1">&#39;input_files&#39;</span>
+</pre></div>
+</div>
+<p>In these file there is a lot of information about the measurements, but you may not be interested in all of it.
+You may be interested in just a few quantities for some calculation you need to do later.
+To read the CSV files provided by the Hidex 300 SL automatic liquid scintillator counter and extract some quantities of interest,
+use the <code class="docutils literal notranslate"><span class="pre">processor.parse_readings()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">parse_readings</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+<span class="go">Found 2 CSV files in folder input_files</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When calling the <code class="docutils literal notranslate"><span class="pre">processor.parse_readings()</span></code> method, Python looks for the <code class="docutils literal notranslate"><span class="pre">input_files</span></code> folder file in the current working directory.
+If Python cannot locate the folder, you will get an error.</p>
+<p>To avoid this error, import the <code class="docutils literal notranslate"><span class="pre">os</span></code> module, get your current working directory with the <code class="docutils literal notranslate"><span class="pre">os.getcwd()</span></code> method,
+and change the current working directory to the parent folder of the <code class="docutils literal notranslate"><span class="pre">input_files</span></code> folder with the <code class="docutils literal notranslate"><span class="pre">os.chdir()</span></code> method.</p>
+<p>If your <code class="docutils literal notranslate"><span class="pre">input_files</span></code> folder is inside the folder <code class="docutils literal notranslate"><span class="pre">/home/my_user/measurements</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="go">&#39;/home/my_user&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;measurements&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="go">&#39;/home/my_user/measurements&#39;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="inspect-the-parsed-readings">
+<h2>Inspect the parsed readings<a class="headerlink" href="#inspect-the-parsed-readings" title="Link to this heading">#</a></h2>
+<p>After parsing the readings from the Hidex 300 SL automatic liquid scintillator counter CSV files,
+inspect the parsed readings to understand its structure and contents.
+The <code class="docutils literal notranslate"><span class="pre">processor</span></code> store the parsed readings as a table using a pandas DataFrame,
+so first you need to import pandas:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+<p>In order to show all the columns of the DataFrame, use the <code class="docutils literal notranslate"><span class="pre">pd.set_option()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Access the parsed readings by calling the <code class="docutils literal notranslate"><span class="pre">processor.readings</span></code> attribute:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span><span class="o">.</span><span class="n">readings</span>
+<span class="go">   Cycle  Sample  Repetitions  Count rate (cpm)  Counts (reading)  Dead time Real time (s)            End time</span>
+<span class="go">0      1       1            1             83.97               140      1.000           100 2023-11-30 08:44:20</span>
+<span class="go">1      1       2            1         252623.23            374237      1.125           100 2023-11-30 08:47:44</span>
+<span class="go">2      1       1            2             87.57               146      1.000           100 2023-11-30 08:51:04</span>
+<span class="go">3      1       2            2         251953.09            373593      1.124           100 2023-11-30 08:54:28</span>
+<span class="go">4      2       1            1             97.77               163      1.000           100 2023-12-01 12:46:16</span>
+<span class="go">5      2       2            1         223744.10            335987      1.110           100 2023-12-01 12:49:40</span>
+<span class="go">6      2       1            2             85.17               142      1.000           100 2023-12-01 12:53:00</span>
+<span class="go">7      2       2            2         223689.40            335843      1.110           100 2023-12-01 12:56:24</span>
+</pre></div>
+</div>
+<p>This table compiles, for each cycle and repetition, the measurements provided by the Hidex 300 SL automatic liquid scintillator counter of
+count rate, counts, real time, dead time and end time, both for the radionuclide sample and the background.
+See more details about these quantities in the Topics guide.</p>
+</section>
+<section id="print-a-summary-of-the-readings">
+<h2>Print a summary of the readings<a class="headerlink" href="#print-a-summary-of-the-readings" title="Link to this heading">#</a></h2>
+<p>After parsing and inspecting the readings, you can print a summary of the readings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+<span class="go">Measurements of Lu-177 on November 2023</span>
+<span class="go">Summary</span>
+<span class="go">Number of cycles: 4</span>
+<span class="go">Repetitions per cycle: 2</span>
+<span class="go">Time per repetition: 100 s</span>
+<span class="go">Total number of measurements: 8</span>
+<span class="go">Total measurement time: 800 s</span>
+<span class="go">Cycles summary</span>
+<span class="go">   Cycle  Repetitions  Real time (s)                Date</span>
+<span class="go">0      1            2            100 2023-11-30 08:44:20</span>
+<span class="go">1      2            2            100 2023-12-06 10:23:19</span>
+<span class="go">2      3            2            100 2023-12-12 08:41:22</span>
+<span class="go">3      4            2            100 2023-12-22 08:47:48</span>
+</pre></div>
+</div>
+<p>This summary provides a detailed information about the readings,
+including information for the hole set of readings as well as for each cycle in the set.
+See more details about these quantities in the Topics guide.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hidex 300 SL processor</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="hidex300_2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Processing the readings</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-the-processor">Initialize the processor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-readings">Parse the readings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-the-parsed-readings">Inspect the parsed readings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#print-a-summary-of-the-readings">Print a summary of the readings</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/hidex300/hidex300_1.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Xandra Campo.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

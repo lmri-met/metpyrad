@@ -1,0 +1,6 @@
+﻿metpyrad.Hidex300.radionuclide
+==============================
+
+.. currentmodule:: metpyrad
+
+.. autoattribute:: Hidex300.radionuclide

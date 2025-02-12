@@ -1,0 +1,891 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Workflow of the class &#8212; MetPyRad 0.0.1</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'topics/hidex300_class/hidex300_design';</script>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="About MetPyRad" href="../../about.html" />
+    <link rel="prev" title="Key components of the class" href="hidex300_components.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">MetPyRad 0.0.1</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../howtos/index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../howtos/index.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Topic guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../about.html">
+    About MetPyRad
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lmri-met/metpyrad>" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../rad_met/index.html">Overview of radionuclide metrology</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../rad_met/rad_met.html">Radionuclide metrology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rad_met/techniques.html">Measurement techniques</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../hidex300_counter/index.html">Overview of Hidex 300 SL automatic counter</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hidex300_counter/instrument.html">The Hidex 300 SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hidex300_counter/measuring.html">Making measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hidex300_counter/output.html">Output files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hidex300_counter/quantities.html">Processing the measurements</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Overview of the Hidex300 class</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hidex300_components.html">Key components of the class</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Workflow of the class</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Topic guides</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Overview of the Hidex300 class</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Workflow of the class</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="workflow-of-the-class">
+<h1>Workflow of the class<a class="headerlink" href="#workflow-of-the-class" title="Link to this heading">#</a></h1>
+<p>The workflow of the class involves several key steps, each contributing to the overall process of handling measurement data.
+Here is a general description of the workflow:</p>
+<ol class="arabic simple">
+<li><p><strong>Initialization</strong>: Set up the class with the necessary information about the radionuclide and the measurement period.</p></li>
+<li><p><strong>Parsing readings</strong>: Read and organize raw measurement data from CSV files into a structured format.</p></li>
+<li><p><strong>Processing measurements</strong>: Categorize and process the parsed data into background, sample, and net measurements.</p></li>
+<li><p><strong>Summarizing data</strong>: Generate a concise overview of the processed data, including key statistics and information.</p></li>
+<li><p><strong>Exporting results</strong>: Save the processed data and visualizations to CSV and PNG files for further analysis and reporting.</p></li>
+<li><p><strong>Comprehensive analysis</strong>: Combine all steps into a single workflow for a complete analysis of the measurement data.</p></li>
+</ol>
+<section id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">#</a></h2>
+<p>The workflow begins with the initialization of the <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class.
+During this step, the user provides information about the radionuclide being measured,
+such as the name of the radionuclide, and the year and month of the measurements.
+This setup ensures that the class is configured with the correct context for the data it will process.</p>
+<p>During the initialization, the constructor (<code class="docutils literal notranslate"><span class="pre">__init__</span></code>) is called with parameters for the <code class="docutils literal notranslate"><span class="pre">radionuclide</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code>, and <code class="docutils literal notranslate"><span class="pre">month</span></code> of the measurements.
+These parameters are stored as the configuration attributes of the class instance (<code class="docutils literal notranslate"><span class="pre">radionuclide</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code>, and <code class="docutils literal notranslate"><span class="pre">month</span></code>).</p>
+<p>Data storage attributes (<code class="docutils literal notranslate"><span class="pre">readings</span></code>, <code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">net</span></code>)
+and measurement attributes (<code class="docutils literal notranslate"><span class="pre">cycles</span></code>, <code class="docutils literal notranslate"><span class="pre">cycle_repetitions</span></code>, <code class="docutils literal notranslate"><span class="pre">repetition_time</span></code>, <code class="docutils literal notranslate"><span class="pre">total_measurements</span></code>, <code class="docutils literal notranslate"><span class="pre">measurement_time</span></code>)
+are initialized to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</section>
+<section id="parsing-readings">
+<h2>Parsing readings<a class="headerlink" href="#parsing-readings" title="Link to this heading">#</a></h2>
+<p>Once the class is initialized, the next step is to parse the measurement data.
+The user specifies the folder containing the CSV files provided by the Hidex 300 SL automatic counter from the measurement of the radionuclide.</p>
+<p>Then, the <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method orchestrates the parsing of measurement data from CSV files located in this folder.
+It reads the CSV files in this folder, extracts the relevant information, and organizes it into a structured format.</p>
+<section id="parsing-csv-files">
+<h3>Parsing CSV files<a class="headerlink" href="#parsing-csv-files" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method calls the <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> private method to handle the detailed parsing logic,
+which includes reading the files, extracting relevant data, and organizing it into a structured DataFrame.</p>
+<section id="getting-csv-files">
+<h4>Getting CSV files<a class="headerlink" href="#getting-csv-files" title="Link to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> method retrieves a list of relevant CSV files that need to be processed
+calling to the <code class="docutils literal notranslate"><span class="pre">_get_csv_files</span></code> helper function.
+This function iterates over all the files in the given folder, checks if each file has a <code class="docutils literal notranslate"><span class="pre">.csv</span></code> extension,
+and appends the absolute path of each CSV file to a list.
+The method then prints the number of CSV files found and returns the list of full paths to these files.</p>
+</section>
+<section id="identifying-information-blocks">
+<h4>Identifying information blocks<a class="headerlink" href="#identifying-information-blocks" title="Link to this heading">#</a></h4>
+<p>Then, the <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> method iterate over the CSV files.
+For each file, it reads the file line by line, and extracts relevant data based on predefined parameters.
+These parameters are defined as class private constants.</p>
+<p>The method assign to each file an identification number.
+The method skips 4 of initial metadata lines (specified by the <code class="docutils literal notranslate"><span class="pre">_ID_LINES</span></code> class constant).
+It identifies the start of new data blocks by the key <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">start</span></code>
+(defined in the <code class="docutils literal notranslate"><span class="pre">_BLOCK_STARTER</span></code> class constant).</p>
+</section>
+<section id="extracting-block-information">
+<h4>Extracting block information<a class="headerlink" href="#extracting-block-information" title="Link to this heading">#</a></h4>
+<p>Then, for each new data block, the <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> method extracts the values in the rows that starts with
+<code class="docutils literal notranslate"><span class="pre">Samp.</span></code>, <code class="docutils literal notranslate"><span class="pre">Repe.</span></code>, <code class="docutils literal notranslate"><span class="pre">CPM</span></code>, <code class="docutils literal notranslate"><span class="pre">Counts</span></code>, <code class="docutils literal notranslate"><span class="pre">DTime</span></code>, <code class="docutils literal notranslate"><span class="pre">Time</span></code> or <code class="docutils literal notranslate"><span class="pre">EndTime</span></code>.
+These keys are defined in the <code class="docutils literal notranslate"><span class="pre">_ROWS_TO_EXTRACT</span></code> class constant.</p>
+<p>These values represent respectively the type of sample (background or radionuclide sample), the number of the repetition,
+the count rate, the total counts, the dead time, the measurement time and the end time of the measurement.
+The delimiter to use when parsing the values is <code class="docutils literal notranslate"><span class="pre">;</span></code>, defined in the <code class="docutils literal notranslate"><span class="pre">_DELIMITER</span></code> class constant.</p>
+<p>The method compiles the extracted information for each block into a dictionary, adding also the file identification number.
+Then, it compiles the extracted information for all blocks into a list.</p>
+</section>
+<section id="structuring-the-data">
+<h4>Structuring the data<a class="headerlink" href="#structuring-the-data" title="Link to this heading">#</a></h4>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> method structures all the extracted data in a DataFrame,
+being the columns the key words defined in the <code class="docutils literal notranslate"><span class="pre">_ROWS_TO_EXTRACT</span></code> class constant,
+and each row corresponding to a single measurement of background or radionuclide sample.</p>
+<p>Then, it converts the strings of all the columns to numeric format, except for the <code class="docutils literal notranslate"><span class="pre">EndTime</span></code> column.
+It converts date and time strings of the <code class="docutils literal notranslate"><span class="pre">EndTime</span></code> column to <code class="docutils literal notranslate"><span class="pre">datetime</span></code> objects
+using the format <code class="docutils literal notranslate"><span class="pre">%d/%m/%Y</span> <span class="pre">%H:%M:%S</span></code> (specified in the <code class="docutils literal notranslate"><span class="pre">_DATE_TIME_FORMAT</span></code> class constant).</p>
+<p>Then, it sorts the DataFrame by end time of the measurements,
+and reassign the file identification number to match the chronological order of the measurements.
+It ensures consistency in repetitions per cycle. If not it will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">_parse_readings</span></code> method renames columns for clarity and returns the structured DataFrame.
+The <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method assign this DataFrame to the <code class="docutils literal notranslate"><span class="pre">readings</span></code> class attribute.</p>
+</section>
+</section>
+<section id="getting-readings-statistics">
+<h3>Getting readings statistics<a class="headerlink" href="#getting-readings-statistics" title="Link to this heading">#</a></h3>
+<p>After parsing the readings to a structured DataFrame, the <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method generates
+a summary of the measurement cycles and their key attributes using the <code class="docutils literal notranslate"><span class="pre">_get_readings_statistics</span></code> private method.</p>
+<section id="summary-of-measurement-cycles">
+<h4>Summary of measurement cycles<a class="headerlink" href="#summary-of-measurement-cycles" title="Link to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">_get_readings_statistics</span></code> starts generating a summary of the measurement cycles and their key attributes
+using the <code class="docutils literal notranslate"><span class="pre">_get_readings_summary</span></code> private method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">_get_readings_summary</span></code> iterates over each unique cycle in the readings DataFrame, stored in the <code class="docutils literal notranslate"><span class="pre">readings</span></code> class attribute.
+For each cycle, it filters the DataFrame, determines the number of repetitions per cycle,
+retrieves the real time of measurement for the repetitions, and identifies the earliest end time of the measurements.</p>
+<p>It compiles these details into a list of results, which is then converted into a summary DataFrame
+containing the cycle, repetitions per cycle, real time of the measurement, and the date and time of the measurement cycle.</p>
+<p>If the real time values are not consistent for all measurements, it will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.
+If the <code class="docutils literal notranslate"><span class="pre">readings</span></code> class attribute is <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>,
+indicating that the readings must be parsed first from the CSV files.</p>
+</section>
+<section id="summary-of-all-measurements">
+<h4>Summary of all measurements<a class="headerlink" href="#summary-of-all-measurements" title="Link to this heading">#</a></h4>
+<p>After getting the measurement cycles summary DataFrame, the <code class="docutils literal notranslate"><span class="pre">_get_readings_statistics</span></code> method
+checks for consistency in repetitions per cycle. If they are not consistent, it will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<p>Then, from this Dataframe, it calculates the number of cycles, the total number of measurements, the total measurement time,
+the time per repetition, and the number of repetitions per cycle.
+These statistics are compiled into a dictionary and returned.</p>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method assigns these statistics to the corresponding measurement attributes of the class.</p>
+</section>
+</section>
+</section>
+<section id="summarizing-measurements">
+<h2>Summarizing measurements<a class="headerlink" href="#summarizing-measurements" title="Link to this heading">#</a></h2>
+<p>With the raw data of the readings parsed and the statistics of the readings generated,
+the class can generate a summary of the parsed readings in a user friendly format.
+This summary includes the key aspects of the measurement cycles
+as well as of the complete set of measurements including all cycles.
+The <code class="docutils literal notranslate"><span class="pre">summarize_readings</span></code> method handles this task,
+providing a concise overview of the measurements structure as well as of the class’s current data and processing state.</p>
+<p>This method can show the summary directly in the console or write it to a text file.
+This behaviour is determined by the parameter <code class="docutils literal notranslate"><span class="pre">save</span></code>.</p>
+<ul class="simple">
+<li><p>By default, the <code class="docutils literal notranslate"><span class="pre">save</span></code> parameter is set to False, then the method print the summary through the console.</p></li>
+<li><p>However, if the <code class="docutils literal notranslate"><span class="pre">save</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, it writes the summary to a text file called <code class="docutils literal notranslate"><span class="pre">summary.txt</span></code>
+in the folder specified in the parameter <code class="docutils literal notranslate"><span class="pre">folder_path</span></code>.</p></li>
+</ul>
+<p>In any case, the method calls the <code class="docutils literal notranslate"><span class="pre">__str__</span></code> dunder method to create the summary as a string.
+The summary string generated depends on the class’s current data and processing state.</p>
+<ul class="simple">
+<li><p>If the readings of the measurements <strong>have not been parsed</strong> from the Hidex 300 SL CSV files
+(meaning the <code class="docutils literal notranslate"><span class="pre">readings</span></code> attribute is <code class="docutils literal notranslate"><span class="pre">None</span></code>), the method compile the information of the configuration attributes
+(radionuclide, year, month) and returns them in a readable way.</p></li>
+<li><p>If the readings of the measurements <strong>have been parsed</strong> from the Hidex 300 SL CSV files
+(meaning the <code class="docutils literal notranslate"><span class="pre">readings</span></code> attribute is not <code class="docutils literal notranslate"><span class="pre">None</span></code>),
+the method compile the information of the configuration attributes, the measurement attributes
+(number of cycles, repetitions per cicle, measurement time per repetition, total number of measurements and total measurement time)
+and the summary of the measurement cycles returned by the <code class="docutils literal notranslate"><span class="pre">_get_readings_summary</span></code> private method and returns them in a readable way.</p></li>
+</ul>
+</section>
+<section id="processing-measurements">
+<h2>Processing measurements<a class="headerlink" href="#processing-measurements" title="Link to this heading">#</a></h2>
+<p>With the raw data of the readings parsed and the statistics of the readings generated, the class can proceeds to process the measurements.
+<strong>Processing the readings</strong> involves computing certain quantities of interest for the characterization of the radionuclide being measured
+from the quantities extracted from the CSV files provided by the Hidex 300 SL.
+This involves categorizing the data into <strong>different types</strong>: background measurements, sample measurements, and net measurements.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">process_readings</span></code> method handles this task.
+It processes different types of measurements (background, sample, net, or all)
+and updates the corresponding attributes with the processed data for further use.
+It calls specific private methods to handle each type of measurement and raises an error if an invalid type is provided.</p>
+<p>The <strong>type of measurement</strong> to proces is defined by the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter.
+Options are ‘background’, ‘sample’, ‘net’, or ‘all’.
+In any case, one of the quantities to calculate is the <strong>elapsed time</strong> between measurements of the same type.
+The user can choose the unit of this quantity setting it in the <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> parameter.
+Default is ‘s’ (seconds). Other options include ‘min’ (minutes), ‘h’ (hours), ‘d’ (days), ‘wk’ (weeks), ‘mo’ (months), and ‘yr’ (years).</p>
+<p>To <strong>process background measurements</strong>, the <code class="docutils literal notranslate"><span class="pre">kind</span></code> must be set to <code class="docutils literal notranslate"><span class="pre">background</span></code>
+Then the method calls the <code class="docutils literal notranslate"><span class="pre">_get_background_sample</span></code> with the same <code class="docutils literal notranslate"><span class="pre">kind</span></code> and <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> parameters.
+This method returns the processed background measurements as a DataFrame,
+which is stored in the <code class="docutils literal notranslate"><span class="pre">background</span></code> class attribute.
+The processed background measurements are stored in the <code class="docutils literal notranslate"><span class="pre">background</span></code> class attribute.</p>
+<p>To <strong>process sample measurements</strong>, the <code class="docutils literal notranslate"><span class="pre">kind</span></code> must be set to <code class="docutils literal notranslate"><span class="pre">sample</span></code>
+Then the method calls the <code class="docutils literal notranslate"><span class="pre">_get_background_sample</span></code> with the same <code class="docutils literal notranslate"><span class="pre">kind</span></code> and <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> parameters.
+This method returns the processed sample measurements as a DataFrame,
+which is stored in the <code class="docutils literal notranslate"><span class="pre">sample</span></code> class attribute.</p>
+<p>To <strong>process net measurements</strong>, the <code class="docutils literal notranslate"><span class="pre">kind</span></code> must be set to <code class="docutils literal notranslate"><span class="pre">net</span></code>
+Then the method calls the <code class="docutils literal notranslate"><span class="pre">_get_background_sample</span></code> with the same <code class="docutils literal notranslate"><span class="pre">kind</span></code> and <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> parameters.
+This method returns the processed background measurements as a DataFrame,
+which is stored in the <code class="docutils literal notranslate"><span class="pre">net</span></code> class attribute.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">all</span></code>, the method processes all types of measurements (background, sample and net) and stores in the corresponding class attributes.</p>
+<section id="processing-background-sample-measurements">
+<h3>Processing background/sample measurements<a class="headerlink" href="#processing-background-sample-measurements" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_get_background_sample</span></code> method processes either background or sample measurements from the parsed measurement readings
+and returns them as a DataFrame.
+It takes a parameter <code class="docutils literal notranslate"><span class="pre">kind</span></code> to specify whether it is processing background or sample data.
+Options are <code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">sample</span></code>.
+It also take a <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> parameter to specify the unit to calculate the elapsed time between measurements.
+In the class workflow, both parameters are set by the <code class="docutils literal notranslate"><span class="pre">process_readings</span></code> method.</p>
+<p>The method first <strong>check for data availability</strong>. If <code class="docutils literal notranslate"><span class="pre">readings</span></code> class attribute is <code class="docutils literal notranslate"><span class="pre">None</span></code>, it raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>,
+indicating that no readings data is available.</p>
+<p>Then, the method <strong>filters the</strong> <code class="docutils literal notranslate"><span class="pre">readings</span></code> <strong>DataFrame</strong> based on the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter
+to isolate the background or sample measurements in a new Dataframe.
+In order to do this, it defines a dictionary that maps the measurement types (background and sample)
+to their respective identifiers (set in the <code class="docutils literal notranslate"><span class="pre">_BACKGROUND_ID</span></code> and <code class="docutils literal notranslate"><span class="pre">_SAMPLE_ID</span></code> class constants).</p>
+<p>It then calculates the <strong>quantities of interest</strong> for each repetition within each cycle from those stored in the filtered Dataframe.</p>
+<ul class="simple">
+<li><p>It calculates the <strong>live time</strong> (in seconds) by dividing the real time (in seconds) by the dead time (<span class="math notranslate nohighlight">\(\ge 1\)</span>)</p></li>
+<li><p>It calculates the <strong>elapsed time</strong> between measurements in <code class="docutils literal notranslate"><span class="pre">datetime</span></code> format and in the specified unit
+by calling the <code class="docutils literal notranslate"><span class="pre">_get_elapsed_time</span></code> helper function and passing the filtered DataFrame and the specified <code class="docutils literal notranslate"><span class="pre">time_unit</span></code>.</p></li>
+<li><p>It calculates the <strong>counts</strong> by multiplying the count rate (in counts per minute) by the live time (in seconds) and dividing by 60.</p></li>
+<li><p>It calculates the <strong>counts uncertainty</strong> as the square root of the counts.</p></li>
+<li><p>It calculates the <strong>counts relative uncertainty</strong> (in %) by dividing the counts uncertainty by the counts and multiplying by 100.</p></li>
+</ul>
+<p>These quantities are added as new columns to the filtered DataFrame, which is then returned.</p>
+</section>
+<section id="processing-net-measurements">
+<h3>Processing net measurements<a class="headerlink" href="#processing-net-measurements" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_get_net_measurements</span></code> method processes net measurements from the background and sample measurements
+and returns them as a DataFrame.
+It takes a parameter <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> to specify the unit to calculate the elapsed time between measurements.
+In the class workflow, both parameters are set by the <code class="docutils literal notranslate"><span class="pre">process_readings</span></code> method.</p>
+<p>The method first <strong>check for data availability</strong>. If <code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">sample</span></code> class attribute are <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+it raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> indicating that the necessary data is not available.</p>
+<p>Then, some of the quantities <strong>quantities of interest</strong> for each repetition within each cycle are taken directly from the <code class="docutils literal notranslate"><span class="pre">sample</span></code> DataFrame:
+cycle, repetition, and elapsed time in <code class="docutils literal notranslate"><span class="pre">datetime</span></code> format and in the specified unit.
+Some other <strong>quantities of interest</strong> for each repetition within each cycle
+from those stored in the <code class="docutils literal notranslate"><span class="pre">background</span></code> and <code class="docutils literal notranslate"><span class="pre">sample</span></code> Dataframes.</p>
+<ul class="simple">
+<li><p>It calculates the <strong>net count rate</strong> (in cpm) by subtracting the background count rate from the sample count rate.</p></li>
+<li><p>It calculates the <strong>net counts</strong> by subtracting the background counts from the sample counts.</p></li>
+<li><p>It calculates the <strong>net counts uncertainty</strong> as the square root of the sum of sample and background counts.</p></li>
+<li><p>It calculates the <strong>relative net counts uncertainty</strong> (in %) calculated as the counts uncertainty divided by the net counts and multiplied by 100.</p></li>
+</ul>
+<p>The method compiles the results in a dictionary which is finally returned as a Dataframe.</p>
+</section>
+<section id="computing-elapsed-time">
+<h3>Computing elapsed time<a class="headerlink" href="#computing-elapsed-time" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_get_elapsed_time</span></code> method calculates the elapsed between measurements in <code class="docutils literal notranslate"><span class="pre">datetime</span></code> format from a specified
+DataFrame (set in the <code class="docutils literal notranslate"><span class="pre">df</span></code> parameter) and converts it to the specified time unit (set in the <code class="docutils literal notranslate"><span class="pre">time_unit</span></code>).
+In the class workflow, both parameters are set by the <code class="docutils literal notranslate"><span class="pre">_get_background_sample</span></code> method.</p>
+<p>First, the method get the <strong>initial time</strong> of the measurement by finding the earliest measurement end time
+in the <code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">sample</span></code> DataFrame.
+Then it calculates the elapsed time between measurements by subtracting the initial_time from the end time values.
+This results in a pandas Series of time deltas.</p>
+<p>Then, the method defines a <strong>time conversion dictionary</strong> that maps each time unit to its corresponding conversion factor from seconds.
+The next conversion factors are used:</p>
+<ul class="simple">
+<li><p>1 minute = 60 seconds</p></li>
+<li><p>1 hour = 60 minutes</p></li>
+<li><p>1 day = 24 hours</p></li>
+<li><p>1 week = 7 days</p></li>
+<li><p>1 month = 30.44 days</p></li>
+<li><p>1 year =  365.25 days</p></li>
+</ul>
+<p>Then, the method <strong>validate the time unit</strong>, checking if the provided <code class="docutils literal notranslate"><span class="pre">time_unit</span></code> is present in the time conversion dictionary.
+Options are ‘s’ (seconds), ‘min’ (minutes), ‘h’ (hours), ‘d’ (days), ‘wk’ (weeks), ‘mo’ (months), and ‘yr’ (years).
+If it is not, it raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception.</p>
+<p>Then, the method <strong>converts the elapsed time</strong> from <code class="docutils literal notranslate"><span class="pre">datetime</span></code> to seconds using the <code class="docutils literal notranslate"><span class="pre">datetime</span></code> builtin function <code class="docutils literal notranslate"><span class="pre">total_seconds()</span></code>.
+Then it converts the elapsed time from seconds to the specified unit by multiplying by the corresponding time conversion factor.</p>
+<p>Finally, the method returns a tuple containing the original elapsed time (as time deltas) and
+the elapsed time converted to the specified unit.</p>
+</section>
+</section>
+<section id="plotting-measurements">
+<h2>Plotting measurements<a class="headerlink" href="#plotting-measurements" title="Link to this heading">#</a></h2>
+<p>After parsing the readings from the CSV files provided by the Hidex 300 SL and processing the different types of
+measurements, the class is ready to plot relevant information of the measurements in terms of time.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">plot_measurements</span></code> method handles this task.
+It uses <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to generate the plots.
+It determines the type of measurements to plot based on the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter (<code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, or <code class="docutils literal notranslate"><span class="pre">net</span></code>).
+It then calls the appropriate helper function for the specified measurement type
+(<code class="docutils literal notranslate"><span class="pre">_plot_background_sample_measurements</span></code> for background or sample measurements or <code class="docutils literal notranslate"><span class="pre">_plot_net_measurements</span></code> for net measurements)
+and providing the corresponding attribute DataFrame (<code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, or <code class="docutils literal notranslate"><span class="pre">net</span></code>).
+It raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if an invalid <code class="docutils literal notranslate"><span class="pre">kind</span></code> is provided.</p>
+<section id="plotting-background-or-sample-measurements">
+<h3>Plotting background or sample measurements<a class="headerlink" href="#plotting-background-or-sample-measurements" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_plot_background_sample_measurements</span></code> helper function creates a series of plots for background or sample measurements.
+It determines the type of measurements to plot based on the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter (<code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">sample</span></code>).
+It gathers the measurements data from the corresponding attribute DataFrame (<code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, or <code class="docutils literal notranslate"><span class="pre">net</span></code>).
+In the class workflow, both parameters are set by the <code class="docutils literal notranslate"><span class="pre">plot_measurements</span></code> method.</p>
+<p>It extracts the <code class="docutils literal notranslate"><span class="pre">End</span> <span class="pre">time</span></code> column from the appropriate measurement DataFrame for the x-axis.
+Then it creates a 3x2 grid of subplots to plot the next quantities in terms of the end time:
+count rate, dead time, real time, live time, counts, and counts uncertainty,
+extracting the corresponding column from the appropriate measurement DataFrame.
+It set the x-axis labels <code class="docutils literal notranslate"><span class="pre">End</span> <span class="pre">time</span></code> and the y-axis labels to the corresponding quantity and unit.
+It sets the title of the figure to <code class="docutils literal notranslate"><span class="pre">Background</span>&#160; <span class="pre">measurements</span></code> or <code class="docutils literal notranslate"><span class="pre">Sample</span>&#160; <span class="pre">measurements</span></code>
+depending on the kind of measurement to plot.</p>
+</section>
+<section id="plotting-net-measurements">
+<h3>Plotting net measurements<a class="headerlink" href="#plotting-net-measurements" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">_plot_net_measurements</span></code> helper function creates a series of plots for net measurements.
+It gathers the measurements data from the <code class="docutils literal notranslate"><span class="pre">net</span></code> attribute DataFrame
+In the class workflow, this parameter is set by the <code class="docutils literal notranslate"><span class="pre">plot_measurements</span></code> method.</p>
+<p>It extracts the <code class="docutils literal notranslate"><span class="pre">Elapsed</span> <span class="pre">time</span></code> (with its unit) column from the attribute DataFrame for the x-axis.
+Then it creates a 2x1 grid of subplots to plot the next quantities in terms of the elapsed time:
+counts and counts uncertainty,
+extracting the corresponding column from the attribute DataFrame.
+It set the x-axis labels <code class="docutils literal notranslate"><span class="pre">Elapsed</span> <span class="pre">time</span></code> (with its unit) and the y-axis labels to the corresponding quantity and unit.
+It sets the title of the figure to <code class="docutils literal notranslate"><span class="pre">Net</span> <span class="pre">quantities</span> <span class="pre">measurements</span></code>.</p>
+</section>
+</section>
+<section id="exporting-measurements">
+<h2>Exporting measurements<a class="headerlink" href="#exporting-measurements" title="Link to this heading">#</a></h2>
+<p>After parsing the readings from the CSV files provided by the Hidex 300 SL and processing the different types of
+measurements, the class is ready to save the processed data and visualizations to CSV and PNG files for further analysis and reporting.</p>
+<section id="exporting-tables">
+<h3>Exporting tables<a class="headerlink" href="#exporting-tables" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">export_table</span></code> method saves specified types of measurements as a CSV file to the specified folder path.
+It determines the type of measurements to plot based on the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter
+(<code class="docutils literal notranslate"><span class="pre">readings</span></code>, <code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">net</span></code>, or <code class="docutils literal notranslate"><span class="pre">all</span></code>).</p>
+<p>First, the method maps the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to the corresponding DataFrame attributes (<code class="docutils literal notranslate"><span class="pre">readings</span></code>, <code class="docutils literal notranslate"><span class="pre">background</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sample</span></code>, <code class="docutils literal notranslate"><span class="pre">net</span></code>, or a the compiled DataFrame returned by the <code class="docutils literal notranslate"><span class="pre">_compile_measurements</span></code> method for <code class="docutils literal notranslate"><span class="pre">all</span></code>).
+Then, it validates the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter by ensuring it exists in the dictionary keys.
+If the <code class="docutils literal notranslate"><span class="pre">kind</span></code> is invalid, it raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception.</p>
+<p>Then, it retrieves the corresponding DataFrame from the dictionary and
+exports it to a CSV file in the specified <code class="docutils literal notranslate"><span class="pre">folder_path</span></code> using the <code class="docutils literal notranslate"><span class="pre">to_csv</span></code> method of the DataFrame.
+The CSV file is named after the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter.
+Finally, it prints a confirmation message indicating the successful export.</p>
+</section>
+<section id="exporting-plots">
+<h3>Exporting plots<a class="headerlink" href="#exporting-plots" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">export_plot</span></code> method class saves the plot of a specified type of measurements as a PNG file to the specified folder path.
+It determines the type of measurements to plot based on the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter
+(<code class="docutils literal notranslate"><span class="pre">background</span></code>, <code class="docutils literal notranslate"><span class="pre">sample</span></code>, or <code class="docutils literal notranslate"><span class="pre">net</span></code>).</p>
+<p>First, the method maps the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter to the corresponding DataFrame attributes (<code class="docutils literal notranslate"><span class="pre">readings</span></code>, <code class="docutils literal notranslate"><span class="pre">background</span></code> or <code class="docutils literal notranslate"><span class="pre">sample</span></code>).
+Then, it validates the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter by ensuring it exists in the dictionary keys.
+If the <code class="docutils literal notranslate"><span class="pre">kind</span></code> is invalid, it raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception.</p>
+<p>Then, it calls the <code class="docutils literal notranslate"><span class="pre">plot_measurements</span></code> method to generate the plot and
+exports it to a PNG file in the specified <code class="docutils literal notranslate"><span class="pre">folder_path</span></code> using the <code class="docutils literal notranslate"><span class="pre">savefig</span></code> method of <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>.
+The PNG file is named after the <code class="docutils literal notranslate"><span class="pre">kind</span></code> parameter.
+Finally, it prints a confirmation message indicating the successful export.</p>
+</section>
+</section>
+<section id="comprehensive-analysis">
+<h2>Comprehensive analysis<a class="headerlink" href="#comprehensive-analysis" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Hidex300</span></code> class allows to run a full comprehensive analysis of the readings,
+combining all the previous steps into a single workflow, including
+including parsing, processing and summarizing the readings and exporting the results to CSV and PNG files.
+The <code class="docutils literal notranslate"><span class="pre">analyze_readings</span></code> method handles this task.</p>
+<p>First, the method <strong>parses the readings</strong> of the CSV files provided by the Hidex 300 SL from the specified
+<code class="docutils literal notranslate"><span class="pre">input_folder</span></code>, by calling the calling the <code class="docutils literal notranslate"><span class="pre">parse_readings</span></code> method.
+Then, it <strong>processes all types of measurements</strong> (background, sample and net) by calling the <code class="docutils literal notranslate"><span class="pre">process_readings</span></code>
+method with <code class="docutils literal notranslate"><span class="pre">kind='all'</span></code> and the specified <code class="docutils literal notranslate"><span class="pre">time_unit</span></code>.
+Finally, it <strong>prints a summary</strong> of the measurements by calling the <code class="docutils literal notranslate"><span class="pre">__str__</span></code> method.</p>
+<p>Optionally, the method can <strong>save the results</strong> (CSV files and plots) to the specified <code class="docutils literal notranslate"><span class="pre">output_folder</span></code>
+if the <code class="docutils literal notranslate"><span class="pre">save</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+The method checks if the <code class="docutils literal notranslate"><span class="pre">output_folder</span></code> exists and creates it if it doesn’t.
+It also creates a subfolder for the specific radionuclide, year, and month to store the results.
+Then it saves the background, sample, net, and compiled measurements as CSV files to this folder
+by calling the <code class="docutils literal notranslate"><span class="pre">export_table</span></code> method.
+It also saves the summary of the readings to a text file by calling the <code class="docutils literal notranslate"><span class="pre">summarize_readings</span></code>.
+Finally, it saves plots of background, sample, and net measurements to PNG files by calling the <code class="docutils literal notranslate"><span class="pre">export_plot</span></code> method.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="hidex300_components.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Key components of the class</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../about.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">About MetPyRad</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization">Initialization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parsing-readings">Parsing readings</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parsing-csv-files">Parsing CSV files</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-csv-files">Getting CSV files</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-information-blocks">Identifying information blocks</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-block-information">Extracting block information</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#structuring-the-data">Structuring the data</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-readings-statistics">Getting readings statistics</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-measurement-cycles">Summary of measurement cycles</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-all-measurements">Summary of all measurements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summarizing-measurements">Summarizing measurements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-measurements">Processing measurements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-background-sample-measurements">Processing background/sample measurements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-net-measurements">Processing net measurements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-elapsed-time">Computing elapsed time</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-measurements">Plotting measurements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-background-or-sample-measurements">Plotting background or sample measurements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-net-measurements">Plotting net measurements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-measurements">Exporting measurements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-tables">Exporting tables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exporting-plots">Exporting plots</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comprehensive-analysis">Comprehensive analysis</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/topics/hidex300_class/hidex300_design.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Xandra Campo.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
