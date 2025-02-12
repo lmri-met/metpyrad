@@ -26,7 +26,7 @@ Then, you can access the parsed readings calling the ``Hidex300.readings`` attri
     >>> from metpyrad import Hidex300
     >>> processor = Hidex300(radionuclide='Lu-177', year=2023, month=11)
     >>> processor.parse_readings(folder_path='/path/to/input/files/folder')
-    >>> processor.readings
+    >>> print(processor.readings)
 
 The returned DataFrame will look like:
 
@@ -64,7 +64,7 @@ Process the background measurements:
 .. code-block:: python
 
     >>> processor.process_readings(kind='background')
-    >>> processor.background
+    >>> print(processor.background)
 
 The returned DataFrame will look like:
 
@@ -85,7 +85,7 @@ Process the sample measurements:
 .. code-block:: python
 
     >>> processor.process_readings(kind='sample')
-    >>> processor.sample
+    >>> print(processor.sample)
 
 The returned DataFrame will look like:
 
@@ -106,7 +106,7 @@ Process the net measurements:
 .. code-block:: python
 
     >>> processor.process_readings(kind='net')
-    >>> processor.net
+    >>> print(processor.net)
 
 The returned DataFrame will look like:
 
@@ -127,9 +127,9 @@ Process all types of measurements:
 .. code-block:: python
 
     >>> processor.process_readings(kind='all')
-    >>> processor.background
-    >>> processor.sample
-    >>> processor.net
+    >>> print(processor.background)
+    >>> print(processor.sample)
+    >>> print(processor.net)
 
 Note that to process the background or sample measurements, the readings must be parsed first.
 Similarly, to process the net measurements, the background and sample measurements must be processed first.
