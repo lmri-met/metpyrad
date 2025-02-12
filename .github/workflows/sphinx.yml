@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: pip install sphinx sphinx_design pydata_sphinx_theme myst_parser
 
+      - name: Install metpyrad
+        run: pip install git+https://github.com/lmri-met/metpyrad.git
+
+      - name: Verify installation
+        run: |
+          pip list
+          python -c "import metpyrad"
+
         # Step 2: Build the HTML documentation using Sphinx
       - name: Build HTML
         run: sphinx-build -b html docs/source docs/build/html
