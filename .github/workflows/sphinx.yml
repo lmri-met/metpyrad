@@ -1,0 +1,51 @@
+# Workflow name
+name: "Sphinx: Render docs"
+
+# Workflow trigger event: Trigger the workflow on every push to the repository
+on: push
+
+# Workflow jobs
+jobs:
+  # Job ID
+  build:
+    # Job runner specification: Use the latest Ubuntu environment for the job
+    runs-on: ubuntu-latest
+
+    # Job permissions
+    permissions:
+      # Grant write permissions to the repository contents
+      contents: write
+
+    # Steps to be executed within the job
+    steps:
+
+      # Step 1: Check out the repository code
+      - name: Checkout code
+      - uses: actions/checkout@v4
+        with:
+          # Do not persist credentials in the local git configuration
+          persist-credentials: false
+
+        # Step 2: Build the HTML documentation using Sphinx
+      - name: Build HTML
+        uses: ammaraskar/sphinx-action@master
+
+        # Step 3: Upload the generated HTML files as artifacts
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          # Name the artifact "html-docs"
+          name: html-docs
+          # Specify the path to the HTML files
+          path: docs/build/html/
+
+        # Step 4: Deploy the HTML files to GitHub Pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        # Only run this step if the push is to the main branch
+        if: github.ref == 'refs/heads/main'
+        with:
+          # Use the GitHub token for authentication
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Specify the directory to publish
+          publish_dir: docs/build/html
