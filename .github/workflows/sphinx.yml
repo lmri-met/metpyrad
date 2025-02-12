@@ -26,32 +26,25 @@ jobs:
           # Do not persist credentials in the local git configuration
           persist-credentials: false
 
+      # Step 2: Install documentation dependencies
+      - name: Install dependencies
+        run: pip install sphinx sphinx_design pydata_sphinx_theme
 
-      # Step 2: Build the HTML documentation using Sphinx
+      # Step 3: Install metpyrad package from GitHub
+      - name: Install metpyrad
+        run: pip install git+https://github.com/lmri-met/metpyrad.git
+
+      # Step 4: Verify the installation of metpyrad package
+      - name: Verify installation
+        run: |
+          pip list
+          python -c "import metpyrad"
+
+      # Step 5: Build the HTML documentation using Sphinx
       - name: Build HTML
-        uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "docs/source"
-          build-command: "sphinx-build -b html docs/source docs/build/html"
+        run: sphinx-build -b html docs/source docs/build/html
 
-
-#      - name: Install dependencies
-#        run: pip install sphinx sphinx_design pydata_sphinx_theme myst_parser
-#
-#      - name: Install metpyrad
-#        run: pip install git+https://github.com/lmri-met/metpyrad.git
-#
-#      - name: Verify installation
-#        run: |
-#          pip list
-#          python -c "import metpyrad"
-#
-#        # Step 2: Build the HTML documentation using Sphinx
-#      - name: Build HTML
-#        run: sphinx-build -b html docs/source docs/build/html
-
-
-        # Step 3: Upload the generated HTML files as artifacts
+      # Step 6: Upload the generated HTML files as artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -60,7 +53,7 @@ jobs:
           # Specify the path to the HTML files
           path: docs/build/html/
 
-        # Step 4: Deploy the HTML files to GitHub Pages
+      # Step 7: Deploy the HTML files to GitHub Pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         # Only run this step if the push is to the main branch
