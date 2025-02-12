@@ -1,9 +1,6 @@
 Visualizing measurements
 ========================
 
-.. warning::
-    Ploting issue. Only in pycharm? Does the user need to import matplotlib to show the plots?
-
 Up to this point, you parsed the readings of your measurements of Lu-177 from the Hidex 300 SL automatic liquid scintillator counter CSV files,
 and processed the to get the background, sample and net measurements.
 Now you have all this information organized and stored in tables.
@@ -26,13 +23,13 @@ specifying the type of measurement you want to process:
 
     >>> processor.plot_measurements(kind='background')
 
+The returned plot will look like:
+
+.. image:: /_static/hidex300/background.png
+
 This plot show all the quantities of interest for the background measurements in terms of time:
 real time, dead time, live time, count rate and counts value and uncertainty.
 See more details about these quantities in the Topic guide.
-
-.. warning::
-    Add plot.
-    Add link to the Topic guide section.
 
 .. note::
 
@@ -53,8 +50,9 @@ Create and customize a plot for the sample measurements:
 
     >>> processor.plot_measurements(kind='sample')
 
-.. warning::
-    Add plot.
+The returned plot will look like:
+
+.. image:: /_static/hidex300/sample.png
 
 Plot net measurements
 ---------------------
@@ -66,5 +64,6 @@ Just use the ``processor.plot_measurements()`` method specifying the type of mea
 
     >>> processor.plot_measurements(kind='net')
 
-.. warning::
-    Add plot.
+The returned plot will look like:
+
+.. image:: /_static/hidex300/net.png

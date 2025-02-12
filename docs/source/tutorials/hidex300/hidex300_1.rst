@@ -18,7 +18,6 @@ Let's see how you can do this using the ``Hidex300`` class.
 
 .. warning::
 
-    Add link to the Topic guide section.
     Add example files to download.
     Add mention to pandas and link to tutorial.
     Add assumption of all being installed and ref to previous section of the tutorial
@@ -100,13 +99,9 @@ Let's say that you have the four CSV files in a folder called ``input_files``:
     measurements/
         input_files/
             Lu-177_2023_11_30.csv
-            Lu-177_2023_11_30.csv
-            Lu-177_2023_11_30.csv
-            Lu-177_2023_11_30.csv
-
-.. warning::
-
-   Update file names
+            Lu-177_2023_12_06.csv
+            Lu-177_2023_12_12.csv
+            Lu-177_2023_12_22.csv
 
 Define the path to the folder that contains the input files:
 
@@ -178,11 +173,7 @@ Access the parsed readings by calling the ``processor.readings`` attribute:
 
 This table compiles, for each cycle and repetition, the measurements provided by the Hidex 300 SL automatic liquid scintillator counter of
 count rate, counts, real time, dead time and end time, both for the radionuclide sample and the background.
-See more details about these quantities in the Topic guide.
-
-.. warning::
-    Update dataframe
-    Add link to the Topic guide section.
+See more details about these quantities in the Topics guide.
 
 Print a summary of the readings
 -------------------------------
@@ -194,20 +185,18 @@ After parsing and inspecting the readings, you can print a summary of the readin
     >>> print(processor)
     Measurements of Lu-177 on November 2023
     Summary
-    Number of cycles: 2
+    Number of cycles: 4
     Repetitions per cycle: 2
     Time per repetition: 100 s
-    Total number of measurements: 4
-    Total measurement time: 400 s
+    Total number of measurements: 8
+    Total measurement time: 800 s
     Cycles summary
        Cycle  Repetitions  Real time (s)                Date
     0      1            2            100 2023-11-30 08:44:20
-    1      2            2            100 2023-12-01 12:46:16
+    1      2            2            100 2023-12-06 10:23:19
+    2      3            2            100 2023-12-12 08:41:22
+    3      4            2            100 2023-12-22 08:47:48
 
 This summary provides a detailed information about the readings,
 including information for the hole set of readings as well as for each cycle in the set.
-See more details about these quantities in the Topic guide.
-
-.. warning::
-    Update summary
-    Add link to the Topic guide section.
+See more details about these quantities in the Topics guide.
