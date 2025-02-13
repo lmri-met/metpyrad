@@ -14,7 +14,7 @@ Key features of the Hidex 300 SL:
   It utilizes three PMTs aligned at 120° from each other with a highly reflective measurement chamber design.
   This provide optimal measurement geometry and maximises light collection.
   Its lead shield design provides good shielding, minimizes instrument weight, and reduces background effects.
-- **TDCR tecnology**:
+- **TDCR technology**:
   Absolute activity counting using triple-to-double coincidence ratio (TDCR) method.
   It also supports using an external standard method.
 - **Temperature stabilization**:

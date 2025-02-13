@@ -57,7 +57,7 @@ from that provided by the Hidex 300 SL:
 
     .. math::
 
-        t_i = t_{{end}_i}-t_{{end}_{i=0}}
+        t_i=t_{{end}_i}-t_{{end}_{i=0}}
 
 **Counts**, :math:`C`:
     The total number of detected events during the measurement period, expressed in `counts`.
@@ -121,7 +121,7 @@ we can derive the next net quantities of interest:
 
 **Net counts relative uncertainty**, :math:`u_r(C)`:
     The net counts uncertainty expressed as a percentage of the net counts.
-    It is calculated dividing the net counts, :math:`C`, by the net counts uncartainty, :math:`u(C)`,
+    It is calculated dividing the net counts, :math:`C`, by the net counts uncertainty, :math:`u(C)`,
     and multiplying by 100 to express it as a percentage:
 
     .. math::

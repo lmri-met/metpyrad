@@ -10,7 +10,7 @@ MetPyRad documentation
 
    This project is under active development. The public API should not be considered stable.
 
-**Date**: Feb XX, 2025
+**Date**: Feb 13, 2025
 **Version**: 0.0.1
 
 **Useful links**:

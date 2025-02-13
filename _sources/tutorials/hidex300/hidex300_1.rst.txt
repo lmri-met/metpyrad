@@ -63,7 +63,7 @@ Let's see how you can do this using the ``Hidex300`` class.
 
 .. note::
 
-    This tutorial assumes that you have Pyhton and MetPyRad library installed.
+    This tutorial assumes that you have Python and MetPyRad library installed.
     If not, please check the installation tutorial.
 
     MetPyRad uses the pandas DataFrames to store the measurements.
