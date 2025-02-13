@@ -34,11 +34,4 @@ Documentation = "https://github.com/lmri-met/metpyrad#readme"
 Issues = "https://github.com/lmri-met/metpyrad/issues"
 
 [tool.hatch.build]
-include = [
-    "src",
-    "docs",
-    "tests",
-    "LICENSE",
-    "README.md",
-    "pyproject.toml",
-]
+exclude = ["dev", "requirements.txt"]
